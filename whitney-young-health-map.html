@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whitney Young Health — 8x8 Mutual Action Plan</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #EAE9E1;
+      color: #111111;
+      padding: 32px 24px 60px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      background: #008486;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      padding: 10px 18px;
+      border-radius: 8px;
+    }
+
+    .header-meta h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .header-meta p {
+      font-size: 13px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .badge-stage {
+      background: #C9DC4F;
+      color: #111;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+
+    .btn-print {
+      background: #008486;
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-print:hover { background: #006e70; }
+
+    /* ── META BAR ── */
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      border-left: 5px solid #008486;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 130px;
+    }
+
+    .meta-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #008486;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 2px;
+    }
+
+    .meta-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    /* ── RISK PILLS ── */
+    .risk-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .risk-pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .risk-red    { background: #fde8e8; color: #b00; }
+    .risk-yellow { background: #fef9e0; color: #7a5f00; }
+    .risk-green  { background: #e0f4f4; color: #005a5b; }
+
+    /* ── PHASE CARDS ── */
+    .phase {
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+
+    .phase.done   { background: #fff; }
+    .phase.active { background: #fff; border: 2px solid #008486; }
+    .phase.future {
+      background: #f0efea;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      gap: 12px;
+    }
+
+    .phase.done   .phase-header { background: #d9f0f0; }
+    .phase.active .phase-header { background: #008486; color: #fff; }
+    .phase.future .phase-header { background: #ddddd8; color: #777; }
+
+    .phase-title-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .phase-icon { font-size: 20px; }
+
+    .phase-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .phase.done   .phase-title { color: #005a5b; }
+    .phase.active .phase-title { color: #fff; }
+    .phase.future .phase-title { color: #888; }
+
+    .phase-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .badge-done   { background: #008486; color: #fff; }
+    .badge-active { background: #C9DC4F; color: #111; }
+    .badge-future { background: #ccc; color: #666; }
+
+    .phase-body { padding: 18px 20px; }
+
+    /* ── TASK ROWS ── */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: #F5F4EE;
+    }
+
+    .phase.active .task { background: #f0fafa; border-left: 3px solid #008486; }
+
+    .task-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .check-done   { background: #008486; color: #fff; }
+    .check-active { background: #fff; border: 2px solid #008486; }
+    .check-future { background: #ddd; }
+
+    .task-content { flex: 1; }
+
+    .task-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+      line-height: 1.4;
+    }
+
+    .task-detail {
+      font-size: 12px;
+      color: #555;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .tag-owner { background: #e0f4f4; color: #005a5b; }
+    .tag-date  { background: #fef9e0; color: #7a5f00; }
+    .tag-flag  { background: #fde8e8; color: #b00; }
+    .tag-note  { background: #f0efea; color: #555; }
+
+    /* ── CONTACTS SIDEBAR ── */
+    .two-col-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .two-col-layout { grid-template-columns: 1fr; }
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+
+    .sidebar-header {
+      background: #008486;
+      color: #fff;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .sidebar-body { padding: 12px 14px; }
+
+    .contact-row {
+      display: flex;
+      flex-direction: column;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0efea;
+    }
+
+    .contact-row:last-child { border-bottom: none; }
+
+    .contact-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .contact-title {
+      font-size: 11px;
+      color: #666;
+      margin-top: 1px;
+    }
+
+    .contact-tag {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 8px;
+    }
+
+    .ct-eb     { background: #fde8e8; color: #b00; }
+    .ct-champ  { background: #e0f4f4; color: #005a5b; }
+    .ct-inf    { background: #fef9e0; color: #7a5f00; }
+    .ct-unk    { background: #f0efea; color: #666; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #999;
+      margin-top: 32px;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      body { background: #EAE9E1 !important; padding: 12px; }
+      .btn-print { display: none !important; }
+
+      .phase         { break-inside: avoid; page-break-inside: avoid; }
+      .sidebar-card  { break-inside: avoid; page-break-inside: avoid; }
+
+      .phase.done   .phase-header { background: #d9f0f0 !important; }
+      .phase.active .phase-header { background: #008486 !important; color: #fff !important; }
+      .phase.future .phase-header { background: #ddddd8 !important; }
+
+      .logo-badge    { background: #008486 !important; color: #fff !important; }
+      .badge-stage   { background: #C9DC4F !important; color: #111 !important; }
+      .sidebar-header{ background: #008486 !important; color: #fff !important; }
+      .check-done    { background: #008486 !important; color: #fff !important; }
+      .badge-done    { background: #008486 !important; color: #fff !important; }
+      .badge-active  { background: #C9DC4F !important; color: #111 !important; }
+
+      .tag-owner { background: #e0f4f4 !important; color: #005a5b !important; }
+      .tag-date  { background: #fef9e0 !important; color: #7a5f00 !important; }
+      .tag-flag  { background: #fde8e8 !important; color: #b00 !important; }
+
+      .risk-pill.risk-red    { background: #fde8e8 !important; color: #b00 !important; }
+      .risk-pill.risk-yellow { background: #fef9e0 !important; color: #7a5f00 !important; }
+      .risk-pill.risk-green  { background: #e0f4f4 !important; color: #005a5b !important; }
+
+      .ct-eb    { background: #fde8e8 !important; color: #b00 !important; }
+      .ct-champ { background: #e0f4f4 !important; color: #005a5b !important; }
+      .ct-inf   { background: #fef9e0 !important; color: #7a5f00 !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-block">
+    <div class="logo-badge">8x8</div>
+    <div class="header-meta">
+      <h1>Whitney Young Health — Mutual Action Plan</h1>
+      <p>UCaaS + CCaaS Opportunity &nbsp;|&nbsp; Direct Deal &nbsp;|&nbsp; PJ Schlegel + Landon Hendricks + Tom Rupp</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <span class="badge-stage">Stage 2 — Problem</span>
+    <button class="btn-print" onclick="window.print()">Export PDF</button>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="meta-bar">
+  <div class="meta-item">
+    <span class="meta-label">Account</span>
+    <span class="meta-value" contenteditable="true">Whitney Young Health</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Industry</span>
+    <span class="meta-value">FQHC / Healthcare</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Locations</span>
+    <span class="meta-value">6 sites (Albany region)</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Incumbent</span>
+    <span class="meta-value">Nextiva</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">EHR</span>
+    <span class="meta-value">Athena Health</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Microsoft</span>
+    <span class="meta-value">M365 E3 (Nonprofit)</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Demo Date</span>
+    <span class="meta-value">Apr 16, 2026</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Target Close</span>
+    <span class="meta-value" contenteditable="true">TBD — confirm at scoping</span>
+  </div>
+</div>
+
+<!-- RISK PILLS -->
+<div class="risk-bar">
+  <span class="risk-pill risk-red">🚩 No follow-up call booked at demo close</span>
+  <span class="risk-pill risk-red">🚩 "Will" — unknown title, most engaged attendee</span>
+  <span class="risk-pill risk-red">🚩 Crisp translation: healthcare compliance claim unverified</span>
+  <span class="risk-pill risk-yellow">⚠️ AI post-call notifications: on roadmap, not native today</span>
+  <span class="risk-pill risk-yellow">⚠️ Relevant analytics integration: feasibility unconfirmed</span>
+  <span class="risk-pill risk-yellow">⚠️ Per-segment recording on transfers: Tom was uncertain</span>
+  <span class="risk-pill risk-green">✅ CEO attended and called demo "comprehensive"</span>
+  <span class="risk-pill risk-green">✅ Strong engagement from ops, IT, and finance</span>
+</div>
+
+<div class="two-col-layout">
+
+  <!-- MAIN PHASES -->
+  <div>
+
+    <!-- PHASE 1: DONE -->
+    <div class="phase done">
+      <div class="phase-header">
+        <div class="phase-title-block">
+          <span class="phase-icon">✅</span>
+          <span class="phase-title">Phase 1 — Discover &amp; Engage</span>
+        </div>
+        <span class="phase-badge badge-done">Complete</span>
+      </div>
+      <div class="phase-body">
+        <div class="task-list">
+          <div class="task">
+            <div class="task-check check-done">✓</div>
+            <div class="task-content">
+              <div class="task-title">Initial outreach &amp; qualification</div>
+              <div class="task-detail">PJ connected, current state confirmed: Nextiva incumbent, Teams + Athena in place, long hold times, nurse voicemail pain, multi-language needs.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: PJ Schlegel</span>
+                <span class="tag tag-date">Complete</span>
+              </div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-done">✓</div>
+            <div class="task-content">
+              <div class="task-title">Demo — Full platform walkthrough</div>
+              <div class="task-detail">Apr 16, 2026. Tom Rupp led. Covered: agent workspace, Engage, supervisor tools, AI Studio (custom WYH bot built), proactive outreach SMS, QMSA, reporting, Athena integration, Teams cross-launch, paging, directory, SSO.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: Tom Rupp / Landon Hendricks</span>
+                <span class="tag tag-date">Apr 16, 2026</span>
+              </div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-done">✓</div>
+            <div class="task-content">
+              <div class="task-title">CEO + CIO + Director of Operations + Finance attendance confirmed</div>
+              <div class="task-detail">Dave Shippee (CEO), Bob Cawley (CIO), Krishna Cionek (Dir. Ops), Lucia O'Brien (PM Ops &amp; Finance), John Fraher (CPA), and "Will" (unidentified) all attended demo. CEO called presentation "comprehensive."</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">8x8 + WYH</span>
+                <span class="tag tag-date">Apr 16, 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2: ACTIVE -->
+    <div class="phase active">
+      <div class="phase-header">
+        <div class="phase-title-block">
+          <span class="phase-icon">🔵</span>
+          <span class="phase-title">Phase 2 — Validate &amp; Scope</span>
+        </div>
+        <span class="phase-badge badge-active">In Progress</span>
+      </div>
+      <div class="phase-body">
+        <div class="task-list">
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Send follow-up email with demo recording</div>
+              <div class="task-detail">PJ confirmed he'd send the recording. Landon to send follow-up with recap, open items list, and ask for scoping call booking. Reference AI Studio custom WYH demo bot number for them to test.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: PJ / Landon</span>
+                <span class="tag tag-date">By: Apr 17, 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Identify "Will" — confirm full attendee roles</div>
+              <div class="task-detail">An attendee named "Will" asked the most forward-looking questions (language translation, AI, proactive outreach, timelines, redundancy). Title unknown — not in the pre-call attendee list provided. Must confirm before champion assessment is complete.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: PJ Schlegel</span>
+                <span class="tag tag-flag">🚩 Critical — Do before next call</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Confirm Crisp translation healthcare compliance specs</div>
+              <div class="task-detail">Will asked about 85% accuracy healthcare standards. Tom confirmed without documentation. Need written confirmation from Crisp/8x8 partnerships on supported languages, accuracy benchmarks, and HIPAA/healthcare compliance before it appears in a proposal.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: Landon Hendricks</span>
+                <span class="tag tag-flag">🚩 Claim made on call — verify before proposal</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Verify per-segment recording on transferred calls</div>
+              <div class="task-detail">Krishna asked if recordings follow the full call journey through transfers and whether each segment is listenable. Tom was unsure — said "I've never actually tried that." Confirm with SE team before proposal. This is a direct QA/compliance use case for them.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: Tom Rupp</span>
+                <span class="tag tag-flag">⚠️ Commitment gap — SE to confirm</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Clarify AI post-call sentiment notifications gap</div>
+              <div class="task-detail">Will asked about manager notifications triggered by call sentiment/rating. Tom confirmed sentiment analysis is available but said real-time notification requires a third party and "is on the 8x8 roadmap." Flag this in the proposal and provide roadmap timeline if available.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: Landon Hendricks</span>
+                <span class="tag tag-note">On roadmap — be transparent in proposal</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Schedule deployment scoping call</div>
+              <div class="task-detail">PJ mentioned this as the next step but didn't book it during the call. Must book within 5 business days of follow-up email. Include deployment specialist. Agenda: site count, user breakdown (CC agents vs. Engage users vs. UC-only), integration priorities (Athena, Relevant, Teams), porting scope.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: PJ Schlegel</span>
+                <span class="tag tag-date">Target: Week of Apr 20</span>
+                <span class="tag tag-flag">🚩 No date confirmed on call</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Confirm Relevant analytics platform integration feasibility</div>
+              <div class="task-detail">"Whitney M. Young Health" (likely Bob Cawley, CIO) mentioned Relevant as their preferred analytics platform and asked about API integration. Tom deferred to pro services. Engage pro services or solution architect to review Relevant's API documentation and confirm data passthrough feasibility before proposal.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: PJ / Pro Services</span>
+                <span class="tag tag-note">Relevant = custom analytics platform</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">WYH: Internal review of demo &amp; alignment on requirements</div>
+              <div class="task-detail">Customer to review recording, confirm priorities, and bring any follow-up questions to scoping call. Six locations, nurses + CC agents + UC users — internal agreement on licensing tiers needed before proposal can be scoped.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: Krishna Cionek / Bob Cawley</span>
+                <span class="tag tag-date">Target: Before scoping call</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-check check-active"></div>
+            <div class="task-content">
+              <div class="task-title">Provide hardware options (Poly phones + DECT/Bluetooth headsets)</div>
+              <div class="task-detail">Will asked about wireless headsets. PJ committed to sharing a link to compatible models. Send Poly phone brochure and DECT/Bluetooth headset options with follow-up email.</div>
+              <div class="task-meta">
+                <span class="tag tag-owner">Owner: PJ Schlegel</span>
+                <span class="tag tag-date">Include in follow-up email</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3: FUTURE -->
+    <div class="phase future">
+      <div class="phase-header">
+        <div class="phase-title-block">
+          <span class="phase-icon">📋</span>
+          <span class="phase-title">Phase 3 — Propose &amp; Prove</span>
+        </div>
+        <span class="phase-badge badge-future">Upcoming</span>
+      </div>
+      <div class="phase-body">
+        <div class="task-list">
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">Deliver scoped proposal</div>
+              <div class="task-detail">Pricing for CC agents, Engage users (nurses/mobile), UC-only users, AI Studio, Proactive Outreach, QMSA, Athena integration, PS/training. Include open PS SKU pending scoping call.</div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">Champion test the Value Map</div>
+              <div class="task-detail">Present to Krishna Cionek (and "Will" once identified) — confirm all six pain areas are addressed. Validate champion's ability to present internally.</div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">Healthcare reference / proof point</div>
+              <div class="task-detail">Provide a comparable FQHC or community health center reference. AI Studio and nurse Engage use cases are differentiators — find a reference that mirrors WYH's environment.</div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">WYH: Internal proposal review</div>
+              <div class="task-detail">CEO (Dave Shippee) and CPA (John Fraher) to review commercials. CIO (Bob Cawley) to review technical scope.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 4: FUTURE -->
+    <div class="phase future">
+      <div class="phase-header">
+        <div class="phase-title-block">
+          <span class="phase-icon">🏆</span>
+          <span class="phase-title">Phase 4 — Vendor of Choice</span>
+        </div>
+        <span class="phase-badge badge-future">Upcoming</span>
+      </div>
+      <div class="phase-body">
+        <div class="task-list">
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">Verbal vendor of choice confirmation</div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">Adoption plan agreed — cutover date, migration approach, porting scope</div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">PS scope confirmed — training package selected</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 5: FUTURE -->
+    <div class="phase future">
+      <div class="phase-header">
+        <div class="phase-title-block">
+          <span class="phase-icon">📝</span>
+          <span class="phase-title">Phase 5 — Contract &amp; Close</span>
+        </div>
+        <span class="phase-badge badge-future">Upcoming</span>
+      </div>
+      <div class="phase-body">
+        <div class="task-list">
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">Legal / contract review (Dave Shippee / John Fraher)</div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="task-check check-future"></div>
+            <div class="task-content">
+              <div class="task-title">Agreement signed — implementation kickoff scheduled</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end main -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="sidebar-card">
+      <div class="sidebar-header">Key Contacts — WYH</div>
+      <div class="sidebar-body">
+        <div class="contact-row">
+          <span class="contact-name" contenteditable="true">Dave Shippee</span>
+          <span class="contact-title">CEO</span>
+          <span class="contact-tag ct-eb">Economic Buyer</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name" contenteditable="true">Bob Cawley</span>
+          <span class="contact-title">CIO</span>
+          <span class="contact-tag ct-champ">Technical Decision Maker</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name" contenteditable="true">Krishna Cionek</span>
+          <span class="contact-title">Director of Operations</span>
+          <span class="contact-tag ct-champ">Champion Candidate</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name" contenteditable="true">Lucia O'Brien</span>
+          <span class="contact-title">PM — Operations &amp; Finance</span>
+          <span class="contact-tag ct-inf">Influencer</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name" contenteditable="true">John Fraher</span>
+          <span class="contact-title">CPA</span>
+          <span class="contact-tag ct-inf">Financial Approver</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name" contenteditable="true">⚠️ "Will" — TBD</span>
+          <span class="contact-title">Title Unknown</span>
+          <span class="contact-tag ct-unk">🚩 Identify Immediately</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-header">8x8 Team</div>
+      <div class="sidebar-body">
+        <div class="contact-row">
+          <span class="contact-name">PJ Schlegel</span>
+          <span class="contact-title">Account Executive</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name">Tom Rupp</span>
+          <span class="contact-title">Sales Engineer</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name">Landon Hendricks</span>
+          <span class="contact-title">CX &amp; Emerging Tech Specialist</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-header">Tech Stack</div>
+      <div class="sidebar-body">
+        <div class="contact-row">
+          <span class="contact-name">Nextiva</span>
+          <span class="contact-title">Current telephony — replacing</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name">Athena Health</span>
+          <span class="contact-title">EHR — integration required</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name">Microsoft Teams (E3 NP)</span>
+          <span class="contact-title">Conferencing + conference bridge lines</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name">Relevant</span>
+          <span class="contact-title">Analytics platform — API integration TBD</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name">Lexi AI</span>
+          <span class="contact-title">Current translation — replacing with Crisp</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-header">Key Requirements</div>
+      <div class="sidebar-body">
+        <div class="contact-row"><span class="contact-name">UC + CC unified platform</span></div>
+        <div class="contact-row"><span class="contact-name">Engage for nurses / mobile staff</span></div>
+        <div class="contact-row"><span class="contact-name">Shared + transcribed voicemail (nurses)</span></div>
+        <div class="contact-row"><span class="contact-name">AI Studio — voice-enabled IVR replacement</span></div>
+        <div class="contact-row"><span class="contact-name">Multi-language (30+ languages via Crisp)</span></div>
+        <div class="contact-row"><span class="contact-name">Proactive outreach — SMS + voice campaigns</span></div>
+        <div class="contact-row"><span class="contact-name">Athena EHR integration (summaries/recordings)</span></div>
+        <div class="contact-row"><span class="contact-name">QMSA + sentiment analysis</span></div>
+        <div class="contact-row"><span class="contact-name">Paging w/ speaker override across sites</span></div>
+        <div class="contact-row"><span class="contact-name">AD/SSO + Teams cross-launch (E3)</span></div>
+        <div class="contact-row"><span class="contact-name">Relevant analytics API integration</span></div>
+        <div class="contact-row"><span class="contact-name">Hot/cold recording storage (up to 10 yrs)</span></div>
+      </div>
+    </div>
+
+  </div><!-- end sidebar -->
+
+</div><!-- end layout -->
+
+<!-- FOOTER -->
+<div class="footer">
+  8x8 Confidential &nbsp;|&nbsp; Whitney Young Health MAP &nbsp;|&nbsp; Demo: Apr 16, 2026 &nbsp;|&nbsp; Landon Hendricks — CX &amp; Emerging Technologies Specialist
+</div>
+
+<script>
+  const KEY = 'wyh-map-v1';
+
+  function save() {
+    const data = {};
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+      data[i] = el.innerHTML;
+    });
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  function load() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+        if (data[i] !== undefined) el.innerHTML = data[i];
+      });
+    } catch(e) {}
+  }
+
+  document.addEventListener('input', save);
+  load();
+</script>
+
+</body>
+</html>

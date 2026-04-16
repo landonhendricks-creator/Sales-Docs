@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whitney Young Health — 8x8 Value Map</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #EAE9E1;
+      color: #111111;
+      padding: 32px 24px 60px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      background: #008486;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      padding: 10px 18px;
+      border-radius: 8px;
+    }
+
+    .header-meta h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111111;
+    }
+
+    .header-meta p {
+      font-size: 13px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .badge-stage {
+      background: #C9DC4F;
+      color: #111;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-print {
+      background: #008486;
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-print:hover { background: #006e70; }
+
+    /* ── DEAL META BAR ── */
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      border-left: 5px solid #008486;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 130px;
+    }
+
+    .meta-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #008486;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 2px;
+    }
+
+    .meta-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    /* ── SECTION CARDS ── */
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: #008486;
+      color: #fff;
+    }
+
+    .section-header .icon { font-size: 18px; }
+
+    .section-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .section-header .subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-left: auto;
+      font-style: italic;
+    }
+
+    .section-body { padding: 18px 20px; }
+
+    /* ── TWO-COL ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+    .col-card {
+      background: #F5F4EE;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .col-card h3 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #008486;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    /* ── ITEMS ── */
+    ul.item-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    ul.item-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      padding: 10px 12px;
+      background: #F5F4EE;
+      border-radius: 7px;
+    }
+
+    .col-card ul.item-list li { background: #fff; }
+
+    ul.item-list li .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #C9DC4F;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    ul.item-list li .dot.red   { background: #e05454; }
+    ul.item-list li .dot.teal  { background: #008486; }
+    ul.item-list li .dot.lime  { background: #C9DC4F; }
+
+    /* ── CAPABILITIES GRID ── */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 780px) { .cap-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .cap-grid { grid-template-columns: 1fr; } }
+
+    .cap-card {
+      background: #F5F4EE;
+      border-radius: 8px;
+      padding: 14px;
+      border-top: 3px solid #C9DC4F;
+    }
+
+    .cap-card h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 6px;
+    }
+
+    .cap-card p {
+      font-size: 12.5px;
+      color: #444;
+      line-height: 1.45;
+    }
+
+    .cap-card .mapped {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #008486;
+      background: #e0f4f4;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* ── RISK PILLS ── */
+    .risk-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .risk-pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .risk-red    { background: #fde8e8; color: #b00; }
+    .risk-yellow { background: #fef9e0; color: #7a5f00; }
+    .risk-green  { background: #e0f4f4; color: #005a5b; }
+
+    /* ── NOTES ── */
+    .notes-field {
+      background: #F5F4EE;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #333;
+      line-height: 1.6;
+      min-height: 60px;
+      outline: none;
+      border: 1px dashed #ccc;
+    }
+    .notes-field:focus { border-color: #008486; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #999;
+      margin-top: 32px;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      body { background: #EAE9E1 !important; padding: 12px 16px 32px; font-size: 12px; }
+      .btn-print { display: none !important; }
+      [contenteditable="true"] { outline: none !important; border: none !important; }
+      .notes-field { border: 1px solid #ddd !important; }
+
+      .section {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 14px !important;
+      }
+
+      .section-header { background: #008486 !important; color: #fff !important; }
+      .logo-badge     { background: #008486 !important; color: #fff !important; }
+      .badge-stage    { background: #C9DC4F !important; color: #111 !important; }
+      .meta-bar       { background: #fff !important; border-left: 5px solid #008486 !important; }
+      .col-card       { background: #F5F4EE !important; }
+      .cap-card       { background: #F5F4EE !important; border-top: 3px solid #C9DC4F !important; }
+      .cap-card .mapped { background: #e0f4f4 !important; color: #008486 !important; }
+      .notes-field    { background: #F5F4EE !important; }
+
+      ul.item-list li             { background: #F5F4EE !important; }
+      .col-card ul.item-list li   { background: #fff !important; }
+
+      .dot      { background: #C9DC4F !important; border-radius: 50% !important; }
+      .dot.red  { background: #e05454 !important; }
+      .dot.teal { background: #008486 !important; }
+      .dot.lime { background: #C9DC4F !important; }
+
+      .risk-pill.risk-red    { background: #fde8e8 !important; color: #b00 !important; }
+      .risk-pill.risk-yellow { background: #fef9e0 !important; color: #7a5f00 !important; }
+      .risk-pill.risk-green  { background: #e0f4f4 !important; color: #005a5b !important; }
+
+      .cap-card  { break-inside: avoid; page-break-inside: avoid; }
+      .col-card  { break-inside: avoid; page-break-inside: avoid; }
+
+      .section-body   { padding: 12px 16px !important; }
+      .section-header { padding: 10px 16px !important; }
+      .cap-grid       { gap: 10px !important; }
+      .two-col        { gap: 12px !important; }
+      ul.item-list    { gap: 6px !important; }
+      ul.item-list li { padding: 8px 10px !important; font-size: 12px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-block">
+    <div class="logo-badge">8x8</div>
+    <div class="header-meta">
+      <h1>Whitney Young Health — Value Map</h1>
+      <p>UCaaS + CCaaS Opportunity &nbsp;|&nbsp; Direct Deal &nbsp;|&nbsp; PJ Schlegel + Landon Hendricks + Tom Rupp</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <span class="badge-stage">Stage 2 — Problem</span>
+    <button class="btn-print" onclick="window.print()">Export PDF</button>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="meta-bar">
+  <div class="meta-item">
+    <span class="meta-label">Account</span>
+    <span class="meta-value" contenteditable="true">Whitney Young Health</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Champion</span>
+    <span class="meta-value" contenteditable="true">Krishna Cionek (TBC)</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Econ. Buyer</span>
+    <span class="meta-value" contenteditable="true">Dave Shippee — CEO</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Industry</span>
+    <span class="meta-value">FQHC / Healthcare</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Locations</span>
+    <span class="meta-value">6 sites — Albany region</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Incumbent</span>
+    <span class="meta-value">Nextiva</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">EHR</span>
+    <span class="meta-value">Athena Health</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Microsoft</span>
+    <span class="meta-value">M365 E3 (Nonprofit)</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Demo Date</span>
+    <span class="meta-value">Apr 16, 2026</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Target Close</span>
+    <span class="meta-value" contenteditable="true">TBD — confirm at scoping</span>
+  </div>
+</div>
+
+<!-- RISK PILLS -->
+<div class="risk-bar">
+  <span class="risk-pill risk-red">🚩 Champion not confirmed — "Will" unidentified</span>
+  <span class="risk-pill risk-red">🚩 No follow-up call booked at demo close</span>
+  <span class="risk-pill risk-yellow">⚠️ Crisp translation healthcare compliance unverified</span>
+  <span class="risk-pill risk-yellow">⚠️ Relevant analytics integration feasibility unknown</span>
+  <span class="risk-pill risk-yellow">⚠️ AI post-call notifications: on roadmap, not native today</span>
+  <span class="risk-pill risk-green">✅ CEO attended + called demo "comprehensive"</span>
+  <span class="risk-pill risk-green">✅ No competing vendor mentioned</span>
+  <span class="risk-pill risk-green">✅ Strong cross-functional engagement at demo</span>
+</div>
+
+
+<!-- ── SECTION 1: OBJECTIVES ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">🎯</span>
+    <h2>Objectives</h2>
+    <span class="subtitle">What Whitney Young Health is trying to accomplish</span>
+  </div>
+  <div class="section-body">
+    <ul class="item-list">
+      <li><span class="dot teal"></span><span contenteditable="true">Replace Nextiva with a unified UCaaS + CCaaS platform that serves all roles — CC scheduling agents, clinical nursing staff, and general office users — under one system across 6 locations.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Reduce patient hold times and abandoned calls through better queue management, callback capability, and an AI-powered IVR that replaces a complex, confusing phone tree.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Give nursing staff a flexible, mobile-friendly way to manage shared voicemails with transcription — visible and actionable by the whole team, not trapped on individual phones.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Deliver proactive patient outreach via SMS and voice — appointment reminders, provider callout notifications, and gap list campaigns — without manual intervention.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Support 30+ patient languages through real-time AI translation in the contact center, replacing the current manual language line process.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Integrate with Athena Health (EHR) to push call summaries and recordings to patient charts, and with Relevant (analytics platform) via API for unified data reporting.</span></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ── SECTION 2: STRATEGIES ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">♟️</span>
+    <h2>Strategies</h2>
+    <span class="subtitle">How Whitney Young Health plans to get there</span>
+  </div>
+  <div class="section-body">
+    <ul class="item-list">
+      <li><span class="dot lime"></span><span contenteditable="true">Evaluate a single-platform vendor that handles both UC and CC natively — avoid stitching together separate products (Nextiva for UC, third-party for CC) that don't share data or reporting.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Use a mixed licensing model — full CC agent seats for scheduling staff, Engage (mobile/informal) for clinical nurses, standard UC for office users — to control cost while meeting all workflows.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Prioritize out-of-box AI capability (voice bot, translation, proactive outreach) that can be stood up without a developer — clinical and ops teams don't have the bandwidth for custom builds.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Replace the current DTMF phone tree with a voice-enabled AI IVR that lets patients say what they need in their own language and get routed correctly — reducing misroutes and caller frustration.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Leverage existing Microsoft E3 licensing — Teams cross-launch integration allows users to stay in a familiar interface while gaining full 8x8 telephony capabilities without re-licensing.</span></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ── SECTION 3: INITIATIVES ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">📋</span>
+    <h2>Initiatives</h2>
+    <span class="subtitle">Active projects and decisions in motion</span>
+  </div>
+  <div class="section-body">
+    <ul class="item-list">
+      <li><span class="dot lime"></span><span contenteditable="true">Telephony platform replacement underway — Nextiva being evaluated for replacement. 8x8 is the current active vendor being evaluated. No competitor mentioned on the call.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">8x8 demo completed Apr 16, 2026 — CEO, CIO, Dir. of Operations, PM, CPA, and "Will" (TBD) attended. Demo received positively. Scoping call and proposal as next steps.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Athena Health EHR integration — active system. Call summary and recording push to patient chart is a confirmed requirement. Pro services scoping needed.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Relevant analytics platform — WYH prefers to route 8x8 data through Relevant rather than native 8x8 analytics. API integration feasibility to be confirmed by pro services.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Language access program — currently using Lexi AI + manual language lines. Evaluating replacement with Crisp (8x8 partner) for real-time AI translation across 30+ languages. Healthcare compliance verification in progress.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Proactive patient outreach — no automated outreach solution today. Appointment reminders, provider cancellations, and gap list campaigns are a clear and confirmed use case.</span></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ── SECTION 4: CHALLENGES ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">⚡</span>
+    <h2>Challenges</h2>
+    <span class="subtitle">Current pain + cost of doing nothing</span>
+  </div>
+  <div class="section-body">
+    <div class="two-col">
+      <div class="col-card">
+        <h3>Current Pain</h3>
+        <ul class="item-list">
+          <li><span class="dot red"></span><span contenteditable="true">Long patient hold times — no callback option today. Patients wait, get frustrated, or abandon. No data on why calls are abandoned or how long waits are.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">Nurses physically dialing into individual voicemail boxes to listen to messages one at a time — no transcription, no shared visibility, no way to see what's been handled.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">Complex DTMF phone tree causing patients to get lost or misrouted. Voice-enabled routing doesn't exist today — callers must navigate press-1, press-2 menus across multiple departments and locations.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">30+ patient languages handled through manual language lines — agent places a separate call, merges it, waits. No AI translation in the queue. Slow, inconsistent, adds to handle time.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">No proactive outreach capability — appointment reminders, provider callouts, and gap list campaigns are manual or don't happen. Provider callout at 7AM means staff scrambling to notify patients individually.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">Phone directory requires device reboot to reflect updates — new staff additions don't propagate to endpoint directories automatically, creating friction and outdated contact lists across 6 sites.</span></li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>Cost of Doing Nothing</h3>
+        <ul class="item-list">
+          <li><span class="dot red"></span><span contenteditable="true">Abandoned calls = missed patient access. For a federally qualified health center serving uninsured and underinsured patients, every dropped call is a missed care opportunity — directly counter to WYH's mission.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">Nursing staff continues to lose time on voicemail management instead of patient care. Shared queues going unmonitored means messages sit, get missed, or get actioned by the wrong person.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">No outbound outreach means no-show rates stay elevated and gap list patients go unreached. Revenue impact on both sides — missed appointments and untouched at-risk populations.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">Manual language line process adds minutes per call and depends on interpreter availability. Patients with limited English face longer waits and less consistent care access than English-speaking patients.</span></li>
+          <li><span class="dot red"></span><span contenteditable="true">No call-to-chart data in Athena means supervisors can't close the loop between patient conversations and clinical records. QA and complaint resolution requires manual hunting across disconnected systems.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── SECTION 5: FUTURE STATE ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">🚀</span>
+    <h2>Future State & Positive Business Outcomes</h2>
+    <span class="subtitle">Where Whitney Young Health wants to be — measurable value</span>
+  </div>
+  <div class="section-body">
+    <ul class="item-list">
+      <li><span class="dot teal"></span><span contenteditable="true">Patients call in, say what they need in any language, get routed to the right department or location without navigating a multi-level DTMF tree — reducing misroutes, hold times, and abandoned calls.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Nurses see a shared, transcribed voicemail inbox for their group — read at a glance, flagged when actioned, accessible from laptop or mobile. No more physical phone pickups to sort messages.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Provider calls out at 7AM — every affected patient gets an automated SMS or voice message within minutes. No staff scramble, no missed notifications, confirmation or reschedule reply routes to a live agent.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Supervisors monitor call quality with sentiment analysis and QMSA — complaints can be reviewed with full call journey, per-segment recordings, and transcriptions. QA goes from reactive to systematic.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">Every call summary and recording link pushed directly to the Athena patient chart — clinicians have full context before follow-up, no manual documentation step for the agent.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">30+ languages served through Crisp real-time AI translation — patient and agent speak naturally, translation is instantaneous. Language access is consistent, fast, and no longer dependent on interpreter line availability.</span></li>
+      <li><span class="dot teal"></span><span contenteditable="true">All UC, CC, Engage, and SMS data flows into one unified data lake — Relevant analytics platform receives a clean API feed, eliminating siloed reporting and giving leadership a single view of patient communication performance.</span></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ── SECTION 6: REQUIRED CAPABILITIES ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">🔧</span>
+    <h2>Required Capabilities</h2>
+    <span class="subtitle">What the solution must do — mapped to 8x8</span>
+  </div>
+  <div class="section-body">
+    <div class="cap-grid">
+
+      <div class="cap-card">
+        <h4>Unified UC + CC Platform</h4>
+        <p>Single platform for all roles — CC scheduling agents, clinical nurses (Engage), office staff (UC). No separate vendors, no data silos between communication types.</p>
+        <span class="mapped">8x8 X Series + CC (X6/X7) ✓</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Engage — Clinical / Mobile Staff</h4>
+        <p>Nurses on laptop or mobile device, joining queues informally, accessing shared voicemails, pausing/resuming availability. Less formal than CC agent but still queue-enabled.</p>
+        <span class="mapped">8x8 Engage Voice ✓</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>AI Studio — Voice-Enabled IVR</h4>
+        <p>Replaces DTMF phone tree. Natural language routing — patient says what they need, system routes them. No developer required. Built-in copilot. Multi-language switch (including Spanish) confirmed in demo.</p>
+        <span class="mapped">8x8 AI Studio ✓</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Shared Transcribed Voicemail</h4>
+        <p>Group voicemail with transcription visible to all members. Read/unread status flagged across the team. Email distribution to nursing group. No physical dial-in required.</p>
+        <span class="mapped">8x8 Work — Group VM + Transcription ✓</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Proactive Outreach (SMS + Voice)</h4>
+        <p>Automated appointment reminders, provider cancellation broadcasts, gap list campaigns. Two-way SMS routes replies to live agents. Webhook/API triggers from EHR or scheduling system.</p>
+        <span class="mapped">8x8 Proactive Outreach ✓</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Real-Time Multi-Language Translation</h4>
+        <p>30+ patient languages. Real-time AI translation between agent and caller during live call. Replaces manual language line process. Healthcare accuracy benchmarks required — Crisp partner integration.</p>
+        <span class="mapped">Crisp (8x8 Partner) — verify compliance ⚠️</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Athena Health Integration</h4>
+        <p>Call summaries and recording links pushed to patient chart in Athena post-call. API-based. Pro services scoping required. Confirmed as a standard integration type for 8x8.</p>
+        <span class="mapped">8x8 PS — Athena API Integration ✓</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>QMSA — Quality Mgmt + Speech Analytics</h4>
+        <p>Post-call sentiment mapping, transcription, keyword search, topic analysis. Hot storage (up to 1 yr), cold storage (up to 10 yrs). Call journey tracking across transfers. Per-segment recording — SE to confirm.</p>
+        <span class="mapped">QMSA (X7/X8) — transfer recording TBD ⚠️</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Supervisor Workspace + Real-Time Dashboards</h4>
+        <p>Configurable widgets — queue health, agent status, abandon rate, SLA, longest wait. Monitor/whisper/barge. Agent state alerts. Keyword/sentiment notifications (roadmap for native; 3rd party today).</p>
+        <span class="mapped">Supervisor Workspace ✓ / Alerts: roadmap ⚠️</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Relevant Analytics Integration</h4>
+        <p>WYH prefers to centralize all data in Relevant platform rather than native 8x8 analytics. API/webhook data passthrough required. Pro services to confirm feasibility pre-proposal.</p>
+        <span class="mapped">8x8 API — PS feasibility TBD ⚠️</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Teams Cross-Launch + SSO (M365 E3)</h4>
+        <p>8x8 widget embedded in Microsoft Teams for users on E3 nonprofit license. SSO + Active Directory provisioning. Conference bridge lines through Teams to be scoped — may remain or migrate.</p>
+        <span class="mapped">Teams Cross-Launch + AD/SSO ✓</span>
+      </div>
+
+      <div class="cap-card">
+        <h4>Paging + Hardware</h4>
+        <p>Multi-site paging groups with speaker volume override (page bypasses mute). Poly phones + DECT / Bluetooth wireless headsets. Paging group limit governed by network multicast — LAN scoping needed.</p>
+        <span class="mapped">Poly Hardware + Paging Groups ✓</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ── OPEN ITEMS ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">📌</span>
+    <h2>Open Items & Next Steps</h2>
+  </div>
+  <div class="section-body">
+    <ul class="item-list">
+      <li><span class="dot red"></span><span contenteditable="true">CRITICAL — Identify "Will" (demo attendee, unknown title). Most technically engaged person on the call. Confirm role before champion assessment is finalized.</span></li>
+      <li><span class="dot red"></span><span contenteditable="true">CRITICAL — Book deployment scoping call (week of Apr 20). Agenda: site count, user breakdown by role, integration priorities, porting scope, timeline. No date confirmed on the demo call.</span></li>
+      <li><span class="dot red"></span><span contenteditable="true">Crisp healthcare translation compliance — confirm supported language list, accuracy benchmarks, and HIPAA/healthcare certifications before this appears in a proposal. Tom made a verbal commitment on the call.</span></li>
+      <li><span class="dot red"></span><span contenteditable="true">Per-segment recording on transferred calls — Tom was uncertain. SE (Tom Rupp) to confirm and document before proposal. Direct QA/compliance use case raised by Krishna Cionek.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Send follow-up email with demo recording, AI Studio test number, Poly hardware options, and open items summary. Target: Apr 17.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Relevant analytics API — engage pro services to assess data passthrough feasibility. WYH wants 8x8 data routed through Relevant, not native 8x8 analytics.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Flag AI post-call sentiment notifications in proposal — native capability is on the 8x8 roadmap. Current solution requires a third-party integration. Be transparent; provide roadmap timeline if available.</span></li>
+      <li><span class="dot lime"></span><span contenteditable="true">Confirm champion — test Krishna Cionek's ability to carry the proposal internally. Does she have access to Dave Shippee (CEO)? Can she drive the internal narrative? Validate at scoping call.</span></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ── DISCOVERY / DEMO NOTES ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="icon">📝</span>
+    <h2>Demo Notes</h2>
+  </div>
+  <div class="section-body">
+    <div class="notes-field" contenteditable="true">
+Whitney Young Health is a Federally Qualified Health Center (FQHC) serving 20,000+ patients across 6 sites in Albany, NY region (Albany, Troy, Watervliet, Swinburne, school-based centers, addiction treatment). Mission: equitable and accessible care for uninsured/underinsured populations. Accepts Medicaid, Medicare, sliding scale.
+
+Current stack: Nextiva (telephony — replacing), Athena Health (EHR), M365 E3 nonprofit (Teams + conference bridges), Lexi AI (translation — replacing with Crisp), Relevant (analytics platform — integration required).
+
+Demo Apr 16: Tom Rupp built a custom WYH AI Studio bot in ~15 min. Live demo of Spanish language switch and SMS appointment confirmation worked in real time. CEO Dave Shippee called it "comprehensive." All key stakeholders attended. Strong engagement throughout — especially from "Will" (title unknown) and Krishna Cionek.
+
+Key moments: nurse shared voicemail transcription resonated strongly with the WYH attendee (likely Bob Cawley/CIO). Proactive outreach + provider callout use case landed well with Will. Krishna focused on QA/compliance — call journey tracking, per-segment recordings. No competitor mentioned.
+
+Biggest gap post-demo: no follow-up call booked. "I'll be in touch" is not a next step.
+    </div>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<div class="footer">
+  8x8 Confidential &nbsp;|&nbsp; Whitney Young Health Value Map &nbsp;|&nbsp; Demo: Apr 16, 2026 &nbsp;|&nbsp; Landon Hendricks — CX &amp; Emerging Technologies Specialist
+</div>
+
+<script>
+  const KEY = 'wyh-value-map-v1';
+
+  function save() {
+    const data = {};
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+      data[i] = el.innerHTML;
+    });
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  function load() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+        if (data[i] !== undefined) el.innerHTML = data[i];
+      });
+    } catch(e) {}
+  }
+
+  document.addEventListener('input', save);
+  load();
+</script>
+
+</body>
+</html>
