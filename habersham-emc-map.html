@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Habersham EMC — 8x8 Mutual Action Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #EAE9E1;
+    color: #111111;
+    min-height: 100vh;
+    padding: 28px 24px 60px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-badge {
+    background: #008486;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+  .deal-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #111111;
+    letter-spacing: -.01em;
+  }
+  .deal-title span { color: #008486; }
+
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 26px;
+    font-size: 13px;
+    color: #444;
+  }
+  .meta-bar .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #C9DC4F;
+    flex-shrink: 0;
+  }
+  .meta-bar strong { color: #111; }
+  .badge-stage {
+    margin-left: auto;
+    background: #008486;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── Layout: MAP + Sidebar ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* ── Phase blocks ── */
+  .phase-block {
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 18px;
+    cursor: default;
+  }
+  .phase-header.done   { background: #008486; }
+  .phase-header.active { background: #C9DC4F; }
+  .phase-header.future { background: #d5d4cc; }
+
+  .phase-number {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .done   .phase-number { background: rgba(255,255,255,.25); color: #fff; }
+  .active .phase-number { background: rgba(0,0,0,.12); color: #111; }
+  .future .phase-number { background: rgba(0,0,0,.1);  color: #555; }
+
+  .phase-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .done   .phase-title { color: #fff; }
+  .active .phase-title { color: #111; }
+  .future .phase-title { color: #666; }
+
+  .phase-date {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 500;
+    opacity: .8;
+  }
+  .done   .phase-date { color: #cef; }
+  .active .phase-date { color: #444; }
+  .future .phase-date { color: #888; }
+
+  .phase-body {
+    padding: 14px 18px 16px;
+  }
+  .future .phase-body { opacity: .45; }
+
+  .task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .task-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: background .15s, border-color .15s;
+  }
+  .task-check.checked {
+    background: #008486;
+    border-color: #008486;
+    color: #fff;
+  }
+  .task-check.checked::after { content: '✓'; font-weight: 700; }
+
+  .task-text {
+    flex: 1;
+    outline: none;
+    color: #222;
+  }
+  .task-text:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+
+  .task-owner {
+    font-size: 11px;
+    font-weight: 600;
+    color: #008486;
+    background: #e6f4f4;
+    padding: 2px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    outline: none;
+    white-space: nowrap;
+  }
+  .task-owner:focus { box-shadow: 0 0 0 2px #008486; }
+  .task-owner.partner { color: #7a5800; background: #fff3cd; }
+  .task-owner.prospect { color: #1a4e6e; background: #dbeeff; }
+
+  .add-task-btn {
+    margin-top: 10px;
+    background: none;
+    border: 1.5px dashed #ccc;
+    border-radius: 6px;
+    color: #aaa;
+    font-size: 12px;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: border-color .15s, color .15s;
+  }
+  .add-task-btn:hover { border-color: #008486; color: #008486; }
+
+  /* ── Sidebar ── */
+  .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+  .side-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .side-card-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #008486;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+  .side-card-title.dark   { background: #111111; }
+  .side-card-title.accent { background: #C9DC4F; color: #111; }
+
+  .contact-list { display: flex; flex-direction: column; gap: 10px; }
+  .contact-item { display: flex; flex-direction: column; gap: 2px; }
+  .contact-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    outline: none;
+  }
+  .contact-name:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+  .contact-role {
+    font-size: 12px;
+    color: #666;
+    outline: none;
+  }
+  .contact-role:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+  .contact-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 20px;
+    width: fit-content;
+    margin-top: 1px;
+  }
+  .tag-champion { background: #C9DC4F; color: #111; }
+  .tag-admin    { background: #e6f4f4; color: #008486; }
+  .tag-eb       { background: #fde8e8; color: #c0392b; }
+  .tag-partner  { background: #fff3cd; color: #7a5800; }
+  .tag-8x8      { background: #008486; color: #fff; }
+  .tag-unknown  { background: #eee; color: #888; }
+
+  .tech-list { display: flex; flex-direction: column; gap: 6px; }
+  .tech-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 5px 8px;
+    background: #EAE9E1;
+    border-radius: 5px;
+  }
+  .tech-label { font-weight: 600; color: #222; }
+  .tech-val { color: #555; font-size: 12px; }
+  .tech-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 20px;
+  }
+  .tb-keep    { background: #d4f0d1; color: #1a6e1a; }
+  .tb-replace { background: #fde8e8; color: #c0392b; }
+  .tb-reuse   { background: #fff3cd; color: #7a5800; }
+
+  /* ── Save indicator ── */
+  #save-indicator {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    background: #008486;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  #save-indicator.show { opacity: 1; }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #EAE9E1 !important; padding: 12px !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    #save-indicator { display: none !important; }
+    .layout { grid-template-columns: 1fr 260px !important; gap: 14px !important; }
+    .phase-block { page-break-inside: avoid; }
+    .phase-header.done   { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .phase-header.active { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .phase-header.future { background: #d5d4cc !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .logo-badge  { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .badge-stage { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar    { background: #fff    !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar .dot { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .side-card-title       { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .side-card-title.dark  { background: #111111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .side-card-title.accent{ background: #C9DC4F !important; color: #111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-champion { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-8x8      { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-eb       { background: #fde8e8 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-partner  { background: #fff3cd !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-admin    { background: #e6f4f4 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-unknown  { background: #eee    !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tb-keep      { background: #d4f0d1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tb-replace   { background: #fde8e8 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tb-reuse     { background: #fff3cd !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tech-item    { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-check.checked { background: #008486 !important; border-color: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-owner   { background: #e6f4f4 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-owner.partner  { background: #fff3cd !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-owner.prospect { background: #dbeeff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .add-task-btn { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <div class="logo-badge">8x8 Mutual Action Plan</div>
+  <h1 class="deal-title">Habersham <span>EMC</span></h1>
+</div>
+
+<!-- Meta bar -->
+<div class="meta-bar">
+  <div class="dot"></div>
+  <strong>AE:</strong> Stacie Marquardt
+  <span>|</span>
+  <strong>SE:</strong> Tom Rupp
+  <span>|</span>
+  <strong>Champion:</strong> Tony (Dir. IT)
+  <span>|</span>
+  <strong>Partner:</strong> Jeff Allen / OneSource
+  <span>|</span>
+  <strong>Selection Target:</strong> Mid–Late June 2026
+  <div class="badge-stage">Stage 1 → 2</div>
+</div>
+
+<div class="layout">
+
+  <!-- ── MAP Column ── -->
+  <div class="map-col">
+
+    <!-- Phase 1: Done -->
+    <div class="phase-block">
+      <div class="phase-header done">
+        <div class="phase-number">Phase 1</div>
+        <div class="phase-title">Discovery &amp; Initial Demo</div>
+        <div class="phase-date">Apr 16, 2026 ✓</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list">
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Introductory discovery call — current environment, pain points, and goals captured</div>
+            <div class="task-owner">8x8 + OneSource</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Live 8x8 platform demo — UCaaS, CCaaS, AI Studio storm IVR, post-call surveys, reporting</div>
+            <div class="task-owner">Tom Rupp / SE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Confirmed Mitel 6940/6930 SIP compatibility — phone reuse approved</div>
+            <div class="task-owner prospect">Tony / IT</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Confirmed Azure AD / SCIM SSO requirements and 8x8 support</div>
+            <div class="task-owner prospect">Will &amp; Steven</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Creovai integration requirement identified — FTP method, Valerie's QA program must be preserved</div>
+            <div class="task-owner">8x8</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">7-year recording retention requirement documented — capital credits dispute use case confirmed</div>
+            <div class="task-owner prospect">Tony / IT</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Phase 2: Active -->
+    <div class="phase-block">
+      <div class="phase-header active">
+        <div class="phase-number">Phase 2</div>
+        <div class="phase-title">Technical Validation &amp; Executive Demo</div>
+        <div class="phase-date">Now → Early May 2026</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list" id="phase2-tasks">
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Confirm Creovai integration method with 8x8 product team — FTP handoff vs. API; document approach</div>
+            <div class="task-owner">Tom Rupp / SE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Validate Mitel 6940/6930 on 8x8 production provisioning — SE to formally confirm model support</div>
+            <div class="task-owner">Tom Rupp / SE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Identify and name the executive sponsor (EB) — Tony to introduce; must attend next demo</div>
+            <div class="task-owner prospect">Tony / IT</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Schedule second demo — include Tony, Will, Steven, Austin, Valerie, and EB. Target: early May 2026</div>
+            <div class="task-owner">Stacie / AE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Deliver second demo — expanded stakeholders, focus on AI Studio storm IVR, Creovai integration plan, reporting accuracy</div>
+            <div class="task-owner">Tom + Landon</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Identify competitor in evaluation — Jeff Allen / OneSource to gather intel on second vendor</div>
+            <div class="task-owner partner">Jeff Allen</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Confirm cold storage pricing for 7-year recording retention — quote per-seat or per-GB accurately</div>
+            <div class="task-owner">Stacie / AE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Deliver Value Map to Tony — align on Required Capabilities and confirm no gaps before proposal</div>
+            <div class="task-owner">Landon / CC Spec</div>
+          </li>
+        </ul>
+        <button class="add-task-btn" onclick="addTask('phase2-tasks')">+ Add task</button>
+      </div>
+    </div>
+
+    <!-- Phase 3: Future -->
+    <div class="phase-block">
+      <div class="phase-header future">
+        <div class="phase-number">Phase 3</div>
+        <div class="phase-title">Proposal &amp; Business Case</div>
+        <div class="phase-date">May–June 2026</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list" id="phase3-tasks">
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Deliver formal proposal and pricing — UCaaS + CCaaS, Creovai integration, cold storage, phone reuse</div>
+            <div class="task-owner">Stacie / AE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Present ROI / business case to EB — reporting accuracy savings, storm IVR value, cost vs. Mitel refresh</div>
+            <div class="task-owner">8x8 + OneSource</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Technical Q&amp;A / security review — SCIM, data residency, recording encryption, Creovai data flow</div>
+            <div class="task-owner">Tom Rupp / SE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Proposal review and objection handling with Tony + EB</div>
+            <div class="task-owner prospect">Tony / EB</div>
+          </li>
+        </ul>
+        <button class="add-task-btn" onclick="addTask('phase3-tasks')">+ Add task</button>
+      </div>
+    </div>
+
+    <!-- Phase 4: Future -->
+    <div class="phase-block">
+      <div class="phase-header future">
+        <div class="phase-number">Phase 4</div>
+        <div class="phase-title">Vendor Selection &amp; Contract</div>
+        <div class="phase-date">Mid–Late June 2026</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list" id="phase4-tasks">
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Executive selects preferred vendor — 8x8 vs. competitor. Decision communicated to Tony by June target</div>
+            <div class="task-owner prospect">EB / Exec</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Contract negotiations — licensing, term, OneSource channel terms</div>
+            <div class="task-owner">Stacie + Jeff Allen</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">MSA / SOW signed; kickoff date confirmed ahead of August budget cycle</div>
+            <div class="task-owner">Stacie / AE</div>
+          </li>
+        </ul>
+        <button class="add-task-btn" onclick="addTask('phase4-tasks')">+ Add task</button>
+      </div>
+    </div>
+
+    <!-- Phase 5: Future -->
+    <div class="phase-block">
+      <div class="phase-header future">
+        <div class="phase-number">Phase 5</div>
+        <div class="phase-title">Implementation &amp; Go-Live</div>
+        <div class="phase-date">Aug–Nov 2026</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list" id="phase5-tasks">
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Implementation kickoff — project plan, number porting, Azure AD/SCIM provisioning, Mitel SIP phone config</div>
+            <div class="task-owner">8x8 PS</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Creovai integration go-live — FTP/API handoff validated in production; Valerie confirms QA workflow intact</div>
+            <div class="task-owner">8x8 PS + Creovai</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">AI Studio storm IVR mode configured and tested — tabletop exercise with Tony's team</div>
+            <div class="task-owner">Tom Rupp + 8x8 PS</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Full go-live — all 112 users migrated; board reporting via Power BI confirmed accurate</div>
+            <div class="task-owner prospect">Tony / IT</div>
+          </li>
+        </ul>
+        <button class="add-task-btn" onclick="addTask('phase5-tasks')">+ Add task</button>
+      </div>
+    </div>
+
+  </div><!-- /map-col -->
+
+  <!-- ── Sidebar ── -->
+  <div class="sidebar">
+
+    <!-- Prospect Contacts -->
+    <div class="side-card">
+      <div class="side-card-title">Prospect Contacts</div>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Tony</div>
+          <div class="contact-role" contenteditable="true">Director of IT</div>
+          <div class="contact-tag tag-champion">Champion</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Valerie</div>
+          <div class="contact-role" contenteditable="true">Director of Member Services</div>
+          <div class="contact-tag tag-admin">Key User — Creovai</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Will</div>
+          <div class="contact-role" contenteditable="true">System Administrator</div>
+          <div class="contact-tag tag-admin">Technical</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Steven</div>
+          <div class="contact-role" contenteditable="true">System Administrator</div>
+          <div class="contact-tag tag-admin">Technical</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Austin</div>
+          <div class="contact-role" contenteditable="true">System Support</div>
+          <div class="contact-tag tag-admin">Technical</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Executive Sponsor — TBD</div>
+          <div class="contact-role" contenteditable="true">Wants to see top 2 vendors before deciding</div>
+          <div class="contact-tag tag-eb">⚠ EB — Not Yet Named</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8x8 / Partner Team -->
+    <div class="side-card">
+      <div class="side-card-title dark">8x8 &amp; Partner Team</div>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Stacie Marquardt</div>
+          <div class="contact-role" contenteditable="true">Account Executive, 8x8</div>
+          <div class="contact-tag tag-8x8">8x8 AE</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Tom Rupp</div>
+          <div class="contact-role" contenteditable="true">Sales Engineer, 8x8</div>
+          <div class="contact-tag tag-8x8">8x8 SE</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Landon Hendricks</div>
+          <div class="contact-role" contenteditable="true">CC Specialist, 8x8</div>
+          <div class="contact-tag tag-8x8">8x8 CC Spec</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Jeff Allen</div>
+          <div class="contact-role" contenteditable="true">OneSource — Channel Partner</div>
+          <div class="contact-tag tag-partner">Partner</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Tech Stack -->
+    <div class="side-card">
+      <div class="side-card-title accent">Current Tech Stack</div>
+      <div class="tech-list">
+        <div class="tech-item">
+          <span class="tech-label">PBX</span>
+          <span class="tech-badge tb-replace">Replace</span>
+          <span class="tech-val">Mitel MiVoice 3300</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">CC Chat</span>
+          <span class="tech-badge tb-replace">Replace</span>
+          <span class="tech-val">Mitel Ignite</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">QA / Sentiment</span>
+          <span class="tech-badge tb-keep">Keep</span>
+          <span class="tech-val">Creovai</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Meetings</span>
+          <span class="tech-badge tb-keep">Keep</span>
+          <span class="tech-val">MS Teams E3</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Identity</span>
+          <span class="tech-badge tb-keep">Keep</span>
+          <span class="tech-val">Azure AD / SCIM</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Phones</span>
+          <span class="tech-badge tb-reuse">Reuse</span>
+          <span class="tech-val">Mitel 6940 / 6930</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Reporting</span>
+          <span class="tech-badge tb-replace">Fix</span>
+          <span class="tech-val">Power BI (data gap)</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">PBX Support</span>
+          <span class="tech-badge tb-replace">Gone</span>
+          <span class="tech-val">CT Solutions (left)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deal Context -->
+    <div class="side-card">
+      <div class="side-card-title dark">Deal Context</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;line-height:1.5;color:#333;" contenteditable="true">
+        <div><strong>Size:</strong> 112 employees, 2 locations, 11-12 CC agents</div>
+        <div><strong>Segment:</strong> Electric Co-op, Clarkesville GA</div>
+        <div><strong>Decision by:</strong> Mid–Late June 2026</div>
+        <div><strong>Budget cycle:</strong> Aug open, Nov board approval</div>
+        <div><strong>Competitors:</strong> TBD — 2 vendors in eval</div>
+        <div><strong>Risk:</strong> EB unnamed; Creovai integration TBD</div>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+
+</div><!-- /layout -->
+
+<div id="save-indicator">Saved</div>
+
+<script>
+(function () {
+  const KEY = 'habersham-emc-map-v1';
+  const INDICATOR = document.getElementById('save-indicator');
+  let timer;
+
+  function showSaved() {
+    INDICATOR.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(() => INDICATOR.classList.remove('show'), 1800);
+  }
+
+  function getState() {
+    const data = {};
+    // contenteditable
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+      data['ce_' + i] = el.innerHTML;
+    });
+    // checkboxes
+    document.querySelectorAll('.task-check').forEach((el, i) => {
+      data['chk_' + i] = el.classList.contains('checked');
+    });
+    return data;
+  }
+
+  function applyState(data) {
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+      if (data['ce_' + i] !== undefined) el.innerHTML = data['ce_' + i];
+    });
+    document.querySelectorAll('.task-check').forEach((el, i) => {
+      if (data['chk_' + i] !== undefined) {
+        el.classList.toggle('checked', data['chk_' + i]);
+      }
+    });
+  }
+
+  function save() {
+    localStorage.setItem(KEY, JSON.stringify(getState()));
+    showSaved();
+  }
+
+  function load() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try { applyState(JSON.parse(raw)); } catch (e) { /* ignore */ }
+  }
+
+  // Checkbox toggle
+  document.addEventListener('click', function (e) {
+    const chk = e.target.closest('.task-check');
+    if (chk) {
+      chk.classList.toggle('checked');
+      save();
+    }
+  });
+
+  document.addEventListener('input', save);
+  load();
+})();
+
+function addTask(listId) {
+  const list = document.getElementById(listId);
+  const li = document.createElement('li');
+  li.className = 'task-item';
+  li.innerHTML = `
+    <div class="task-check"></div>
+    <div class="task-text" contenteditable="true">New task</div>
+    <div class="task-owner" contenteditable="true">Owner</div>
+  `;
+  list.appendChild(li);
+  li.querySelector('.task-text').focus();
+}
+</script>
+</body>
+</html>

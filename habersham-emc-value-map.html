@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Habersham EMC — 8x8 Value Map</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #EAE9E1;
+    color: #111111;
+    min-height: 100vh;
+    padding: 32px 24px 60px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-badge {
+    background: #008486;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+  .deal-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #111111;
+    letter-spacing: -.01em;
+  }
+  .deal-title span { color: #008486; }
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: #444;
+  }
+  .meta-bar .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #C9DC4F;
+    flex-shrink: 0;
+  }
+  .meta-bar strong { color: #111; }
+  .badge-stage {
+    margin-left: auto;
+    background: #008486;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── Grid layout ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 3; }
+
+  /* ── Cards ── */
+  .col-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .section-header {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #008486;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    display: inline-block;
+  }
+  .section-header.accent { background: #C9DC4F; color: #111111; }
+  .section-header.dark   { background: #111111; color: #fff; }
+  .section-header.risk   { background: #c0392b; color: #fff; }
+
+  ul.item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 0;
+    margin: 0;
+  }
+  ul.item-list li {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #EAE9E1;
+    font-size: 13.5px;
+    line-height: 1.5;
+    outline: none;
+  }
+  ul.item-list li:focus { box-shadow: 0 0 0 2px #008486; }
+
+  /* ── Capabilities ── */
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .cap-card {
+    background: #EAE9E1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .cap-card .cap-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    outline: none;
+  }
+  .cap-card .cap-detail {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.45;
+    outline: none;
+  }
+  .cap-card .cap-title:focus,
+  .cap-card .cap-detail:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+
+  .risk-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 3px;
+    width: fit-content;
+  }
+  .risk-pill.confirmed { background: #d4f0d1; color: #1a6e1a; }
+  .risk-pill.tbd       { background: #fff3cd; color: #7a5800; }
+  .risk-pill.required  { background: #fde8e8; color: #c0392b; }
+
+  /* ── Open Items ── */
+  .open-items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .open-item {
+    background: #EAE9E1;
+    border-radius: 6px;
+    padding: 9px 13px;
+    font-size: 13px;
+    line-height: 1.5;
+    outline: none;
+  }
+  .open-item:focus { box-shadow: 0 0 0 2px #008486; }
+
+  /* ── Notes ── */
+  .notes-field {
+    background: #EAE9E1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 80px;
+    outline: none;
+  }
+  .notes-field:focus { box-shadow: 0 0 0 2px #008486; }
+
+  /* ── Save indicator ── */
+  #save-indicator {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    background: #008486;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  #save-indicator.show { opacity: 1; }
+
+  /* ── Section spacing ── */
+  .section-block { margin-bottom: 18px; }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #EAE9E1 !important; padding: 16px !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    #save-indicator { display: none !important; }
+    .col-card { background: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
+    .cap-card { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
+    .section-header { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.accent { background: #C9DC4F !important; color: #111111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.dark   { background: #111111 !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.risk   { background: #c0392b !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .logo-badge { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .badge-stage { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar { background: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar .dot { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    ul.item-list li { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .open-item { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .notes-field { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.confirmed { background: #d4f0d1 !important; color: #1a6e1a !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.tbd       { background: #fff3cd !important; color: #7a5800 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.required  { background: #fde8e8 !important; color: #c0392b !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .grid-2, .grid-3 { gap: 10px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <div class="logo-badge">8x8 Value Map</div>
+  <h1 class="deal-title">Habersham <span>EMC</span></h1>
+</div>
+
+<!-- Meta bar -->
+<div class="meta-bar">
+  <div class="dot"></div>
+  <strong>Account:</strong> Habersham EMC — Electric Cooperative, Clarkesville GA
+  <span>|</span>
+  <strong>AE:</strong> Stacie Marquardt
+  <span>|</span>
+  <strong>SE:</strong> Tom Rupp
+  <span>|</span>
+  <strong>Champion:</strong> Tony (Dir. IT)
+  <span>|</span>
+  <strong>Partner:</strong> Jeff Allen / OneSource
+  <span>|</span>
+  <strong>Demo:</strong> Apr 16, 2026
+  <div class="badge-stage">Stage 1 → 2</div>
+</div>
+
+<!-- Row 1: Objectives + Challenges -->
+<div class="grid-2 section-block">
+
+  <div class="col-card">
+    <div class="section-header">Business Objectives</div>
+    <ul class="item-list">
+      <li contenteditable="true">Modernize aging Mitel MiVoice Business 3300 infrastructure (~20 yrs old) with a cloud-native UCaaS + CCaaS platform</li>
+      <li contenteditable="true">Eliminate reporting discrepancies between Power BI and Mitel that are causing board-level frustration</li>
+      <li contenteditable="true">Ensure business continuity and communication resilience during storm / mass-outage events</li>
+      <li contenteditable="true">Improve member experience through post-call surveys, omnichannel contact, and measurable QA</li>
+      <li contenteditable="true">Maintain and preserve existing Creovai QA/sentiment workflow without disruption to Valerie's team</li>
+      <li contenteditable="true">Complete vendor evaluation and selection by mid-to-late June 2026 ahead of August budget cycle</li>
+    </ul>
+  </div>
+
+  <div class="col-card">
+    <div class="section-header risk">Challenges &amp; Pain Points</div>
+    <ul class="item-list">
+      <li contenteditable="true">Power BI + Mitel data mismatch — inaccurate call reporting presented to board; undermines credibility of IT ops data</li>
+      <li contenteditable="true">CT Solutions (Mitel support partner) is gone — no support coverage on aging PBX; Tony managing hardware risk alone</li>
+      <li contenteditable="true">Ice storm event (70% outage, 20-hr shifts) exposed serious gaps in IVR flexibility and outbound communication at scale</li>
+      <li contenteditable="true">No dynamic IVR storm mode — agents manually re-routing calls during crisis; no pre-built outage messaging</li>
+      <li contenteditable="true">Recording retention compliance — capital credit disputes require recordings up to 3–4 years old; current solution unclear on 7-yr policy</li>
+      <li contenteditable="true">Only ~half of employees have DIDs today — limits direct member communication and accountability</li>
+      <li contenteditable="true">Chat currently handled via Mitel Ignite — separate platform, fragmented omnichannel experience</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- Row 2: Strategies + Initiatives -->
+<div class="grid-2 section-block">
+
+  <div class="col-card">
+    <div class="section-header accent">Strategies</div>
+    <ul class="item-list">
+      <li contenteditable="true">Replace Mitel MiVoice Business 3300 with 8x8 X Series — unified UCaaS + CCaaS on a single cloud platform</li>
+      <li contenteditable="true">Integrate 8x8 with Creovai via FTP/API to preserve existing QA and sentiment analysis workflows</li>
+      <li contenteditable="true">Deploy 8x8 AI Studio for outage/storm IVR mode — pre-built menu activated during mass events</li>
+      <li contenteditable="true">Leverage 8x8 native reporting + Power BI connector to eliminate data mismatch at the board level</li>
+      <li contenteditable="true">Reuse existing Mitel 6940/6930 SIP phones to reduce hardware cost during transition</li>
+      <li contenteditable="true">Enable SSO via Azure AD / SCIM for seamless provisioning aligned to existing identity management</li>
+    </ul>
+  </div>
+
+  <div class="col-card">
+    <div class="section-header accent">Initiatives &amp; Timeline</div>
+    <ul class="item-list">
+      <li contenteditable="true">Vendor evaluation in progress — top 2 vendors to be presented to unnamed executive sponsor before decision</li>
+      <li contenteditable="true">Second demo (expanded stakeholders + executive) targeting beginning of May 2026</li>
+      <li contenteditable="true">Selection deadline: mid-to-late June 2026</li>
+      <li contenteditable="true">Budget cycle opens August 2026; board approves November 2026 for next fiscal year</li>
+      <li contenteditable="true">OneSource (Jeff Allen) managing channel deal; brought 8x8 in as recommended vendor</li>
+      <li contenteditable="true">Creovai integration validation required before contract — must confirm FTP/API method with Creovai team</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- Row 3: Future State (full width) -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Future State / Positive Business Outcomes</div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <ul class="item-list">
+        <li contenteditable="true">Single cloud platform for all voice, chat, email, and meetings — eliminating siloed Mitel + Ignite environment</li>
+        <li contenteditable="true">Accurate, real-time call data feeding Power BI — board-ready reporting with zero reconciliation overhead</li>
+        <li contenteditable="true">AI Studio storm/outage IVR mode activatable in minutes — drastically reducing agent burden during crisis events</li>
+        <li contenteditable="true">Post-call member satisfaction surveys providing measurable CSAT data for Valerie's team and leadership</li>
+      </ul>
+      <ul class="item-list">
+        <li contenteditable="true">Creovai QA and sentiment analysis fully preserved — no disruption to existing scoring and coaching workflow</li>
+        <li contenteditable="true">7-year call recording retention met — capital credits disputes supported; full compliance posture</li>
+        <li contenteditable="true">Every employee receives a DID — improved member accountability and direct communication</li>
+        <li contenteditable="true">Existing Mitel SIP phones reused — lower hardware refresh cost, faster go-live</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Row 4: Required Capabilities -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header">Required Capabilities</div>
+    <div class="cap-grid" style="margin-top:8px;">
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Cloud UCaaS + CCaaS (Unified Platform)</div>
+        <div class="cap-detail" contenteditable="true">Replace Mitel MiVoice Business 3300 with 8x8 X Series; voice, chat, email on one platform for all 112 employees + 11-12 CC agents</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Creovai Integration (QA / Sentiment)</div>
+        <div class="cap-detail" contenteditable="true">Must preserve existing Creovai FTP-based workflow for Valerie's member services team. 8x8 to confirm FTP/API handoff method — do NOT displace Creovai</div>
+        <span class="risk-pill tbd">⚠ Integration Method TBD</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">8x8 AI Studio — Outage / Storm Mode IVR</div>
+        <div class="cap-detail" contenteditable="true">Pre-built IVR menu activated during mass outage events; automates outbound messaging and call routing; key differentiator for electric co-op use case</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Accurate Reporting + Power BI Connector</div>
+        <div class="cap-detail" contenteditable="true">Native 8x8 analytics + Power BI integration to eliminate Mitel data mismatch; board-ready dashboards with reliable call volume and performance data</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Call Recording — 7-Year Retention</div>
+        <div class="cap-detail" contenteditable="true">Hot storage up to 1 year; cold storage up to 10 years via 8x8. Capital credits dispute use case requires access to recordings 3–4 years old</div>
+        <span class="risk-pill confirmed">✓ 8x8 Supports (Cold Storage)</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Post-Call Member Surveys</div>
+        <div class="cap-detail" contenteditable="true">8x8 native post-call surveys; demoed and well-received during Apr 16 session. Provides measurable CSAT for Valerie's QA program</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Omnichannel — Voice, Chat, Email</div>
+        <div class="cap-detail" contenteditable="true">Replace Mitel Ignite (chat) and consolidate all contact channels under 8x8 CC. Unified agent desktop for 11-12 member service reps</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">MS Teams Integration (E3 Licenses)</div>
+        <div class="cap-detail" contenteditable="true">Habersham EMC uses Teams E3 for meetings; 8x8 voice integrated alongside Teams. Preserve existing meeting workflows without displacement</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">SSO / Azure AD / SCIM Provisioning</div>
+        <div class="cap-detail" contenteditable="true">Existing Azure AD identity; SCIM auto-provisioning confirmed supported by 8x8 X Series. Will and Steven (Sys Admins) to validate</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">DID for All Employees</div>
+        <div class="cap-detail" contenteditable="true">~50% of employees have DIDs today on Mitel; 8x8 provides a DID to every user by default. Improves member-facing accountability</div>
+        <span class="risk-pill confirmed">✓ 8x8 Default</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">SIP Phone Reuse (Mitel 6940 / 6930)</div>
+        <div class="cap-detail" contenteditable="true">Tony confirmed Mitel 6940 and 6930 are SIP-compatible and can be reused on 8x8 — significant hardware cost avoidance</div>
+        <span class="risk-pill confirmed">✓ Confirmed SIP-Compatible</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Executive / EB Stakeholder Engagement</div>
+        <div class="cap-detail" contenteditable="true">Unnamed executive sponsor wants to see top 2 vendors before deciding. Second demo must include EB. Tony is champion; EB not yet engaged directly</div>
+        <span class="risk-pill required">⚠ EB Not Yet Engaged</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Open Items -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header risk">Open Items &amp; Risk Flags</div>
+    <div class="open-items-grid" style="margin-top:8px;">
+      <div class="open-item" contenteditable="true">🔴 Confirm Creovai integration method with 8x8 and Creovai team — FTP vs. API. Must be validated before proposal. Valerie's QA program depends on this.</div>
+      <div class="open-item" contenteditable="true">🔴 Executive / EB identity unknown — Tony says "executive wants to see top 2 vendors." Who is the EB? Must be named and included in next demo.</div>
+      <div class="open-item" contenteditable="true">🟡 Second demo date TBD — Stacie suggested early May. Needs to be scheduled and confirmed with Tony. Include Will, Steven, Austin, Valerie, and EB.</div>
+      <div class="open-item" contenteditable="true">🟡 Competitor identity unknown — evaluation is top 2 vendors. Who is the other vendor? Mitel refresh? RingCentral? Need intel from Jeff Allen.</div>
+      <div class="open-item" contenteditable="true">🟡 Recording retention pricing — cold storage for 7 years needs to be quoted accurately. Confirm 8x8 cold storage pricing per GB or per seat.</div>
+      <div class="open-item" contenteditable="true">🟡 Mitel 6940/6930 provisioning — confirm 8x8 supports these models in production. Tony is confident but SE (Tom) to formally validate.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Notes -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Field Notes</div>
+    <div class="notes-field" contenteditable="true" style="margin-top:8px;">Demo held Apr 16, 2026. Attended by Tony (Dir IT), Will &amp; Steven (Sys Admins), Austin (Sys Support) from Habersham EMC. Jeff Allen / OneSource is channel partner. Stacie Marquardt AE, Tom Rupp SE, Landon Hendricks CC specialist on 8x8 side.
+
+Key moments: (1) Power BI/Mitel reporting gap was the strongest pain — Tony lit up when 8x8 reporting was demoed. (2) AI Studio storm-mode IVR was the biggest "wow" — ice storm event is fresh and painful. (3) Creovai must not be displaced — Valerie's entire QA program runs on it. (4) Post-call survey demo well-received. (5) Tony confirmed Mitel 6940/6930 are SIP-compatible — good cost story.
+
+Watch-outs: EB is unnamed and not yet in the room. Deal does NOT close before August budget cycle. Timeline target is vendor selection by June, board approval November. Not an urgent deal — build the relationship and deliver a compelling second demo with exec in the room.
+    </div>
+  </div>
+</div>
+
+<div id="save-indicator">Saved</div>
+
+<script>
+(function () {
+  const KEY = 'habersham-emc-value-map-v1';
+  const INDICATOR = document.getElementById('save-indicator');
+  let timer;
+
+  function showSaved() {
+    INDICATOR.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(() => INDICATOR.classList.remove('show'), 1800);
+  }
+
+  function save() {
+    const els = document.querySelectorAll('[contenteditable="true"]');
+    const data = {};
+    els.forEach((el, i) => { data[i] = el.innerHTML; });
+    localStorage.setItem(KEY, JSON.stringify(data));
+    showSaved();
+  }
+
+  function load() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      const els = document.querySelectorAll('[contenteditable="true"]');
+      els.forEach((el, i) => { if (data[i] !== undefined) el.innerHTML = data[i]; });
+    } catch (e) { /* ignore */ }
+  }
+
+  load();
+  document.addEventListener('input', save);
+})();
+</script>
+</body>
+</html>
