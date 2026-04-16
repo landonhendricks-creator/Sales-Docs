@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Berkeley Electric Cooperative — 8x8 Value Map</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #EAE9E1;
+    color: #111111;
+    min-height: 100vh;
+    padding: 32px 24px 60px;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-badge {
+    background: #008486;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+  .deal-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #111111;
+    letter-spacing: -.01em;
+  }
+  .deal-title span { color: #008486; }
+
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: #444;
+  }
+  .meta-bar .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #C9DC4F;
+    flex-shrink: 0;
+  }
+  .meta-bar strong { color: #111; }
+  .badge-stage {
+    margin-left: auto;
+    background: #008486;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .col-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .section-header {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #008486;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    display: inline-block;
+  }
+  .section-header.accent { background: #C9DC4F; color: #111111; }
+  .section-header.dark   { background: #111111; color: #fff; }
+  .section-header.risk   { background: #c0392b; color: #fff; }
+
+  ul.item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 0;
+    margin: 0;
+  }
+  ul.item-list li {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #EAE9E1;
+    font-size: 13.5px;
+    line-height: 1.5;
+    outline: none;
+  }
+  ul.item-list li:focus { box-shadow: 0 0 0 2px #008486; }
+
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .cap-card {
+    background: #EAE9E1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .cap-card .cap-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    outline: none;
+  }
+  .cap-card .cap-detail {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.45;
+    outline: none;
+  }
+  .cap-card .cap-title:focus,
+  .cap-card .cap-detail:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+
+  .risk-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 3px;
+    width: fit-content;
+  }
+  .risk-pill.confirmed { background: #d4f0d1; color: #1a6e1a; }
+  .risk-pill.tbd       { background: #fff3cd; color: #7a5800; }
+  .risk-pill.required  { background: #fde8e8; color: #c0392b; }
+
+  .open-items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .open-item {
+    background: #EAE9E1;
+    border-radius: 6px;
+    padding: 9px 13px;
+    font-size: 13px;
+    line-height: 1.5;
+    outline: none;
+  }
+  .open-item:focus { box-shadow: 0 0 0 2px #008486; }
+
+  .notes-field {
+    background: #EAE9E1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 80px;
+    outline: none;
+  }
+  .notes-field:focus { box-shadow: 0 0 0 2px #008486; }
+
+  .section-block { margin-bottom: 18px; }
+
+  #save-indicator {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    background: #008486;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  #save-indicator.show { opacity: 1; }
+
+  @media print {
+    body { background: #EAE9E1 !important; padding: 16px !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    #save-indicator { display: none !important; }
+    .col-card { background: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
+    .cap-card { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
+    .section-header { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.accent { background: #C9DC4F !important; color: #111111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.dark   { background: #111111 !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.risk   { background: #c0392b !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .logo-badge  { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .badge-stage { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar    { background: #fff    !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar .dot { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    ul.item-list li { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .open-item  { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .notes-field{ background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.confirmed { background: #d4f0d1 !important; color: #1a6e1a !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.tbd       { background: #fff3cd !important; color: #7a5800 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.required  { background: #fde8e8 !important; color: #c0392b !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .grid-2 { gap: 10px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <div class="logo-badge">8x8 Value Map</div>
+  <h1 class="deal-title">Berkeley Electric <span>Cooperative</span></h1>
+</div>
+
+<!-- Meta bar -->
+<div class="meta-bar">
+  <div class="dot"></div>
+  <strong>Account:</strong> Berkeley Electric Cooperative — Moncks Corner, SC (Berkeley, Charleston, Dorchester counties)
+  <span>|</span>
+  <strong>AE:</strong> Stacie Marquardt
+  <span>|</span>
+  <strong>SE:</strong> Tom Rupp
+  <span>|</span>
+  <strong>Champion:</strong> Tony Shepherd (Dir. IT Ops)
+  <span>|</span>
+  <strong>EB:</strong> Amy Langdon (VP IT) ✓ In room
+  <span>|</span>
+  <strong>Partner:</strong> Mike Hancock / Inspire Communication
+  <span>|</span>
+  <strong>Demo:</strong> Apr 2, 2026
+  <div class="badge-stage">Stage 2</div>
+</div>
+
+<!-- Row 1: Objectives + Challenges -->
+<div class="grid-2 section-block">
+
+  <div class="col-card">
+    <div class="section-header">Business Objectives</div>
+    <ul class="item-list">
+      <li contenteditable="true">Modernize off aging Mitel on-prem platform with a unified cloud UCaaS + CCaaS solution across 300 users and 25 CC agents</li>
+      <li contenteditable="true">Ensure mission-critical uptime and communication resilience during storm and hurricane events when agents log in across all district offices</li>
+      <li contenteditable="true">Improve contact center quality management through AI-driven sentiment analysis, real-time supervisor alerting, and automated QA scoring</li>
+      <li contenteditable="true">Consolidate disparate tools (Mitel, Zoho chat, CIS IVR) under a simpler platform without displacing core CIS/IVR workflows</li>
+      <li contenteditable="true">Build a Snowflake data warehouse fed by 8x8 API data to enable unified reporting and custom dashboards for leadership</li>
+      <li contenteditable="true">Simplify IT administration — AD/Entra sync, profile-based provisioning, SSO, and hot desking to reduce day-to-day management overhead</li>
+    </ul>
+  </div>
+
+  <div class="col-card">
+    <div class="section-header risk">Challenges &amp; Pain Points</div>
+    <ul class="item-list">
+      <li contenteditable="true">Mitel on-prem is aging — limited roadmap, on-prem risk, and no path to the cloud without replacement. Tony has prior experience with Fuse and RingCentral — actively evaluating options</li>
+      <li contenteditable="true">Mitel reporting is poor ("not great") — contact center reporting inadequate for supervisors managing 25 agents across multiple queues</li>
+      <li contenteditable="true">No real-time sentiment or supervisor alerting — if a call goes negative, supervisors have no automatic notification to intervene</li>
+      <li contenteditable="true">Zoho chat is siloed from voice — chat and voice are on separate platforms, creating a fragmented omnichannel experience</li>
+      <li contenteditable="true">Mitel softphone add-ons cost extra per user — every feature requires an additional license; 8x8 X Series seat is all-inclusive</li>
+      <li contenteditable="true">Storm/hurricane scenarios require agents at district offices — current system lacks the flexibility to seamlessly distribute contact center agents during mass outage events</li>
+      <li contenteditable="true">No Snowflake integration today — call and agent data can't be correlated with other operational data for board-level insight</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- Row 2: Strategies + Initiatives -->
+<div class="grid-2 section-block">
+
+  <div class="col-card">
+    <div class="section-header accent">Strategies</div>
+    <ul class="item-list">
+      <li contenteditable="true">Replace Mitel on-prem with 8x8 X Series — all-inclusive seat licensing covering UCaaS, CC, DID, mobile app, desktop client, and Teams integration</li>
+      <li contenteditable="true">Deploy 8x8 QMSA (Quality Management &amp; Speech Analytics) for sentiment analysis, topic categorization, auto-scoring, and real-time agent assist supervisor alerts</li>
+      <li contenteditable="true">Integrate 8x8 with Snowflake via open APIs — pull call, queue, and agent data into Berkeley's data warehouse for custom dashboards</li>
+      <li contenteditable="true">Teams cross-launch integration (E3, no Phone license) — embed 8x8 voice widget inside Teams so users don't switch apps</li>
+      <li contenteditable="true">Retain CIS/NIS IVR for balance, outage, and payment self-service — 8x8 routes overflow to live agents; no board-approved IVR replacement needed</li>
+      <li contenteditable="true">Entra ID (Active Directory) sync + field mapping + SSO — automate provisioning; disable AD user = disable 8x8 phone automatically</li>
+      <li contenteditable="true">Reuse Mitel 6930/6940 SIP phones — 5000 series retired as paperweights; 6900 series reused to reduce hardware refresh cost</li>
+    </ul>
+  </div>
+
+  <div class="col-card">
+    <div class="section-header accent">Initiatives &amp; Timeline</div>
+    <ul class="item-list">
+      <li contenteditable="true">Initial demo completed Apr 2, 2026 — UCaaS, CC, AI Studio, QMSA shown; Amy Langdon (VP IT) in room</li>
+      <li contenteditable="true">Tony to debrief with team and provide feedback to Mike Hancock on reactions and gaps</li>
+      <li contenteditable="true">Second demo needed — real-time agent assist/sentiment supervisor alerting not shown; requires dedicated follow-up session</li>
+      <li contenteditable="true">Mike Hancock + Stacie Marquardt to develop initial quote for 300 UCaaS seats + 25 CC agents</li>
+      <li contenteditable="true">Tony has prior experience with Fuse and RingCentral — competitive evaluation underway; Inspire represents ~273 vendors</li>
+      <li contenteditable="true">Tom Rupp action items: validate nomadic 911 alert method (email/SMS), provide AD/Entra field mapping list</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- Row 3: Future State -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Future State / Positive Business Outcomes</div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <ul class="item-list">
+        <li contenteditable="true">Single cloud platform for voice, chat, and CC — Mitel on-prem retired; Zoho chat consolidated under 8x8 omnichannel</li>
+        <li contenteditable="true">Supervisors receive real-time alerts when member calls go negative — proactive intervention before escalation, not reactive review</li>
+        <li contenteditable="true">AI auto-scores every interaction — QA team no longer sifts through calls manually; sentiment and topic categorization surfaces the right calls</li>
+        <li contenteditable="true">Snowflake data warehouse fed by 8x8 APIs — call and agent data correlated with operational data for board-ready dashboards</li>
+      </ul>
+      <ul class="item-list">
+        <li contenteditable="true">Distributed CC during storm events — agents log in from any district office seamlessly; queues managed dynamically from supervisor workspace</li>
+        <li contenteditable="true">All-inclusive per-seat licensing — no add-on fees for mobile app, softphone, DID, or Teams widget; simpler budgeting for Amy's team</li>
+        <li contenteditable="true">AD/Entra sync automates user lifecycle — new hires provisioned instantly; terminated employees' phones disabled automatically</li>
+        <li contenteditable="true">Screen recording + historical call review — supervisors can pull any agent's screen recording up to 30+ days back for coaching or disputes</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Row 4: Required Capabilities -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header">Required Capabilities</div>
+    <div class="cap-grid" style="margin-top:8px;">
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Cloud UCaaS + CCaaS (Unified Platform)</div>
+        <div class="cap-detail" contenteditable="true">Replace Mitel on-prem for 300 users + 25 CC agents. All-inclusive X Series seat — DID, mobile app, desktop client, voicemail transcription, SMS, fax. No per-feature add-ons.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">AI Sentiment + Real-Time Agent Assist</div>
+        <div class="cap-detail" contenteditable="true">Supervisor alerted when member call sentiment goes negative — whisper, monitor, or barge in. Tony's #1 AI priority. NOT shown in first demo — requires dedicated follow-up session.</div>
+        <span class="risk-pill tbd">⚠ Demo Pending — Follow-Up Required</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">QMSA — Speech Analytics &amp; Auto-Scoring</div>
+        <div class="cap-detail" contenteditable="true">AI categorizes all calls by topic and sentiment; auto-evaluation on roadmap. Supervisors can search by phrase, agent, sentiment, or date. Screen recording (up to 4 monitors) with historical access.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Snowflake Data Warehouse Integration</div>
+        <div class="cap-detail" contenteditable="true">Berkeley building Snowflake DW to unify operational data. 8x8 open APIs (developer.8x8.com) allow full call, queue, and agent data extraction for custom dashboards.</div>
+        <span class="risk-pill confirmed">✓ Open API Available</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">MS Teams Integration (E3 / No Phone License)</div>
+        <div class="cap-detail" contenteditable="true">Cross-launch integration: 8x8 voice widget embedded in Teams sidebar. No E5/Phone license required. Most employees (not front line) use Teams for chat and meetings. No additional cost on 8x8 side.</div>
+        <span class="risk-pill confirmed">✓ Cross-Launch Confirmed</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Active Directory / Entra ID Sync + SSO</div>
+        <div class="cap-detail" contenteditable="true">Field-mapped sync between Entra ID and 8x8. Disable AD user = disable 8x8 phone. Hannah and Barry confirmed this as a key requirement. AD field mapping list to be provided by Tom Rupp.</div>
+        <span class="risk-pill confirmed">✓ Confirmed — Field Map List Pending</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Multi-Site + Storm / Hurricane Distributed CC</div>
+        <div class="cap-detail" contenteditable="true">Agents normally in one room; during storms, agents log in from all district offices. 8x8 cloud CC supports distributed agents — supervisor workspace manages queues and agents remotely.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Preserve CIS/NIS IVR (Do NOT Displace)</div>
+        <div class="cap-detail" contenteditable="true">CIS from NIS handles balance inquiries, outage reporting, and payments. Board does not want to change this. 8x8 routes callers who opt out of CIS self-service to live agents only. AI Studio IVR not needed here.</div>
+        <span class="risk-pill required">✓ Confirmed — Do Not Touch CIS IVR</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Omnichannel — Voice + Chat Consolidation</div>
+        <div class="cap-detail" contenteditable="true">Chat currently handled by Zoho (separate from Mitel). 8x8 CC supports web chat routed to agents alongside voice. Opportunity to consolidate Zoho chat under 8x8 omnichannel — confirm with Tony/Amy.</div>
+        <span class="risk-pill tbd">⚠ Zoho Chat Consolidation TBD</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Screen Recording + Historical Call Review</div>
+        <div class="cap-detail" contenteditable="true">Record up to 4 agent screens simultaneously. Historical screen recordings accessible 30+ days back via Content Analytics. Tony asked specifically about historical access — confirmed.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Call Recording Retention + Cold Storage</div>
+        <div class="cap-detail" contenteditable="true">Hot storage configurable up to 1 year; cold storage up to 10 years. FTP export to external storage (e.g., NAS/WAB) also supported. Tony asked about self-managed storage — confirmed via FTP.</div>
+        <span class="risk-pill confirmed">✓ Hot + Cold + FTP Export</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Nomadic 911 + Emergency Alerting (BP Notification)</div>
+        <div class="cap-detail" contenteditable="true">Berkeley has existing 911 → BP (safety personnel) alerting. 8x8 Nomadic 911 supports location-aware e911 and internal alert notifications. Alert method (email vs. SMS) to be validated by Tom Rupp.</div>
+        <span class="risk-pill tbd">⚠ Alert Method (Email/SMS) — Tom to Validate</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">SIP Phone Reuse (Mitel 6930 / 6940)</div>
+        <div class="cap-detail" contenteditable="true">6930 and 6940 are SIP/dual-mode — reusable on 8x8. Mitel 5330, 5340 (5000 series) are not SIP-compatible — paperweights. Hardware cost avoidance on ~300-seat deployment.</div>
+        <span class="risk-pill confirmed">✓ 6900 Series SIP-Compatible</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Hot Desking + Profile-Based Provisioning</div>
+        <div class="cap-detail" contenteditable="true">Hot desking supported — device-only mode for shared phones. Profile policies (equiv. to Mitel Class of Service) allow templated provisioning per department. Hannah confirmed this is how she wants to manage users.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Zoho CRM Integration (Post-Call Summary Push)</div>
+        <div class="cap-detail" contenteditable="true">8x8 can auto-push AI call summaries and disposition codes into Zoho after each interaction. Reduces after-call work and ensures CRM is always updated. Berkeley uses Zoho for email, chat, and basic ticketing.</div>
+        <span class="risk-pill confirmed">✓ Zoho Integration Available</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Open Items -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header risk">Open Items &amp; Risk Flags</div>
+    <div class="open-items-grid" style="margin-top:8px;">
+      <div class="open-item" contenteditable="true">🔴 Real-time agent assist / sentiment supervisor alerting NOT demoed — this was Tony's #1 AI use case. Must be shown in follow-up demo or risk losing the differentiation story.</div>
+      <div class="open-item" contenteditable="true">🔴 Competitor not identified — Tony mentioned experience with Fuse and RingCentral. Mike Hancock represents 273 vendors; could present alternatives. Must understand who else is in the evaluation.</div>
+      <div class="open-item" contenteditable="true">🟡 Nomadic 911 BP-alerting method TBD — Tom Rupp to validate whether 8x8 sends email, SMS, or both when an agent dials 911. Berkeley has existing BP-alert workflow to preserve.</div>
+      <div class="open-item" contenteditable="true">🟡 AD / Entra ID field mapping list needed — Tom Rupp to provide the complete list of fields shared between 8x8 and Entra. Hannah flagged: disable AD user must disable 8x8 phone.</div>
+      <div class="open-item" contenteditable="true">🟡 Zoho chat consolidation — opportunity to fold Zoho web chat under 8x8 omnichannel. Not discussed explicitly. Confirm with Tony/Amy whether this is desirable or Zoho chat stays separate.</div>
+      <div class="open-item" contenteditable="true">🟡 Second demo scheduling — Tony to debrief team and circle back to Mike. Target: agent assist demo + any additional areas missed (evaluations, deeper CC admin). No date confirmed yet.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Notes -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Field Notes</div>
+    <div class="notes-field" contenteditable="true" style="margin-top:8px;">Demo held Apr 2, 2026. 8x8 team: Stacie Marquardt (AE), Tom Rupp (SE), Chris Rathbun (Exp. Sales Specialist). Partner: Mike Hancock, Inspire Communication. Berkeley team: Tony Shepherd (Dir IT Ops — champion), Amy Langdon (VP IT — EB, in room), Hannah (IT Tech, manages phone system), Barry (IT Tech), Justin McFong (Dir OD Ops — routing/switching/firewall), Easton (Hannah's son, job shadowing).
+
+Key moments: (1) Tony immediately clarified AI priority — NOT interested in IVR automation (CIS handles that, board won't change it). Interested in sentiment analysis + real-time supervisor alerting + QA auto-scoring. (2) Snowflake data warehouse question was unprompted and sophisticated — Tony/Amy are data-savvy; API story landed well. (3) AD sync question with field mapping + disable user = disable phone was a very specific Hannah requirement. (4) Screen recording historical access confirmed. (5) Recording export to FTP/NAS confirmed. (6) AI Studio demo was built for BEC (outage IVR) but not what they need — do not lead with AI Studio in next demo.
+
+Competitive watch: Tony said he's "worked with Fuse" and "Ring" — both in his prior experience. Mike Hancock represents many vendors including RingCentral. Ensure second demo locks in 8x8 before a formal competitive bake-off is triggered. Amy Langdon being in room on day one is a significant positive signal — EB is already engaged.
+
+Hard stop hit at 12:00 PM. Tony said "sounds good" to next steps but asked to debrief with team first. No urgency expressed on timeline. Pricing sensitivity unknown — need discovery on budget.
+    </div>
+  </div>
+</div>
+
+<div id="save-indicator">Saved</div>
+
+<script>
+(function () {
+  const KEY = 'berkeley-electric-value-map-v1';
+  const INDICATOR = document.getElementById('save-indicator');
+  let timer;
+  function showSaved() {
+    INDICATOR.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(() => INDICATOR.classList.remove('show'), 1800);
+  }
+  function save() {
+    const els = document.querySelectorAll('[contenteditable="true"]');
+    const data = {};
+    els.forEach((el, i) => { data[i] = el.innerHTML; });
+    localStorage.setItem(KEY, JSON.stringify(data));
+    showSaved();
+  }
+  function load() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      const els = document.querySelectorAll('[contenteditable="true"]');
+      els.forEach((el, i) => { if (data[i] !== undefined) el.innerHTML = data[i]; });
+    } catch (e) {}
+  }
+  load();
+  document.addEventListener('input', save);
+})();
+</script>
+</body>
+</html>
