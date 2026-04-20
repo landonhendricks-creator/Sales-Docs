@@ -1,686 +1,486 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CyberMaxx — 8x8 Value Map</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberMaxx — 8x8 Value Map</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #EAE9E1;
-      color: #111111;
-      padding: 32px 24px 60px;
-    }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #EAE9E1;
+    color: #111111;
+    min-height: 100vh;
+    padding: 32px 24px 60px;
+  }
 
-    /* ── HEADER ── */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-badge {
+    background: #008486;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+  .deal-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #111111;
+    letter-spacing: -.01em;
+  }
+  .deal-title span { color: #008486; }
 
-    .logo-block {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: #444;
+  }
+  .meta-bar .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #C9DC4F;
+    flex-shrink: 0;
+  }
+  .meta-bar strong { color: #111; }
+  .badge-stage {
+    margin-left: auto;
+    background: #008486;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
 
-    .logo-badge {
-      background: #008486;
-      color: #fff;
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      padding: 10px 18px;
-      border-radius: 8px;
-    }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
 
-    .header-meta h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #111111;
-    }
+  .col-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .section-header {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #008486;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    display: inline-block;
+  }
+  .section-header.accent { background: #C9DC4F; color: #111111; }
+  .section-header.dark   { background: #111111; color: #fff; }
+  .section-header.risk   { background: #c0392b; color: #fff; }
 
-    .header-meta p {
-      font-size: 13px;
-      color: #555;
-      margin-top: 2px;
-    }
+  ul.item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 0;
+    margin: 0;
+  }
+  ul.item-list li {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #EAE9E1;
+    font-size: 13.5px;
+    line-height: 1.5;
+    outline: none;
+  }
+  ul.item-list li:focus { box-shadow: 0 0 0 2px #008486; }
 
-    .header-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .cap-card {
+    background: #EAE9E1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .cap-card .cap-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    outline: none;
+  }
+  .cap-card .cap-detail {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.45;
+    outline: none;
+  }
+  .cap-card .cap-title:focus,
+  .cap-card .cap-detail:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
 
-    .badge-stage {
-      background: #C9DC4F;
-      color: #111;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 20px;
-      letter-spacing: 0.3px;
-    }
+  .risk-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 3px;
+    width: fit-content;
+  }
+  .risk-pill.confirmed { background: #d4f0d1; color: #1a6e1a; }
+  .risk-pill.tbd       { background: #fff3cd; color: #7a5800; }
+  .risk-pill.gap       { background: #fde8e8; color: #c0392b; }
 
-    .btn-print {
-      background: #008486;
-      color: #fff;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-print:hover { background: #006e70; }
+  .open-items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .open-item {
+    background: #EAE9E1;
+    border-radius: 6px;
+    padding: 9px 13px;
+    font-size: 13px;
+    line-height: 1.5;
+    outline: none;
+  }
+  .open-item:focus { box-shadow: 0 0 0 2px #008486; }
 
-    /* ── DEAL META BAR ── */
-    .meta-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      background: #fff;
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin-bottom: 28px;
-      border-left: 5px solid #008486;
-    }
+  .notes-field {
+    background: #EAE9E1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 80px;
+    outline: none;
+  }
+  .notes-field:focus { box-shadow: 0 0 0 2px #008486; }
 
-    .meta-item {
-      display: flex;
-      flex-direction: column;
-      min-width: 130px;
-    }
+  .section-block { margin-bottom: 18px; }
 
-    .meta-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: #008486;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 2px;
-    }
+  #save-indicator {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    background: #008486;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  #save-indicator.show { opacity: 1; }
 
-    .meta-value {
-      font-size: 13px;
-      font-weight: 600;
-      color: #111;
-    }
-
-    /* ── SECTION CARDS ── */
-    .section {
-      background: #fff;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 20px;
-      background: #008486;
-      color: #fff;
-    }
-
-    .section-header .icon {
-      font-size: 18px;
-    }
-
-    .section-header h2 {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-    }
-
-    .section-header .subtitle {
-      font-size: 12px;
-      opacity: 0.8;
-      margin-left: auto;
-      font-style: italic;
-    }
-
-    .section-body {
-      padding: 18px 20px;
-    }
-
-    /* ── TWO-COLUMN GRID ── */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    @media (max-width: 680px) {
-      .two-col { grid-template-columns: 1fr; }
-    }
-
-    .col-card {
-      background: #F5F4EE;
-      border-radius: 8px;
-      padding: 14px 16px;
-    }
-
-    .col-card h3 {
-      font-size: 12px;
-      font-weight: 700;
-      color: #008486;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
-    }
-
-    /* ── ITEMS ── */
-    ul.item-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    ul.item-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 13.5px;
-      line-height: 1.5;
-      padding: 10px 12px;
-      background: #F5F4EE;
-      border-radius: 7px;
-    }
-
-    .col-card ul.item-list li {
-      background: #fff;
-    }
-
-    ul.item-list li .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #C9DC4F;
-      flex-shrink: 0;
-      margin-top: 5px;
-    }
-
-    ul.item-list li .dot.red   { background: #e05454; }
-    ul.item-list li .dot.teal  { background: #008486; }
-    ul.item-list li .dot.lime  { background: #C9DC4F; }
-
-    /* ── REQUIRED CAPABILITIES GRID ── */
-    .cap-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
-    }
-    @media (max-width: 780px) { .cap-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 520px) { .cap-grid { grid-template-columns: 1fr; } }
-
-    .cap-card {
-      background: #F5F4EE;
-      border-radius: 8px;
-      padding: 14px;
-      border-top: 3px solid #C9DC4F;
-    }
-
-    .cap-card h4 {
-      font-size: 12px;
-      font-weight: 700;
-      color: #111;
-      margin-bottom: 6px;
-    }
-
-    .cap-card p {
-      font-size: 12.5px;
-      color: #444;
-      line-height: 1.45;
-    }
-
-    .cap-card .mapped {
-      display: inline-block;
-      margin-top: 8px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #008486;
-      background: #e0f4f4;
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-
-    /* ── RISK PILLS ── */
-    .risk-bar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .risk-pill {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .risk-red    { background: #fde8e8; color: #b00; }
-    .risk-yellow { background: #fef9e0; color: #7a5f00; }
-    .risk-green  { background: #e0f4f4; color: #005a5b; }
-
-    /* ── NOTES ── */
-    .notes-field {
-      background: #F5F4EE;
-      border-radius: 8px;
-      padding: 14px 16px;
-      font-size: 13px;
-      color: #333;
-      line-height: 1.6;
-      min-height: 60px;
-      outline: none;
-      border: 1px dashed #ccc;
-    }
-    .notes-field:focus { border-color: #008486; }
-
-    /* ── FOOTER ── */
-    .footer {
-      text-align: center;
-      font-size: 11px;
-      color: #999;
-      margin-top: 32px;
-    }
-
-    /* ── PRINT ── */
-    @media print {
-      /* Force color printing — browsers strip backgrounds by default */
-      * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
-      }
-
-      body {
-        background: #EAE9E1 !important;
-        padding: 12px 16px 32px;
-        font-size: 12px;
-      }
-
-      /* Hide interactive elements */
-      .btn-print { display: none !important; }
-      [contenteditable="true"] { outline: none !important; border: none !important; }
-      .notes-field { border: 1px solid #ddd !important; }
-
-      /* Keep section backgrounds and headers */
-      .section {
-        box-shadow: none !important;
-        border: 1px solid #ddd !important;
-        break-inside: avoid;
-        page-break-inside: avoid;
-        margin-bottom: 14px !important;
-      }
-
-      .section-header {
-        background: #008486 !important;
-        color: #fff !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
-      /* Force all colored backgrounds */
-      .logo-badge        { background: #008486 !important; color: #fff !important; }
-      .badge-stage       { background: #C9DC4F !important; color: #111 !important; }
-      .meta-bar          { background: #fff !important; border-left: 5px solid #008486 !important; }
-      .col-card          { background: #F5F4EE !important; }
-      .cap-card          { background: #F5F4EE !important; border-top: 3px solid #C9DC4F !important; }
-      .cap-card .mapped  { background: #e0f4f4 !important; color: #008486 !important; }
-      .notes-field       { background: #F5F4EE !important; }
-
-      ul.item-list li               { background: #F5F4EE !important; }
-      .col-card ul.item-list li     { background: #fff !important; }
-
-      .dot       { background: #C9DC4F !important; border-radius: 50% !important; }
-      .dot.red   { background: #e05454 !important; }
-      .dot.teal  { background: #008486 !important; }
-      .dot.lime  { background: #C9DC4F !important; }
-
-      .risk-pill          { print-color-adjust: exact !important; }
-      .risk-pill.risk-red    { background: #fde8e8 !important; color: #b00 !important; }
-      .risk-pill.risk-yellow { background: #fef9e0 !important; color: #7a5f00 !important; }
-      .risk-pill.risk-green  { background: #e0f4f4 !important; color: #005a5b !important; }
-
-      /* Page break hints */
-      .header, .meta-bar, .risk-bar { break-after: avoid; page-break-after: avoid; }
-      .cap-card  { break-inside: avoid; page-break-inside: avoid; }
-      .col-card  { break-inside: avoid; page-break-inside: avoid; }
-
-      /* Tighten spacing for print */
-      .section-body    { padding: 12px 16px !important; }
-      .section-header  { padding: 10px 16px !important; }
-      .cap-grid        { gap: 10px !important; }
-      .two-col         { gap: 12px !important; }
-      ul.item-list     { gap: 6px !important; }
-      ul.item-list li  { padding: 8px 10px !important; font-size: 12px !important; }
-    }
-  </style>
+  @media print {
+    body { background: #EAE9E1 !important; padding: 16px !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    #save-indicator { display: none !important; }
+    .col-card { background: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
+    .cap-card { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
+    .section-header { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.accent { background: #C9DC4F !important; color: #111111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.dark   { background: #111111 !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .section-header.risk   { background: #c0392b !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .logo-badge  { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .badge-stage { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar    { background: #fff    !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar .dot { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    ul.item-list li { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .open-item  { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .notes-field{ background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.confirmed { background: #d4f0d1 !important; color: #1a6e1a !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.tbd       { background: #fff3cd !important; color: #7a5800 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .risk-pill.gap       { background: #fde8e8 !important; color: #c0392b !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .grid-2 { gap: 10px !important; }
+  }
+</style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo-block">
-    <div class="logo-badge">8x8</div>
-    <div class="header-meta">
-      <h1>CyberMaxx — Value Map</h1>
-      <p>Contact Center Opportunity &nbsp;|&nbsp; Direct Deal &nbsp;|&nbsp; PJ Schlegel + Landon Hendricks</p>
-    </div>
-  </div>
-  <div class="header-actions">
-    <span class="badge-stage">Stage 1 — Qualify</span>
-    <button class="btn-print" onclick="window.print()">Export PDF</button>
-  </div>
+<!-- Header -->
+<div class="page-header">
+  <div class="logo-badge">8x8 Value Map</div>
+  <h1 class="deal-title">Cyber<span>Maxx</span></h1>
 </div>
 
-<!-- META BAR -->
+<!-- Meta bar -->
 <div class="meta-bar">
-  <div class="meta-item">
-    <span class="meta-label">Account</span>
-    <span class="meta-value" contenteditable="true">CyberMaxx</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Champion</span>
-    <span class="meta-value" contenteditable="true">Joseph Wallis</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Industry</span>
-    <span class="meta-value">Cybersecurity (MSSP)</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Seat Count</span>
-    <span class="meta-value" contenteditable="true">~65 CC Agents</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Incumbent</span>
-    <span class="meta-value">Microsoft Teams (Queues)</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Competitor</span>
-    <span class="meta-value">RingCentral CX</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Target Close</span>
-    <span class="meta-value" contenteditable="true">Q3 2026 (vendor select)</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Demo Date</span>
-    <span class="meta-value" contenteditable="true">Mon Apr 20 @ 12PM CST</span>
-  </div>
-  <div class="meta-item">
-    <span class="meta-label">Discovery Date</span>
-    <span class="meta-value">Apr 15, 2026</span>
-  </div>
+  <div class="dot"></div>
+  <strong>Account:</strong> CyberMaxx — MDR Provider, Founded 2002
+  <span>|</span>
+  <strong>AE:</strong> PJ Schlegel
+  <span>|</span>
+  <strong>SE:</strong> Tom Rupp
+  <span>|</span>
+  <strong>CC Spec:</strong> Landon Hendricks
+  <span>|</span>
+  <strong>Champion:</strong> Joseph Wallis
+  <span>|</span>
+  <strong>Influencer:</strong> Erica Smith (CC Ops)
+  <span>|</span>
+  <strong>Demos:</strong> Demo 1 + Apr 20, 2026
+  <div class="badge-stage">Stage 2 → 3</div>
 </div>
 
-<!-- RISK PILLS -->
-<div class="risk-bar">
-  <span class="risk-pill risk-red">🚩 Business stakeholders pushing RingCentral CX</span>
-  <span class="risk-pill risk-yellow">⚠️ H2 acquisition could shift platform decision</span>
-  <span class="risk-pill risk-yellow">⚠️ Joseph is evaluator — EB not yet identified</span>
-  <span class="risk-pill risk-green">✅ 8x8 already approved vendor in their system</span>
-  <span class="risk-pill risk-green">✅ RC licensing cost is a known disqualifier for Joseph</span>
-</div>
+<!-- Row 1: Objectives + Challenges -->
+<div class="grid-2 section-block">
 
-
-<!-- ── SECTION 1: OBJECTIVES ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">🎯</span>
-    <h2>Objectives</h2>
-    <span class="subtitle">What CyberMaxx is trying to accomplish</span>
-  </div>
-  <div class="section-body">
+  <div class="col-card">
+    <div class="section-header">Business Objectives</div>
     <ul class="item-list">
-      <li><span class="dot teal"></span><span contenteditable="true">Deploy a dedicated contact center for ~65 SOC analysts handling inbound customer support calls — without replacing Teams telephony for the remaining ~115 users.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Gain out-of-box analytics and reporting on queue performance — including abandoned call root-cause analysis — to answer the six specific business problem statements presented to IT.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Implement skills-based routing to separate Tier 1 and Tier 2 SOC analyst queues for more efficient call handling and faster resolution.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Maintain Call Cabinet (Smarsh) compliance recording without disruption or re-procurement.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Select a vendor by beginning of Q3 2026 and go live by end of Q3 / early Q4 — ahead of a likely H2 acquisition that could bring RingCentral into the org.</span></li>
+      <li contenteditable="true">Add a formal Contact Center solution that sits ON TOP of Microsoft Teams — preserving existing Teams environment while adding enterprise CC capabilities</li>
+      <li contenteditable="true">Achieve a true partnership with a vendor who provides dedicated US-based account management and ongoing support (not just a transactional vendor relationship)</li>
+      <li contenteditable="true">Gain deep real-time visibility into contact center performance — dashboards, SLAs, queue health, and agent activity without switching applications</li>
+      <li contenteditable="true">Implement formal disposition codes, skills-based routing, and structured wrap-up workflows that current Teams calling plan cannot support</li>
+      <li contenteditable="true">Replace manual call auditing with AI-driven QMSA — speech analytics, sentiment mapping, keyword detection, and automated evaluation templates</li>
+      <li contenteditable="true">Scale CC infrastructure to support ~65 SOC agents with concurrent licensing as business grows</li>
     </ul>
   </div>
-</div>
 
-
-<!-- ── SECTION 2: STRATEGIES ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">♟️</span>
-    <h2>Strategies</h2>
-    <span class="subtitle">How CyberMaxx plans to get there</span>
-  </div>
-  <div class="section-body">
+  <div class="col-card">
+    <div class="section-header risk">Challenges &amp; Pain Points</div>
     <ul class="item-list">
-      <li><span class="dot lime"></span><span contenteditable="true">Evaluate Microsoft Teams-certified CCaaS vendors only — Joseph's explicit requirement. SOC analysts must stay in the Teams ecosystem. No separate softphone client, no dual-presence conflicts.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">Use the six business problem statements as the evaluation filter — function parity against what RingCentral CX claims to solve. Any vendor that doesn't check all six boxes is disqualified.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">Prioritize cost efficiency — avoid double-licensing (Teams phone + CC UC layer) that RingCentral forces. IT leadership has direct visibility into RC pricing from prior relationship (~$121/user/mo previously).</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">Leverage existing vendor approval — 8x8 is already in CyberMaxx's procurement system from prior relationship, shortcutting vetting process considerably.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">Move before the H2 acquisition — selecting a CC platform now lets CyberMaxx rationalize any acquired company's RC licenses rather than being absorbed into RingCentral post-deal.</span></li>
+      <li contenteditable="true">Teams calling plan lacks contact center depth — no disposition codes, no skills-based routing, no QMSA, no formal agent/supervisor workspace</li>
+      <li contenteditable="true">No real-time supervisor alerting for queue issues — if calls pile up or agents go dark, leadership has no proactive notification path. Currently reactive.</li>
+      <li contenteditable="true">Manual call auditing is time-consuming and incomplete — Erica's team listens to recordings manually; no AI, no keyword categorization, no sentiment mapping</li>
+      <li contenteditable="true">Agent call volume balancing is ad hoc — no native way to limit calls per hour for new hires vs. senior agents; creates risk of overloading or underloading staff</li>
+      <li contenteditable="true">Call Cabinet (Smarsh) may be redundant — compliance recording currently done via Call Cabinet; 8x8 has native recording capability; overlap not yet resolved</li>
+      <li contenteditable="true">Fragmented reporting — no unified view of CC + UC data; pulling reports from separate systems creates overhead and delays leadership insight</li>
     </ul>
   </div>
+
 </div>
 
+<!-- Row 2: Strategies + Initiatives -->
+<div class="grid-2 section-block">
 
-<!-- ── SECTION 3: INITIATIVES ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">📋</span>
-    <h2>Initiatives</h2>
-    <span class="subtitle">Active projects and decisions in motion</span>
-  </div>
-  <div class="section-body">
+  <div class="col-card">
+    <div class="section-header accent">Strategies</div>
     <ul class="item-list">
-      <li><span class="dot lime"></span><span contenteditable="true">CCaaS vendor evaluation in progress — 8x8 and RingCentral CX in consideration. Business stakeholders sponsor RC; Joseph (IT) is evaluating Teams-native alternatives independently.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">8x8 demo confirmed — Monday April 20 @ 12PM CST, 1-hour block. Focus: Teams integration UX, analytics/reporting, skills-based routing, supervisor workspace. Joseph leading evaluation solo.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">10DLC SMS campaign configuration underway for Teams — lower priority, not tied to CC eval. Not a contact center use case.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">H2 2026 acquisition planned — CyberMaxx expects to acquire a company that may already be running RingCentral. Platform decision made now directly affects post-acquisition rationalization leverage.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">AI tooling being adopted to cap SOC headcount — intent is to hold agents at ~65–70 rather than scale with volume. AI CC capabilities relevant as a future-state conversation post-selection.</span></li>
+      <li contenteditable="true">Deploy 8x8 CC (X6/X7/X8) on top of existing Teams environment — direct routing as a service; CC agents remain in Teams tenant but gain full 8x8 enterprise CC capabilities</li>
+      <li contenteditable="true">Implement skills-based routing across 2-3 existing queues (expandable) — route calls to highest-skilled available agent; overflow to secondary skill tiers</li>
+      <li contenteditable="true">Enable QMSA — replace manual audits with AI-driven sentiment analysis, keyword/phrase categorization, agent action item extraction, and evaluation templates</li>
+      <li contenteditable="true">Scope Teams webhook/API integration for queue overflow alerts — ping Leadership channel in Teams when queue thresholds are breached (action item for Landon)</li>
+      <li contenteditable="true">Concurrent licensing model — only pay for max simultaneous agents logged in; cost-efficient for shift-based SOC operation</li>
+      <li contenteditable="true">Evaluate Call Cabinet overlap — determine if 8x8 native recording can replace or supplement Call Cabinet/Smarsh for compliance recording</li>
     </ul>
   </div>
+
+  <div class="col-card">
+    <div class="section-header accent">Initiatives &amp; Next Steps</div>
+    <ul class="item-list">
+      <li contenteditable="true">PJ Schlegel to send license feature matrix (X6 / X7 / X8) and demo recording to Joseph Wallis</li>
+      <li contenteditable="true">Joseph reviews matrix → scoping/deployment call to confirm scope, features, and tailored pricing</li>
+      <li contenteditable="true">Landon Hendricks to scope Teams webhook/API for queue alerting — confirm if buildable and estimate effort</li>
+      <li contenteditable="true">Joseph intends to see one additional competitor demo for benchmarking before deciding — 8x8 must stay top of mind during that evaluation window</li>
+      <li contenteditable="true">Confirm Call Cabinet / Smarsh role post-migration — compliance recording overlap to be resolved in scoping call</li>
+      <li contenteditable="true">Post-scoping: PJ to turn around tailored pricing for confirmed license tier(s)</li>
+    </ul>
+  </div>
+
 </div>
 
-
-<!-- ── SECTION 4: CHALLENGES ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">⚡</span>
-    <h2>Challenges</h2>
-    <span class="subtitle">Current pain + cost of doing nothing</span>
-  </div>
-  <div class="section-body">
-    <div class="two-col">
-      <div class="col-card">
-        <h3>Current Pain</h3>
-        <ul class="item-list">
-          <li><span class="dot red"></span><span contenteditable="true">Teams provides near-zero CC telemetry — abandoned calls are happening but Joseph can't determine if they're wrong-number hangs or wait-time dropoffs. Business is demanding answers he can't provide.</span></li>
-          <li><span class="dot red"></span><span contenteditable="true">No skills-based routing — Tier 1 and Tier 2 SOC analysts sit in a flat FIFO queue. Complex calls consume Tier 1 time; escalation is manual and undocumented.</span></li>
-          <li><span class="dot red"></span><span contenteditable="true">Supervisor tools exist (Teams Queues App) but go unused — managers either don't know about listen/whisper features or avoid the interface entirely. Coaching is reactive.</span></li>
-          <li><span class="dot red"></span><span contenteditable="true">Microsoft roadmap is unreliable for CC features — user feedback is ignored, new releases are minimally viable. Joseph has stopped waiting.</span></li>
-        </ul>
-      </div>
-      <div class="col-card">
-        <h3>Cost of Doing Nothing</h3>
-        <ul class="item-list">
-          <li><span class="dot red"></span><span contenteditable="true">If H2 acquisition brings RingCentral into the org with no CC vendor already selected, CyberMaxx loses platform control — they absorb RC rather than rationalize it out.</span></li>
-          <li><span class="dot red"></span><span contenteditable="true">Business stakeholders continue pushing RingCentral CX without a credible alternative — RC wins by default. Cost for 65 agents would approach what CyberMaxx paid for the entire company historically.</span></li>
-          <li><span class="dot red"></span><span contenteditable="true">RingCentral's forced UC bundling forces double-licensing on top of existing M365 E5 — a structural cost problem Joseph has already identified as a non-starter.</span></li>
-          <li><span class="dot red"></span><span contenteditable="true">SOC analysts continue working blind — no performance data, no coaching tools, no abandoned call visibility. Customer experience gaps compound and go unmeasured.</span></li>
-        </ul>
-      </div>
+<!-- Row 3: Future State -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Future State / Positive Business Outcomes</div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <ul class="item-list">
+        <li contenteditable="true">Agents work in a unified environment — Teams for internal collaboration, 8x8 CC workspace for member interactions; one platform, minimal context switching</li>
+        <li contenteditable="true">Supervisors see live queue health at a glance — customizable dashboards with SLA, abandons, agent status; get proactively pinged in Teams when thresholds are breached</li>
+        <li contenteditable="true">QMSA eliminates manual audits — AI categorizes and surfaces the calls that need review; Erica's team coaches with data instead of guesswork</li>
+      </ul>
+      <ul class="item-list">
+        <li contenteditable="true">Formal disposition codes provide structured call outcome data — enables reporting by call type, identifies trends, feeds scheduled reports to leadership</li>
+        <li contenteditable="true">Skills-based routing delivers callers to the right agent faster — new hires protected from overload; senior agents used for high-priority queues</li>
+        <li contenteditable="true">Unified reporting — CC and UC data in one platform; scheduled reports delivered to leadership inbox weekly without manual effort</li>
+      </ul>
     </div>
   </div>
 </div>
 
-
-<!-- ── SECTION 5: FUTURE STATE ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">🚀</span>
-    <h2>Future State & Positive Business Outcomes</h2>
-    <span class="subtitle">Where CyberMaxx wants to be — measurable value</span>
-  </div>
-  <div class="section-body">
-    <ul class="item-list">
-      <li><span class="dot teal"></span><span contenteditable="true">SOC analysts remain fully inside the Teams ecosystem — no dual-client friction, no presence conflicts, seamless internal transfers without switching apps.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Out-of-box reporting answers all six business problems — cradle-to-grave call journey, abandoned call root-cause, real-time queue health, and historical SLA performance available without custom builds or IT overhead.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Tier 1 / Tier 2 skills-based routing reduces average handle time and escalation noise — analysts work the right calls, supervisors have live data to intervene proactively, not reactively.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Call Cabinet integration maintained with zero disruption — compliance recording continues without re-procurement, re-certification, or workflow changes.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Vendor selected before H2 acquisition — CyberMaxx enters post-acquisition integration with a CC platform already contracted, giving leverage to rationalize or eliminate acquired company's RC licenses.</span></li>
-      <li><span class="dot teal"></span><span contenteditable="true">Future-ready for AI expansion — unified data lake means keyword alerting, speech analytics, and omnichannel can be added when the business asks, without rebuilding reporting infrastructure from scratch.</span></li>
-    </ul>
-  </div>
-</div>
-
-
-<!-- ── SECTION 6: REQUIRED CAPABILITIES ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">🔧</span>
-    <h2>Required Capabilities</h2>
-    <span class="subtitle">What the solution must do — mapped to 8x8</span>
-  </div>
-  <div class="section-body">
-    <div class="cap-grid">
+<!-- Row 4: Required Capabilities -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header">Required Capabilities</div>
+    <div class="cap-grid" style="margin-top:8px;">
 
       <div class="cap-card">
-        <h4>Teams-Native CCaaS Integration</h4>
-        <p>Microsoft Teams-certified. Agents stay in Teams. No separate softphone, no separate UC layer, no dual-client presence conflict. No additional licensing on top of M365 E5.</p>
-        <span class="mapped">8x8 CC for Teams ✓</span>
+        <div class="cap-title" contenteditable="true">CC on Top of Teams (Direct Routing as a Service)</div>
+        <div class="cap-detail" contenteditable="true">8x8 CC overlays existing Teams environment. CC agents remain in Teams tenant. UCaaS NOT needed — Joseph explicitly stated no interest in 8x8 UC replacing Teams calling plan. Contact center sits on top.</div>
+        <span class="risk-pill confirmed">✓ Confirmed — Teams-Native CC</span>
       </div>
 
       <div class="cap-card">
-        <h4>Skills-Based Routing</h4>
-        <p>Route calls based on Tier 1 / Tier 2 analyst skill groups. Separate queues, not a flat FIFO. Must be configurable without IT heavy-lifting post go-live.</p>
-        <span class="mapped">X6/X7 ACD + Skills ✓</span>
+        <div class="cap-title" contenteditable="true">Skills-Based Routing</div>
+        <div class="cap-detail" contenteditable="true">Assign skill levels to agents within each queue. High-skill agents receive calls first; overflow to lower-skill tiers. Longest-idle routing within skill tier. Currently 2–3 queues; no limit on queue count.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
       </div>
 
       <div class="cap-card">
-        <h4>Abandoned Call Analytics</h4>
-        <p>Root-cause visibility on abandoned calls — wrong number vs. wait-time dropout. Out-of-box — not a Power BI custom export. Answers a direct business stakeholder question.</p>
-        <span class="mapped">Call Journey / Analytics ✓</span>
+        <div class="cap-title" contenteditable="true">Disposition Codes</div>
+        <div class="cap-detail" contenteditable="true">Currently unavailable in Teams calling plan — Erica and Joseph confirmed they want them. 8x8 CC supports disposition codes natively. Available in X6/X7/X8 formal CC tiers (NOT in Engage/lightweight model).</div>
+        <span class="risk-pill confirmed">✓ Confirmed — Requires X6+ CC License</span>
       </div>
 
       <div class="cap-card">
-        <h4>Real-Time Supervisor Workspace</h4>
-        <p>Listen, whisper, barge for SOC team leads. Live queue dashboards that supervisors will actually use. Current Teams Queues App is available but ignored.</p>
-        <span class="mapped">Supervisor Workspace ✓</span>
+        <div class="cap-title" contenteditable="true">QMSA — Speech Analytics &amp; AI Call Review</div>
+        <div class="cap-detail" contenteditable="true">Replaces manual call audits. AI categorizes calls by topic (agent confrontation, empathy, compliance phrases). Sentiment mapping, full transcript, agent action item extraction, keyword phrase detection. Evaluation templates (yes/no, sliding scale, auto-fail).</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
       </div>
 
       <div class="cap-card">
-        <h4>Historical Reporting</h4>
-        <p>Cradle-to-grave call journey. Queue SLA, handle time, call volume trends. Answers the six business problem statements. Must be self-serve — not IT-dependent.</p>
-        <span class="mapped">8x8 Analytics Hub ✓</span>
+        <div class="cap-title" contenteditable="true">Real-Time Dashboards + Customizable Reporting</div>
+        <div class="cap-detail" contenteditable="true">Build custom dashboards with any CC metric (SLA %, abandons, agent status, queue depth). Shareable via URL. Scheduled reports emailed to leadership/distribution lists. Erica confirmed this is critical. Journey map also well-received by Joseph.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
       </div>
 
       <div class="cap-card">
-        <h4>Compliance Recording Integration</h4>
-        <p>Call Cabinet (Smarsh) must continue working. Integration already exists on 8x8. This is a continuity requirement — product works, no replacement needed.</p>
-        <span class="mapped">Smarsh / Call Cabinet ✓</span>
+        <div class="cap-title" contenteditable="true">Barge / Monitor / Whisper</div>
+        <div class="cap-detail" contenteditable="true">Supervisors can silently monitor agents (agent and caller unaware), whisper coaching to agents mid-call, or barge into call when needed. Available in supervisor workspace. PJ requested Tom demo this — well received.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
       </div>
 
       <div class="cap-card">
-        <h4>IVR / Auto Attendant</h4>
-        <p>Single support option today routing to SOC queue. Customers occasionally get lost — needs audit visibility. Basic IVR must remain functional and reportable.</p>
-        <span class="mapped">8x8 IVR / Flow Builder ✓</span>
+        <div class="cap-title" contenteditable="true">Queue Alert / Webhook to Teams Channel</div>
+        <div class="cap-detail" contenteditable="true">Joseph's request: when a queue backs up or thresholds are breached, ping a Leadership Alerts Teams channel via webhook — more actionable than email. Not out of box. Landon action item to scope feasibility via 8x8 API or pro services.</div>
+        <span class="risk-pill tbd">⚠ Not Native — Landon Scoping</span>
       </div>
 
       <div class="cap-card">
-        <h4>CC-Only Seat Licensing</h4>
-        <p>65 agents on contact center seats only. No forced UC bundle on top of M365 E5. RingCentral's bundled UC requirement is a known disqualifier — Joseph has called it out directly.</p>
-        <span class="mapped">X6/X7 CC SKU ✓</span>
+        <div class="cap-title" contenteditable="true">Call Volume / Per-Agent Hourly Limits</div>
+        <div class="cap-detail" contenteditable="true">Erica requested ability to limit calls per hour per agent (protect new hires from overload). Not a native 8x8 inbound CC feature. Workarounds: skill-level manipulation, manual supervisor status changes, overflow queue design. Erica noted Five9 has this natively — GAP.</div>
+        <span class="risk-pill gap">⚠ GAP — No Native Limit; Workarounds Available</span>
       </div>
 
       <div class="cap-card">
-        <h4>Native QM / Speech Analytics <span style="font-weight:400;font-size:11px;color:#888;">(Future)</span></h4>
-        <p>Not a current business ask. Joseph will revisit if business requests AI recording/analytics. Platform must support natively without rebuilding on a separate data silo.</p>
-        <span class="mapped">QMSA — X7/X8 (future) ✓</span>
+        <div class="cap-title" contenteditable="true">Compliance Recording (Call Cabinet / Smarsh Review)</div>
+        <div class="cap-detail" contenteditable="true">Currently using Call Cabinet (Smarsh) for compliance recording of all inbound + outbound calls. 8x8 has native recording. Joseph asked if 8x8 can replace Call Cabinet. Overlap to be evaluated in scoping — may reduce cost or simplify stack.</div>
+        <span class="risk-pill tbd">⚠ Overlap TBD — Scoping Required</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Queue Recording by Type (CC Only — Not Internal Teams)</div>
+        <div class="cap-detail" contenteditable="true">Erica confirmed: record CC queue calls and external outbound only — NOT internal Teams-to-Teams calls. 8x8 recording scoped to specific queues, configurable at 100% / partial. Internal Teams calls remain unrecorded.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Auto Wrap-Up / After Call Work Timer</div>
+        <div class="cap-detail" contenteditable="true">Erica asked if wrap-up status auto-returns agent to available after a set time. Confirmed: configurable after-call work (ACW) timer; agent auto-returns to available after timer expires. Supervisor can also manually override agent status.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Concurrent Licensing Model</div>
+        <div class="cap-detail" contenteditable="true">Landon confirmed: 8x8 CC is concurrent — licenses = max agents simultaneously logged in. Cost-efficient for CyberMaxx's shift-based SOC (~65 agents; not all on at once). Confirmed this is the correct model for their environment.</div>
+        <span class="risk-pill confirmed">✓ Confirmed — Concurrent Model</span>
       </div>
 
     </div>
   </div>
 </div>
 
-
-<!-- ── OPEN ITEMS ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">📌</span>
-    <h2>Open Items & Next Steps</h2>
-  </div>
-  <div class="section-body">
-    <ul class="item-list">
-      <li><span class="dot red"></span><span contenteditable="true">CRITICAL — Pull the six business problem statements from Ebony's prior call notes before the April 20 demo. Demo must address each one explicitly.</span></li>
-      <li><span class="dot red"></span><span contenteditable="true">CRITICAL — Confirm 8x8 CC for Teams licensing model with SE: does a CC-only seat for the 65 agents require any 8x8 UC layer, or is it clean? Joseph will use this to disqualify RingCentral's bundling model.</span></li>
-      <li><span class="dot red"></span><span contenteditable="true">Identify the business-side EB — "stakeholders" pushing RingCentral are unnamed. Joseph is IT evaluator; someone above him has budget authority. Must surface before advancing past Stage 1.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">Demo April 20 @ 12PM CST — focus areas: Teams integration UX, call journey analytics, skills-based routing, supervisor workspace. Keep AI features brief unless Joseph opens the door — he is function-parity focused.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">Prepare RC displacement one-pager — Joseph already knows RC's cost problem; arm him with specifics (CC-only 8x8 vs. RC bundled pricing) to carry internally against business stakeholders pushing RC.</span></li>
-      <li><span class="dot lime"></span><span contenteditable="true">Confirm Call Cabinet / Smarsh integration details with partnership team — have this ready for Joseph at or before the demo. He confirmed the product works; just needs continuity assurance.</span></li>
-    </ul>
-  </div>
-</div>
-
-
-<!-- ── DISCOVERY NOTES ── -->
-<div class="section">
-  <div class="section-header">
-    <span class="icon">📝</span>
-    <h2>Discovery Notes</h2>
-  </div>
-  <div class="section-body">
-    <div class="notes-field" contenteditable="true">
-CyberMaxx is a cybersecurity MSSP (~180 users total). ~65 SOC analysts handle inbound customer support in a Microsoft Teams queue today. Three acquisitions in three years — one more expected H2 2026. Prior 8x8 customer — legacy CyberMaxx licenses wound down post-acquisition when they moved to the acquired company's Teams infrastructure; 8x8 still in vendor approval system.
-
-Joseph Wallis is running an independent evaluation of Teams-certified CCaaS after Teams Queues App proved insufficient. Business stakeholders are advocating for RingCentral CX based on prior job familiarity. Joseph is skeptical of RC's forced UC bundling and knows their pricing. He's measured, research-driven, cost-conscious, and function-parity focused — not a buyer yet, but he's the one driving the evaluation.
-
-Ebony (8x8 SDR) had a prior call with Joseph — six business problem statements were shared with her. Need those notes before April 20 demo. Call Cabinet / Smarsh compliance recording is working well and must remain in place. Voice-only for CC — no SMS or omnichannel in scope today.
+<!-- Open Items -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header risk">Open Items &amp; Risk Flags</div>
+    <div class="open-items-grid" style="margin-top:8px;">
+      <div class="open-item" contenteditable="true">🔴 Joseph wants to see one more competitor demo before deciding — evaluation is not complete. Keep engagement warm during this window. Identify likely competitor (RingCentral CX was previously mentioned).</div>
+      <div class="open-item" contenteditable="true">🔴 Call-volume-per-agent limit is a native gap vs. Five9 — Erica has used Five9 and specifically named this feature. Must address with workaround design or pro services scoping to avoid it becoming a deal-breaker.</div>
+      <div class="open-item" contenteditable="true">🟡 Teams webhook for queue alerting — Landon action item. Must confirm buildable (API/pro services) and provide answer before Joseph's next evaluation touchpoint.</div>
+      <div class="open-item" contenteditable="true">🟡 PJ to send license feature matrix (X6/X7/X8) and demo recording — Joseph explicitly requested this before scheduling scoping call. Must be delivered promptly.</div>
+      <div class="open-item" contenteditable="true">🟡 Call Cabinet / Smarsh overlap — compliance recording overlap with 8x8 native recording needs resolution. Could be a cost savings story or a complexity risk. Resolve in scoping call.</div>
+      <div class="open-item" contenteditable="true">🟡 Engage vs. formal CC workspace — Joseph is intrigued by Teams-native interface (Engage) but Engage lacks disposition codes. Must clearly map features to license tiers to avoid confusion at scoping.</div>
     </div>
   </div>
 </div>
 
+<!-- Notes -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Field Notes</div>
+    <div class="notes-field" contenteditable="true" style="margin-top:8px;">Demo 1 (initial): CyberMaxx CCaaS eval — ~65 SOC agents, Teams-native, vs. RingCentral CX. Call Cabinet/Smarsh in use for compliance recording. Champion: Joseph Wallis.
 
-<!-- FOOTER -->
-<div class="footer">
-  8x8 Confidential &nbsp;|&nbsp; CyberMaxx Value Map &nbsp;|&nbsp; Generated Apr 15, 2026 &nbsp;|&nbsp; Landon Hendricks — CX &amp; Emerging Technologies Specialist
+Demo 2 — Apr 20, 2026: 8x8 team: PJ Schlegel (AE), Tom Rupp (SE), Landon Hendricks (CC Spec). CyberMaxx: Joseph Wallis (champion/decision-maker), Erica Smith (CC ops — very technical, strong influencer). A third CyberMaxx attendee was expected but did not join.
+
+Key demo moments: (1) Teams-native CC integration demoed — Joseph's biggest concern is minimal separation between CC and Teams. He wants agents living in 8x8 CC workspace for CC needs and Teams for everything else — confirmed this is viable. (2) Skills-based routing confirmed. (3) Erica drove majority of detailed questions — disposition codes, call limits per agent, queue recording scope, QMSA, barge/whisper, auto wrap-up. All sharp, well-informed questions. (4) Joseph lit up on the Journey Map ("this map is cool"). (5) Queue alerting via Teams webhook — Joseph suggested it, Landon took as action item. (6) Joseph explicitly stated: NO interest in 8x8 UCaaS — CC on top of Teams ONLY.
+
+Competitive context: Joseph mentioned "seeing only a few live demos" and wants to see one more competitor. Previously RingCentral CX was in evaluation. Erica referenced Five9 (called-per-hour limit) — Five9 may be the competitor. PJ's unified data / single reporting platform differentiator landed well with Landon's assist.
+
+Tone: Joseph is cautious and analytical. Erica is the operational expert who will influence the decision from the floor. Both engaged well. Deal is progressing — license matrix delivery is the critical next step.
+    </div>
+  </div>
 </div>
+
+<div id="save-indicator">Saved</div>
 
 <script>
+(function () {
   const KEY = 'cybermaxx-value-map-v1';
-
-  function save() {
-    const data = {};
-    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
-      data[i] = el.innerHTML;
-    });
-    localStorage.setItem(KEY, JSON.stringify(data));
+  const IND = document.getElementById('save-indicator');
+  let timer;
+  function showSaved() {
+    IND.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(() => IND.classList.remove('show'), 1800);
   }
-
+  function save() {
+    const els = document.querySelectorAll('[contenteditable="true"]');
+    const data = {};
+    els.forEach((el, i) => { data[i] = el.innerHTML; });
+    localStorage.setItem(KEY, JSON.stringify(data));
+    showSaved();
+  }
   function load() {
     const raw = localStorage.getItem(KEY);
     if (!raw) return;
     try {
       const data = JSON.parse(raw);
-      document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
-        if (data[i] !== undefined) el.innerHTML = data[i];
-      });
-    } catch(e) {}
+      const els = document.querySelectorAll('[contenteditable="true"]');
+      els.forEach((el, i) => { if (data[i] !== undefined) el.innerHTML = data[i]; });
+    } catch (e) {}
   }
-
-  document.addEventListener('input', save);
   load();
+  document.addEventListener('input', save);
+})();
 </script>
-
 </body>
 </html>

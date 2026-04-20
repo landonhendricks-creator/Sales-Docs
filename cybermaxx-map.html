@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberMaxx — 8x8 Mutual Action Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #EAE9E1;
+    color: #111111;
+    min-height: 100vh;
+    padding: 28px 24px 60px;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-badge {
+    background: #008486;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+  .deal-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #111111;
+    letter-spacing: -.01em;
+  }
+  .deal-title span { color: #008486; }
+
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 26px;
+    font-size: 13px;
+    color: #444;
+  }
+  .meta-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: #C9DC4F; flex-shrink: 0; }
+  .meta-bar strong { color: #111; }
+  .badge-stage {
+    margin-left: auto;
+    background: #008486;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .phase-block {
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 18px;
+  }
+  .phase-header.done   { background: #008486; }
+  .phase-header.active { background: #C9DC4F; }
+  .phase-header.future { background: #d5d4cc; }
+
+  .phase-number {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .done   .phase-number { background: rgba(255,255,255,.25); color: #fff; }
+  .active .phase-number { background: rgba(0,0,0,.12); color: #111; }
+  .future .phase-number { background: rgba(0,0,0,.1);  color: #555; }
+
+  .phase-title { font-size: 14px; font-weight: 700; }
+  .done   .phase-title { color: #fff; }
+  .active .phase-title { color: #111; }
+  .future .phase-title { color: #666; }
+
+  .phase-date { margin-left: auto; font-size: 12px; font-weight: 500; opacity: .8; }
+  .done   .phase-date { color: #cef; }
+  .active .phase-date { color: #444; }
+  .future .phase-date { color: #888; }
+
+  .phase-body { padding: 14px 18px 16px; }
+  .future .phase-body { opacity: .45; }
+
+  .task-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .task-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; }
+
+  .task-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: background .15s, border-color .15s;
+  }
+  .task-check.checked { background: #008486; border-color: #008486; color: #fff; }
+  .task-check.checked::after { content: '✓'; font-weight: 700; }
+
+  .task-text { flex: 1; outline: none; color: #222; }
+  .task-text:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+
+  .task-owner {
+    font-size: 11px; font-weight: 600; color: #008486;
+    background: #e6f4f4; padding: 2px 8px; border-radius: 20px;
+    flex-shrink: 0; margin-top: 3px; outline: none; white-space: nowrap;
+  }
+  .task-owner:focus { box-shadow: 0 0 0 2px #008486; }
+  .task-owner.prospect { color: #1a4e6e; background: #dbeeff; }
+  .task-owner.urgent   { color: #c0392b; background: #fde8e8; }
+
+  .add-task-btn {
+    margin-top: 10px;
+    background: none;
+    border: 1.5px dashed #ccc;
+    border-radius: 6px;
+    color: #aaa;
+    font-size: 12px;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: border-color .15s, color .15s;
+  }
+  .add-task-btn:hover { border-color: #008486; color: #008486; }
+
+  .sidebar { display: flex; flex-direction: column; gap: 16px; }
+  .side-card { background: #fff; border-radius: 10px; padding: 16px 18px; }
+  .side-card-title {
+    font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    color: #fff; background: #008486; padding: 4px 10px; border-radius: 4px;
+    margin-bottom: 12px; display: inline-block;
+  }
+  .side-card-title.dark   { background: #111111; }
+  .side-card-title.accent { background: #C9DC4F; color: #111; }
+  .side-card-title.risk   { background: #c0392b; color: #fff; }
+
+  .contact-list { display: flex; flex-direction: column; gap: 10px; }
+  .contact-item { display: flex; flex-direction: column; gap: 2px; }
+  .contact-name { font-size: 13px; font-weight: 700; color: #111; outline: none; }
+  .contact-name:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+  .contact-role { font-size: 12px; color: #666; outline: none; }
+  .contact-role:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+  .contact-tag {
+    font-size: 10px; font-weight: 700;
+    padding: 1px 7px; border-radius: 20px;
+    width: fit-content; margin-top: 1px;
+  }
+  .tag-champion { background: #C9DC4F; color: #111; }
+  .tag-inf      { background: #ede9ff; color: #5a3e9b; }
+  .tag-8x8      { background: #008486; color: #fff; }
+  .tag-gap      { background: #fde8e8; color: #c0392b; }
+
+  .tech-list { display: flex; flex-direction: column; gap: 6px; }
+  .tech-item {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12.5px; padding: 5px 8px; background: #EAE9E1; border-radius: 5px;
+  }
+  .tech-label { font-weight: 600; color: #222; }
+  .tech-val   { color: #555; font-size: 12px; }
+  .tech-badge { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 20px; }
+  .tb-keep    { background: #d4f0d1; color: #1a6e1a; }
+  .tb-replace { background: #fde8e8; color: #c0392b; }
+  .tb-add     { background: #e6f4f4; color: #008486; }
+  .tb-tbd     { background: #fff3cd; color: #7a5800; }
+
+  #save-indicator {
+    position: fixed; bottom: 18px; right: 22px;
+    background: #008486; color: #fff; font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: 20px; opacity: 0;
+    transition: opacity .4s; pointer-events: none; z-index: 9999;
+  }
+  #save-indicator.show { opacity: 1; }
+
+  @media print {
+    body { background: #EAE9E1 !important; padding: 12px !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    #save-indicator { display: none !important; }
+    .layout { grid-template-columns: 1fr 260px !important; gap: 14px !important; }
+    .phase-block { page-break-inside: avoid; }
+    .phase-header.done   { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .phase-header.active { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .phase-header.future { background: #d5d4cc !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .logo-badge  { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .badge-stage { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar    { background: #fff    !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .meta-bar .dot { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .side-card-title        { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .side-card-title.dark   { background: #111111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .side-card-title.accent { background: #C9DC4F !important; color: #111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .side-card-title.risk   { background: #c0392b !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-champion { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-inf      { background: #ede9ff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-8x8      { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tag-gap      { background: #fde8e8 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tb-keep    { background: #d4f0d1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tb-replace { background: #fde8e8 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tb-add     { background: #e6f4f4 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tb-tbd     { background: #fff3cd !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .tech-item  { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-check.checked { background: #008486 !important; border-color: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-owner { background: #e6f4f4 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-owner.prospect { background: #dbeeff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .task-owner.urgent   { background: #fde8e8 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    .add-task-btn { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="logo-badge">8x8 Mutual Action Plan</div>
+  <h1 class="deal-title">Cyber<span>Maxx</span></h1>
+</div>
+
+<div class="meta-bar">
+  <div class="dot"></div>
+  <strong>AE:</strong> PJ Schlegel
+  <span>|</span>
+  <strong>SE:</strong> Tom Rupp
+  <span>|</span>
+  <strong>CC Spec:</strong> Landon Hendricks
+  <span>|</span>
+  <strong>Champion:</strong> Joseph Wallis
+  <span>|</span>
+  <strong>Influencer:</strong> Erica Smith (CC Ops)
+  <span>|</span>
+  <strong>Agents:</strong> ~65 SOC (Concurrent)
+  <span>|</span>
+  <strong>Platform:</strong> CC on top of Teams
+  <div class="badge-stage">Stage 2 → 3</div>
+</div>
+
+<div class="layout">
+
+  <!-- MAP Column -->
+  <div class="map-col">
+
+    <!-- Phase 1: Done -->
+    <div class="phase-block">
+      <div class="phase-header done">
+        <div class="phase-number">Phase 1</div>
+        <div class="phase-title">Discovery &amp; Initial Demo</div>
+        <div class="phase-date">Demo 1 ✓</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list">
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Discovery completed — current environment documented: Teams + calling plan, Call Cabinet/Smarsh, ~65 SOC CC agents, vs. RingCentral CX</div>
+            <div class="task-owner">PJ Schlegel / AE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Initial platform demo — 8x8 CC capabilities, Teams integration overview, QMSA introduced</div>
+            <div class="task-owner">Tom Rupp / SE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Champion identified: Joseph Wallis. Key influencer: Erica Smith (CC Ops, detailed product knowledge)</div>
+            <div class="task-owner">PJ Schlegel</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Phase 2: Done -->
+    <div class="phase-block">
+      <div class="phase-header done">
+        <div class="phase-number">Phase 2</div>
+        <div class="phase-title">Deep-Dive Demo — CC, QMSA, Reporting</div>
+        <div class="phase-date">Apr 20, 2026 ✓</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list">
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Deep-dive CC demo — Teams direct routing, agent workspace, skills-based routing, disposition codes, barge/monitor/whisper, QMSA, reporting, Journey Map</div>
+            <div class="task-owner">Tom Rupp / SE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Confirmed CC on Teams as the model — UCaaS NOT needed. Joseph wants CC on top of Teams with minimal separation</div>
+            <div class="task-owner prospect">Joseph Wallis</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Concurrent licensing model confirmed and explained by Landon — licenses = max simultaneous agents</div>
+            <div class="task-owner">Landon Hendricks</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Teams webhook for queue alerting — Joseph proposed; Landon took as action item to scope via API / pro services</div>
+            <div class="task-owner urgent">Landon — Action Item</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Call volume per agent limit — Erica's ask; confirmed NOT native in 8x8 inbound CC. Workarounds discussed (skill level, overflow queues, supervisor control). GAP vs Five9.</div>
+            <div class="task-owner urgent">Gap — Needs Resolution</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check checked"></div>
+            <div class="task-text" contenteditable="true">Joseph requested license feature matrix (X6/X7/X8) before scheduling scoping call</div>
+            <div class="task-owner prospect">Joseph Wallis</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Phase 3: Active -->
+    <div class="phase-block">
+      <div class="phase-header active">
+        <div class="phase-number">Phase 3</div>
+        <div class="phase-title">Post-Demo Follow-Through &amp; Scoping Prep</div>
+        <div class="phase-date">Now → TBD</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list" id="phase3-tasks">
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">PJ delivers license feature matrix (X6/X7/X8) and demo recording to Joseph — critical gate before scoping call</div>
+            <div class="task-owner urgent">PJ Schlegel — Immediate</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Landon scopes Teams webhook/API for queue threshold alerting — confirm buildable, estimate effort, document workaround or pro services path</div>
+            <div class="task-owner urgent">Landon — Action Item</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Address per-agent call volume limit gap — document 8x8 workaround approach (skill levels, supervisor override, overflow queue design) vs. Five9 native feature</div>
+            <div class="task-owner">Landon + Tom</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Joseph reviews license matrix, selects preferred CC tier(s) — leads to scoping call scheduling</div>
+            <div class="task-owner prospect">Joseph Wallis</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Joseph completes competitor demo (likely Five9 or RingCentral CX) — stay engaged; reinforce unified data / single reporting differentiator during this window</div>
+            <div class="task-owner prospect">Joseph Wallis</div>
+          </li>
+        </ul>
+        <button class="add-task-btn" onclick="addTask('phase3-tasks')">+ Add task</button>
+      </div>
+    </div>
+
+    <!-- Phase 4: Future -->
+    <div class="phase-block">
+      <div class="phase-header future">
+        <div class="phase-number">Phase 4</div>
+        <div class="phase-title">Scoping Call &amp; Proposal</div>
+        <div class="phase-date">TBD</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list" id="phase4-tasks">
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Scoping / deployment call — confirm CC tier, agent count, queue design, Call Cabinet overlap, Teams webhook feasibility, implementation plan</div>
+            <div class="task-owner">PJ + Tom + Landon</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Resolve Call Cabinet / Smarsh overlap — determine if 8x8 native recording replaces or supplements compliance recording workflow</div>
+            <div class="task-owner">PJ + Joseph</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">PJ delivers tailored pricing — recurring license cost + setup/implementation cost for confirmed scope</div>
+            <div class="task-owner">PJ Schlegel / AE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Proposal review with Joseph and Erica — address pricing objections, confirm scope alignment</div>
+            <div class="task-owner prospect">Joseph + Erica</div>
+          </li>
+        </ul>
+        <button class="add-task-btn" onclick="addTask('phase4-tasks')">+ Add task</button>
+      </div>
+    </div>
+
+    <!-- Phase 5: Future -->
+    <div class="phase-block">
+      <div class="phase-header future">
+        <div class="phase-number">Phase 5</div>
+        <div class="phase-title">Decision &amp; Contract</div>
+        <div class="phase-date">TBD</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list" id="phase5-tasks">
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Vendor selection — Joseph (and Erica's influence) confirms 8x8 over competitor(s)</div>
+            <div class="task-owner prospect">Joseph Wallis</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Contract / MSA signed — CC license tier confirmed, concurrent seat count locked</div>
+            <div class="task-owner">PJ Schlegel / AE</div>
+          </li>
+          <li class="task-item">
+            <div class="task-check"></div>
+            <div class="task-text" contenteditable="true">Implementation kickoff — Teams direct routing configuration, queue build-out, QMSA setup, disposition codes configured</div>
+            <div class="task-owner">8x8 PS</div>
+          </li>
+        </ul>
+        <button class="add-task-btn" onclick="addTask('phase5-tasks')">+ Add task</button>
+      </div>
+    </div>
+
+  </div><!-- /map-col -->
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <div class="side-card">
+      <div class="side-card-title">CyberMaxx Contacts</div>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Joseph Wallis</div>
+          <div class="contact-role" contenteditable="true">Champion / Decision-Maker</div>
+          <div class="contact-tag tag-champion">Champion</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Erica Smith</div>
+          <div class="contact-role" contenteditable="true">Contact Center Operations — key influencer, strong technical knowledge (Five9, RingCentral)</div>
+          <div class="contact-tag tag-inf">Influencer — CC Ops</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-title dark">8x8 Team</div>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">PJ Schlegel</div>
+          <div class="contact-role" contenteditable="true">Account Executive, 8x8</div>
+          <div class="contact-tag tag-8x8">8x8 AE</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Tom Rupp</div>
+          <div class="contact-role" contenteditable="true">Sales Engineer, 8x8</div>
+          <div class="contact-tag tag-8x8">8x8 SE</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-name" contenteditable="true">Landon Hendricks</div>
+          <div class="contact-role" contenteditable="true">CC Specialist, 8x8</div>
+          <div class="contact-tag tag-8x8">8x8 CC Spec</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-title accent">Current Tech Stack</div>
+      <div class="tech-list">
+        <div class="tech-item">
+          <span class="tech-label">UC / Calling</span>
+          <span class="tech-badge tb-keep">Keep</span>
+          <span class="tech-val">MS Teams</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">CC</span>
+          <span class="tech-badge tb-add">ADD 8x8</span>
+          <span class="tech-val">None (Teams)</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Compliance Rec.</span>
+          <span class="tech-badge tb-tbd">Overlap TBD</span>
+          <span class="tech-val">Call Cabinet / Smarsh</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Agents</span>
+          <span class="tech-badge tb-add">Concurrent</span>
+          <span class="tech-val">~65 SOC Agents</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Queues (today)</span>
+          <span class="tech-badge tb-add">Expand</span>
+          <span class="tech-val">2–3 Queues</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Routing</span>
+          <span class="tech-badge tb-add">ADD SBR</span>
+          <span class="tech-val">None (Teams basic)</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">QA / Audit</span>
+          <span class="tech-badge tb-add">ADD QMSA</span>
+          <span class="tech-val">Manual Listening</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-label">Competitor</span>
+          <span class="tech-badge tb-tbd">Watch</span>
+          <span class="tech-val">RingCentral / Five9</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-title risk">Key Gaps to Address</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;line-height:1.5;color:#333;">
+        <div contenteditable="true">🔴 <strong>Call/hr limit per agent</strong> — Five9 has natively; 8x8 does not. Must present workaround before Erica's final input.</div>
+        <div contenteditable="true">🟡 <strong>Teams webhook for queue alerts</strong> — not out of box; Landon scoping via API.</div>
+        <div contenteditable="true">🟡 <strong>Call Cabinet overlap</strong> — resolve in scoping call.</div>
+        <div contenteditable="true">🟡 <strong>Engage vs. full CC</strong> — Engage = Teams-native but no disposition codes; must clarify in matrix.</div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-card-title dark">Deal Context</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;line-height:1.5;color:#333;" contenteditable="true">
+        <div><strong>Model:</strong> CC on top of Teams only — No UCaaS</div>
+        <div><strong>Licensing:</strong> Concurrent (max simultaneous)</div>
+        <div><strong>Tiers:</strong> X6 / X7 / X8 — matrix pending</div>
+        <div><strong>Competitor:</strong> RingCentral CX / Five9 (TBD)</div>
+        <div><strong>Gate:</strong> Joseph reviews matrix → scoping call</div>
+        <div><strong>Founded:</strong> 2002 · MDR / Cybersecurity</div>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+
+</div><!-- /layout -->
+
+<div id="save-indicator">Saved</div>
+
+<script>
+(function () {
+  const KEY = 'cybermaxx-map-v1';
+  const IND = document.getElementById('save-indicator');
+  let timer;
+
+  function showSaved() {
+    IND.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(() => IND.classList.remove('show'), 1800);
+  }
+
+  function getState() {
+    const data = {};
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => { data['ce_' + i] = el.innerHTML; });
+    document.querySelectorAll('.task-check').forEach((el, i) => { data['chk_' + i] = el.classList.contains('checked'); });
+    return data;
+  }
+
+  function applyState(data) {
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => { if (data['ce_' + i] !== undefined) el.innerHTML = data['ce_' + i]; });
+    document.querySelectorAll('.task-check').forEach((el, i) => { if (data['chk_' + i] !== undefined) el.classList.toggle('checked', data['chk_' + i]); });
+  }
+
+  function save() { localStorage.setItem(KEY, JSON.stringify(getState())); showSaved(); }
+
+  function load() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try { applyState(JSON.parse(raw)); } catch (e) {}
+  }
+
+  document.addEventListener('click', function (e) {
+    const chk = e.target.closest('.task-check');
+    if (chk) { chk.classList.toggle('checked'); save(); }
+  });
+
+  document.addEventListener('input', save);
+  load();
+})();
+
+function addTask(listId) {
+  const list = document.getElementById(listId);
+  const li = document.createElement('li');
+  li.className = 'task-item';
+  li.innerHTML = `<div class="task-check"></div><div class="task-text" contenteditable="true">New task</div><div class="task-owner" contenteditable="true">Owner</div>`;
+  list.appendChild(li);
+  li.querySelector('.task-text').focus();
+}
+</script>
+</body>
+</html>
