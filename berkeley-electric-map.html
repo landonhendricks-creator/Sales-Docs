@@ -213,35 +213,40 @@
   #save-indicator.show { opacity: 1; }
 
   @media print {
-    body { background: #EAE9E1 !important; padding: 12px !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    @page { size: letter landscape; margin: 0.4in 0.5in; }
+    * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    body { background: #EAE9E1 !important; padding: 0 !important; max-width: 100% !important; font-size: 11px !important; }
     #save-indicator { display: none !important; }
-    .layout { grid-template-columns: 1fr 260px !important; gap: 14px !important; }
-    .phase-block { page-break-inside: avoid; }
-    .phase-header.done   { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .phase-header.active { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .phase-header.future { background: #d5d4cc !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .logo-badge  { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .badge-stage { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .meta-bar    { background: #fff    !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .meta-bar .dot { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .side-card-title       { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .side-card-title.dark  { background: #111111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .side-card-title.accent{ background: #C9DC4F !important; color: #111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tag-champion { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tag-eb    { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tag-8x8   { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tag-tech  { background: #e6f4f4 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tag-ops   { background: #ede9ff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tag-partner { background: #fff3cd !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tb-keep    { background: #d4f0d1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tb-replace { background: #fde8e8 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tb-reuse   { background: #fff3cd !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .tech-item  { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .task-check.checked { background: #008486 !important; border-color: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .task-owner { background: #e6f4f4 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .task-owner.partner  { background: #fff3cd !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .task-owner.prospect { background: #dbeeff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .task-owner.urgent   { background: #fde8e8 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    /* Float layout — far more reliable than grid for page breaks */
+    .layout { display: block !important; overflow: hidden !important; }
+    .sidebar { float: right !important; width: 220px !important; }
+    .map-col { margin-right: 240px !important; }
+    /* overflow:hidden on phase-block fights the fragmentation engine */
+    .phase-block { overflow: visible !important; break-inside: avoid; page-break-inside: avoid; }
+    .phase-header { break-after: avoid; page-break-after: avoid; }
+    .phase-header.done   { background: #008486 !important; }
+    .phase-header.active { background: #C9DC4F !important; }
+    .phase-header.future { background: #d5d4cc !important; }
+    .logo-badge, .badge-stage { background: #008486 !important; }
+    .meta-bar { background: #fff !important; }
+    .meta-bar .dot { background: #C9DC4F !important; }
+    .side-card-title.dark  { background: #111111 !important; }
+    .side-card-title.accent { background: #C9DC4F !important; color: #111 !important; }
+    .tag-champion { background: #C9DC4F !important; }
+    .tag-eb    { background: #008486 !important; }
+    .tag-8x8   { background: #008486 !important; }
+    .tag-tech  { background: #e6f4f4 !important; }
+    .tag-ops   { background: #ede9ff !important; }
+    .tag-partner { background: #fff3cd !important; }
+    .tb-keep    { background: #d4f0d1 !important; }
+    .tb-replace { background: #fde8e8 !important; }
+    .tb-reuse   { background: #fff3cd !important; }
+    .tech-item  { background: #EAE9E1 !important; }
+    .task-check.checked { background: #008486 !important; border-color: #008486 !important; }
+    .task-owner { background: #e6f4f4 !important; }
+    .task-owner.partner  { background: #fff3cd !important; }
+    .task-owner.prospect { background: #dbeeff !important; }
+    .task-owner.urgent   { background: #fde8e8 !important; }
     .add-task-btn { display: none !important; }
   }
 </style>

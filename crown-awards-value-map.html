@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Crown Awards — 8x8 Value Map</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #EAE9E1;
+    color: #111111;
+    min-height: 100vh;
+    padding: 32px 24px 60px;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-badge {
+    background: #008486;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+  .deal-title { font-size: 26px; font-weight: 800; color: #111111; letter-spacing: -.01em; }
+  .deal-title span { color: #008486; }
+
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: #444;
+  }
+  .meta-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: #C9DC4F; flex-shrink: 0; }
+  .meta-bar strong { color: #111; }
+  .badge-stage {
+    margin-left: auto;
+    background: #008486;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+
+  .col-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .section-header {
+    font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    color: #fff; background: #008486; padding: 5px 10px; border-radius: 4px;
+    margin-bottom: 2px; display: inline-block;
+  }
+  .section-header.accent { background: #C9DC4F; color: #111111; }
+  .section-header.dark   { background: #111111; color: #fff; }
+  .section-header.risk   { background: #c0392b; color: #fff; }
+
+  ul.item-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  ul.item-list li {
+    padding: 8px 12px; border-radius: 6px; background: #EAE9E1;
+    font-size: 13.5px; line-height: 1.5; outline: none;
+  }
+  ul.item-list li:focus { box-shadow: 0 0 0 2px #008486; }
+
+  .cap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .cap-card { background: #EAE9E1; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; }
+  .cap-card .cap-title { font-size: 13px; font-weight: 700; color: #111; outline: none; }
+  .cap-card .cap-detail { font-size: 12px; color: #555; line-height: 1.45; outline: none; }
+  .cap-card .cap-title:focus, .cap-card .cap-detail:focus { box-shadow: 0 0 0 2px #008486; border-radius: 3px; }
+
+  .risk-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 20px; margin-top: 3px; width: fit-content;
+  }
+  .risk-pill.confirmed { background: #d4f0d1; color: #1a6e1a; }
+  .risk-pill.tbd       { background: #fff3cd; color: #7a5800; }
+  .risk-pill.gap       { background: #fde8e8; color: #c0392b; }
+
+  .open-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .open-item {
+    background: #EAE9E1; border-radius: 6px; padding: 9px 13px;
+    font-size: 13px; line-height: 1.5; outline: none;
+  }
+  .open-item:focus { box-shadow: 0 0 0 2px #008486; }
+
+  .notes-field {
+    background: #EAE9E1; border-radius: 8px; padding: 14px 16px;
+    font-size: 13px; line-height: 1.6; min-height: 80px; outline: none;
+  }
+  .notes-field:focus { box-shadow: 0 0 0 2px #008486; }
+
+  .section-block { margin-bottom: 18px; }
+
+  #save-indicator {
+    position: fixed; bottom: 18px; right: 22px;
+    background: #008486; color: #fff; font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: 20px; opacity: 0;
+    transition: opacity .4s; pointer-events: none; z-index: 9999;
+  }
+  #save-indicator.show { opacity: 1; }
+
+  @media print {
+    @page { size: letter landscape; margin: 0.4in 0.5in; }
+    * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    body { background: #EAE9E1 !important; padding: 0 !important; max-width: 100% !important; font-size: 11px !important; }
+    #save-indicator { display: none !important; }
+    .col-card { background: #fff !important; break-inside: avoid; page-break-inside: avoid; }
+    .cap-card { background: #EAE9E1 !important; break-inside: avoid; page-break-inside: avoid; }
+    .section-header { break-after: avoid; page-break-after: avoid; }
+    .section-header.accent { background: #C9DC4F !important; color: #111111 !important; }
+    .section-header.dark   { background: #111111 !important; color: #fff !important; }
+    .section-header.risk   { background: #c0392b !important; color: #fff !important; }
+    .logo-badge, .badge-stage { background: #008486 !important; }
+    .meta-bar { background: #fff !important; }
+    .meta-bar .dot { background: #C9DC4F !important; }
+    ul.item-list li, .open-item, .notes-field { background: #EAE9E1 !important; }
+    .risk-pill.confirmed { background: #d4f0d1 !important; color: #1a6e1a !important; }
+    .risk-pill.tbd       { background: #fff3cd !important; color: #7a5800 !important; }
+    .risk-pill.required, .risk-pill.gap { background: #fde8e8 !important; color: #c0392b !important; }
+    .grid-2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    .grid-3 { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 10px !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="logo-badge">8x8 Value Map</div>
+  <h1 class="deal-title">Crown <span>Awards</span></h1>
+</div>
+
+<div class="meta-bar">
+  <div class="dot"></div>
+  <strong>Account:</strong> Crown Awards — America's Largest Awards Manufacturer · Est. 1979 · New York, Philippines, Belize
+  <span>|</span>
+  <strong>AE:</strong> PJ Schlegel
+  <span>|</span>
+  <strong>CC Spec:</strong> Landon Hendricks
+  <span>|</span>
+  <strong>Champion:</strong> Tatiana (CC Manager)
+  <span>|</span>
+  <strong>Procurement:</strong> Jonathan Fenety, Doug Crowe
+  <span>|</span>
+  <strong>Discovery:</strong> Apr 21, 2026
+  <div class="badge-stage">Stage 1 → 2</div>
+</div>
+
+<!-- Row 1: Objectives + Challenges -->
+<div class="grid-2 section-block">
+  <div class="col-card">
+    <div class="section-header">Business Objectives</div>
+    <ul class="item-list">
+      <li contenteditable="true">Replace Zima (contract ending December 2026) with a superior contact center platform that serves NY, Philippines, and Belize as one unified system on the same license type</li>
+      <li contenteditable="true">Automate 100% QA scoring via AI — replace manual scorecard-based auditing with AI-driven speech analytics that covers every call, not just the ones QA agents can manually review</li>
+      <li contenteditable="true">Maintain or improve granular reporting — Jonathan selected Zima specifically for deep reporting; new platform must match or exceed. Kenny and Tatiana must be able to run reports independently without IT help</li>
+      <li contenteditable="true">Eliminate cumbersome credit card redaction process — replace custom API workflow with native/seamless PCI compliance and redaction on recorded calls</li>
+      <li contenteditable="true">Consolidate live chat under the same platform — LiveChat contract also ending end of year; opportunity to move to 8x8 omnichannel (voice + chat + SMS)</li>
+      <li contenteditable="true">Ensure all third-party integrations are fully managed by 8x8 — bad experience with Zima's 3rd-party speech analytics/WFM (removed from contract); any integrations must be on 8x8's paper and supported by 8x8</li>
+    </ul>
+  </div>
+
+  <div class="col-card">
+    <div class="section-header risk">Challenges &amp; Pain Points</div>
+    <ul class="item-list">
+      <li contenteditable="true">Philippines + New York on different license types in Zima — agents cannot call each other directly without going through a queue. Tatiana called this her "biggest hurdle." Must be resolved in new platform.</li>
+      <li contenteditable="true">PCI redaction requires a manual API pipeline in Zima — pull recording, redact, delete, reinstall. Crown takes phone payments constantly (mostly sales calls). This is a daily operational burden.</li>
+      <li contenteditable="true">Zima's AI/WFM was third-party and failed — speech analytics and WFM were removed from contract for non-performance. Jonathan explicitly asked: show only 8x8-native features or clearly label 3rd party.</li>
+      <li contenteditable="true">Softphone reliability issues — CC agents on browser-based softphones; Tatiana mentioned "issues" with them. Wants flexibility for hard phone, softphone, or mobile options.</li>
+      <li contenteditable="true">Live chat is siloed — separate LiveChat vendor, separate contract. Both contracts ending December 2026. Opportunity to consolidate everything under 8x8.</li>
+      <li contenteditable="true">Forecasting/scheduling is manual — busy seasons (Apr–Jun) require different staffing. No WFM tool currently since Zima's failed. Need forecasting capability without overpaying for enterprise WFM.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Row 2: Strategies + Initiatives -->
+<div class="grid-2 section-block">
+  <div class="col-card">
+    <div class="section-header accent">Strategies</div>
+    <ul class="item-list">
+      <li contenteditable="true">Deploy 8x8 UCaaS + CCaaS — all locations (NY, Philippines, Belize) on same license tier; eliminates cross-location call restrictions that plagued Zima deployment</li>
+      <li contenteditable="true">Enable QMSA (AI speech analytics) for 100% automated QA — every call scored, categorized, and sentiment-mapped without manual agent intervention</li>
+      <li contenteditable="true">Implement Call Cabinet / Smarsh for PCI-compliant recording + redaction — fully integrated with 8x8; no custom API build required. Credit card data automatically redacted on recording.</li>
+      <li contenteditable="true">Consolidate LiveChat under 8x8 omnichannel — web chat, SMS (two-way), and voice in one contact center platform and reporting view</li>
+      <li contenteditable="true">Leverage built-in WFM (acquired, included with CC licenses) for seasonal forecasting — no third-party contract, no additional cost; purpose-built for Crown's use case</li>
+      <li contenteditable="true">Confirm Grandstream GRP-2613 compatibility — office/non-CC users keep existing desk phones; avoid hardware refresh cost</li>
+    </ul>
+  </div>
+
+  <div class="col-card">
+    <div class="section-header accent">Initiatives &amp; Timeline</div>
+    <ul class="item-list">
+      <li contenteditable="true">Zima contract ends December 2026 — new platform must be live before cutover. Decision target likely Q3 2026 to allow implementation runway.</li>
+      <li contenteditable="true">LiveChat contract also ends end of year — consolidation into 8x8 omnichannel is additional scope and potential cost savings</li>
+      <li contenteditable="true">Demo scheduling in progress — PJ to send available dates; Doug and Jonathan to confirm (Doug splits NY/Florida). Target: next week.</li>
+      <li contenteditable="true">License feature matrix (X6/X7/X8) shared in discovery chat — Jonathan reviewing concurrent vs. named license structure (~80-85 concurrent CC seats today)</li>
+      <li contenteditable="true">References requested by Doug — contact center focused; provide after license tier is confirmed. Align reference to similar CC deployment if possible.</li>
+      <li contenteditable="true">NDA already executed — Jonathan is organized and moving quickly. Maintain momentum.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Row 3: Future State -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Future State / Positive Business Outcomes</div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <ul class="item-list">
+        <li contenteditable="true">NY, Philippines, and Belize agents all on the same 8x8 license — seamless internal calling across all locations; no queue required to reach a colleague in Manila</li>
+        <li contenteditable="true">100% of calls automatically QA'd by AI — QMSA scores every interaction; Tatiana's QA team shifts from listening to reviewing flags and coaching</li>
+        <li contenteditable="true">PCI redaction is automatic — credit card numbers removed from recordings at the moment of recording; no manual API, no rework, full compliance</li>
+      </ul>
+      <ul class="item-list">
+        <li contenteditable="true">Voice, chat, and SMS unified under one platform — agents handle all channel types from one workspace; live chat and SMS consolidated from two vendors into one</li>
+        <li contenteditable="true">WFM forecasting included at no extra cost — Tatiana's team staffs for seasonal spikes (Apr–Jun) with data-driven forecasts rather than guesswork</li>
+        <li contenteditable="true">Reporting independence — Tatiana and Kenny run any report on their own without a helpdesk ticket or vendor assistance</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Row 4: Required Capabilities -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header">Required Capabilities</div>
+    <div class="cap-grid" style="margin-top:8px;">
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Multi-Location Global CC — Unified Licensing</div>
+        <div class="cap-detail" contenteditable="true">NY, Philippines, and Belize all on same 8x8 CC license tier (X6/X7/X8). Agents can call each other directly without routing through a queue. Tatiana's #1 operational pain point with Zima — must be confirmed explicitly.</div>
+        <span class="risk-pill confirmed">✓ Confirmed 8x8 — Same License Globally</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">AI-Driven QA — 100% Call Scoring (QMSA)</div>
+        <div class="cap-detail" contenteditable="true">Tatiana's #1 AI priority. Replace manual scorecard agents with AI that QAs every call — sentiment mapping, keyword/phrase detection, topic categorization, auto-scoring, agent action item extraction. Show in demo briefly, per Tatiana's instruction.</div>
+        <span class="risk-pill confirmed">✓ 8x8 Native QMSA</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">PCI Compliance + Call Recording Redaction</div>
+        <div class="cap-detail" contenteditable="true">Crown takes phone payments on nearly every sales call. Current Zima API process is painful. Two options: (1) PCI Pal — secure payment gateway, no redaction needed (more robust, higher cost); (2) Call Cabinet/Smarsh — compliance recording + auto-redaction, most cost-effective. Both integrated with 8x8.</div>
+        <span class="risk-pill tbd">⚠ 3rd Party — Call Cabinet preferred; PCI Pal option. Clarify contract status.</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Granular Reporting — Self-Service</div>
+        <div class="cap-detail" contenteditable="true">Jonathan chose Zima specifically for granular reporting. Cannot lose any existing metrics. KPIs: avg talk time, conversion, hold time, D&amp;D time, ratings. Tatiana and Kenny must run/build reports independently without IT or vendor. Kenny to join demo.</div>
+        <span class="risk-pill confirmed">✓ 8x8 Native Analytics — Self-Service</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Omnichannel — Live Chat Consolidation</div>
+        <div class="cap-detail" contenteditable="true">LiveChat contract ending end of year (separate from Zima). Jonathan mentioned this at end of call as additional scope. 8x8 omnichannel supports web chat in CC queue alongside voice. Show in demo.</div>
+        <span class="risk-pill confirmed">✓ 8x8 Native Web Chat</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Two-Way SMS / CPaaS</div>
+        <div class="cap-detail" contenteditable="true">Tatiana wants to send artwork/engraving proofs via SMS to customers and receive replies back into the CC queue. Not a priority but she wants to see it. 8x8 CPaaS supports outbound + inbound SMS routed to agent queue. Competitive with Twilio on pricing.</div>
+        <span class="risk-pill confirmed">✓ 8x8 Native CPaaS / SMS</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">WFM — Seasonal Forecasting (Included)</div>
+        <div class="cap-detail" contenteditable="true">Busy season: April–May–June. Crown hires and schedules differently. Wants forecasting capability. 8x8 acquired WFM included with CC licenses at no extra cost — right-sized for Crown (not Verint/enterprise level). Landon confirmed free option.</div>
+        <span class="risk-pill confirmed">✓ Included with CC License</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Multi-Queue Structure (External + Internal)</div>
+        <div class="cap-detail" contenteditable="true">External: Sales, Support, Retention (outbound), Custom, Engraving, Art. Internal: a few internal queues. Retention team does outbound. 8x8 supports inbound + outbound queues, skills-based routing, disposition codes. Confirm outbound dialer capability for Retention.</div>
+        <span class="risk-pill confirmed">✓ 8x8 Supports Multi-Queue + Outbound</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Endpoint Flexibility (Softphone, Hard Phone, Mobile)</div>
+        <div class="cap-detail" contenteditable="true">CC agents on softphones today — Tatiana has had "issues" with them. Wants flexibility: keep softphone (browser), option for hard phone, or mobile app. Jonathan wants office/non-CC on hard phones. Grandstream GRP-2613 — confirm 8x8 compatibility before demo.</div>
+        <span class="risk-pill tbd">⚠ Grandstream GRP-2613 Compatibility — Confirm Before Demo</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Concurrent CC Licensing (~80-85 Seats)</div>
+        <div class="cap-detail" contenteditable="true">Currently ~80-85 concurrent CC licenses with Zima. Up to 5 agents per concurrent license on 8x8. Jonathan asked about concurrent model — confirmed same structure. X6/X7/X8 tier decision pending matrix review.</div>
+        <span class="risk-pill confirmed">✓ Concurrent Model Confirmed</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">Salesforce (SFCC) Integration — CRM</div>
+        <div class="cap-detail" contenteditable="true">PJ confirmed Salesforce integration mentioned in requirements doc. Crown uses SFCC (Salesforce Commerce Cloud) primarily for e-commerce. CRM role not fully clear. Confirm whether screen-pop or data-push to SFCC is needed in demo scoping.</div>
+        <span class="risk-pill tbd">⚠ SFCC Integration Scope — Confirm with Tatiana</span>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-title" contenteditable="true">MS Teams Integration (Internal UC)</div>
+        <div class="cap-detail" contenteditable="true">Crown uses Teams for internal communication. Non-CC office users stay on Teams. PJ confirmed 8x8 Teams integration. Demo scope: focus is CC — Tatiana explicitly said don't spend time on non-CC side. Confirm Teams version/licensing if needed.</div>
+        <span class="risk-pill confirmed">✓ 8x8 Teams Integration Available</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Open Items -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header risk">Open Items &amp; Risk Flags</div>
+    <div class="open-items-grid" style="margin-top:8px;">
+      <div class="open-item" contenteditable="true">🔴 Grandstream GRP-2613 compatibility — Jonathan does NOT want to buy new phones. Must confirm 8x8 supports this model before demo. PJ/SE action item.</div>
+      <div class="open-item" contenteditable="true">🔴 Call Cabinet / Smarsh contract status — currently NOT on 8x8's paper but "coming soon." Must be transparent with Jonathan/Tatiana. Landon to get update before demo.</div>
+      <div class="open-item" contenteditable="true">🟡 Demo scheduling — PJ to send available dates. Doug splits NY/Florida; Jonathan needs to confirm Doug's schedule. Target: next week.</div>
+      <div class="open-item" contenteditable="true">🟡 Kenny (reporting specialist) should attend demo — Tatiana mentioned Kenny handles reporting. Must be included in demo invite to validate reporting depth matches or exceeds Zima.</div>
+      <div class="open-item" contenteditable="true">🟡 Salesforce Commerce Cloud (SFCC) scope — Crown uses SFCC. Confirm whether CC-to-SFCC screen pop or integration is needed. May require 8x8 Salesforce connector scoping.</div>
+      <div class="open-item" contenteditable="true">🟡 References needed post-demo — Doug requested references. Align to contact center + e-commerce/retail vertical if possible. Provide after license tier confirmed.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Notes -->
+<div class="section-block">
+  <div class="col-card">
+    <div class="section-header dark">Field Notes</div>
+    <div class="notes-field" contenteditable="true" style="margin-top:8px;">Discovery call Apr 21, 2026. 8x8 team: PJ Schlegel (AE), Eboni Barnes (original contact), Landon Hendricks (CC Spec). Crown team: Tatiana (CC Manager — champion, very engaged), Jonathan Fenety (Procurement — organized, 6 years at Crown, already sent requirements + executed NDA), Doug Crowe (Procurement/Finance — budget watchdog, lost audio mid-call, sent email requesting references).
+
+Key themes: (1) Tatiana's biggest pain is the split-license problem with Zima — NY and Philippines agents couldn't call each other directly. Extremely motivated to fix this. (2) 100% AI-driven QA is her #1 AI ask — not voice bots, not IVR. Just score every call. (3) Jonathan specifically chose Zima 8 years ago for its granular reporting — new platform must match. (4) Jonathan explicitly asked that demo clearly label 8x8-native vs. third-party features (Zima's 3rd-party WFM/speech analytics failed and was removed from contract). (5) Jonathan also revealed at the END of the call that LiveChat (separate from Zima) is also expiring — bonus consolidation opportunity.
+
+Tatiana's demo guidance: Focus on CC basics, QA/QMSA briefly, show live chat, show SMS briefly, do NOT spend half the demo on AI. She said "show me the basics without going too far off course." She'll be the most vocal in the demo.
+
+Tone: Jonathan is methodical and procurement-minded (quick on NDA, sends requirements docs, asks about 3rd-party labeling). Doug is the financial watchdog. Tatiana is the operational champion who lives in the system every day. Win Tatiana on the platform, win Jonathan on the process and transparency, and Doug will approve.
+
+Crown has been growing rapidly since 1979 — they outgrew Zima. This is a modernization deal, not just a replacement. Global expansion (Philippines, Belize) is ongoing.
+    </div>
+  </div>
+</div>
+
+<div id="save-indicator">Saved</div>
+<script>
+(function () {
+  const KEY = 'crown-awards-value-map-v1';
+  const IND = document.getElementById('save-indicator');
+  let timer;
+  function showSaved() { IND.classList.add('show'); clearTimeout(timer); timer = setTimeout(() => IND.classList.remove('show'), 1800); }
+  function save() {
+    const els = document.querySelectorAll('[contenteditable="true"]');
+    const data = {};
+    els.forEach((el, i) => { data[i] = el.innerHTML; });
+    localStorage.setItem(KEY, JSON.stringify(data));
+    showSaved();
+  }
+  function load() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try { const data = JSON.parse(raw); document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => { if (data[i] !== undefined) el.innerHTML = data[i]; }); } catch (e) {}
+  }
+  load();
+  document.addEventListener('input', save);
+})();
+</script>
+</body>
+</html>

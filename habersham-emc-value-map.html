@@ -226,25 +226,25 @@
 
   /* ── Print ── */
   @media print {
-    body { background: #EAE9E1 !important; padding: 16px !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    @page { size: letter landscape; margin: 0.4in 0.5in; }
+    * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    body { background: #EAE9E1 !important; padding: 0 !important; max-width: 100% !important; font-size: 11px !important; }
     #save-indicator { display: none !important; }
-    .col-card { background: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
-    .cap-card { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; page-break-inside: avoid; }
-    .section-header { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .section-header.accent { background: #C9DC4F !important; color: #111111 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .section-header.dark   { background: #111111 !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .section-header.risk   { background: #c0392b !important; color: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .logo-badge { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .badge-stage { background: #008486 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .meta-bar { background: #fff !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .meta-bar .dot { background: #C9DC4F !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    ul.item-list li { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .open-item { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .notes-field { background: #EAE9E1 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .risk-pill.confirmed { background: #d4f0d1 !important; color: #1a6e1a !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .risk-pill.tbd       { background: #fff3cd !important; color: #7a5800 !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .risk-pill.required  { background: #fde8e8 !important; color: #c0392b !important; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-    .grid-2, .grid-3 { gap: 10px !important; }
+    .col-card { background: #fff !important; break-inside: avoid; page-break-inside: avoid; }
+    .cap-card { background: #EAE9E1 !important; break-inside: avoid; page-break-inside: avoid; }
+    .section-header { break-after: avoid; page-break-after: avoid; }
+    .section-header.accent { background: #C9DC4F !important; color: #111111 !important; }
+    .section-header.dark   { background: #111111 !important; color: #fff !important; }
+    .section-header.risk   { background: #c0392b !important; color: #fff !important; }
+    .logo-badge, .badge-stage { background: #008486 !important; }
+    .meta-bar { background: #fff !important; }
+    .meta-bar .dot { background: #C9DC4F !important; }
+    ul.item-list li, .open-item, .notes-field { background: #EAE9E1 !important; }
+    .risk-pill.confirmed { background: #d4f0d1 !important; color: #1a6e1a !important; }
+    .risk-pill.tbd       { background: #fff3cd !important; color: #7a5800 !important; }
+    .risk-pill.required, .risk-pill.gap { background: #fde8e8 !important; color: #c0392b !important; }
+    .grid-2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    .grid-3 { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 10px !important; }
   }
 </style>
 </head>

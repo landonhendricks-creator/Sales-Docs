@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown Awards — Mutual Action Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #EAE9E1;
+    --primary: #008486;
+    --accent: #C9DC4F;
+    --dark: #111111;
+    --white: #ffffff;
+    --red: #c0392b;
+    --orange: #e67e22;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --gray: #7f8c8d;
+    --light: #f4f3ec;
+    --border: #d0cfc8;
+    --done-bg: #e8f5e9;
+    --done-border: #27ae60;
+    --active-bg: #fff8e1;
+    --active-border: #f9a825;
+    --future-bg: #f4f3ec;
+    --future-border: #d0cfc8;
+    --risk-bg: #fdecea;
+    --risk-border: #c0392b;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    padding: 32px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 12px 12px 0 0;
+    padding: 28px 32px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+  .header-left .sub { font-size: 13px; opacity: .85; margin-top: 4px; }
+  .header-right { text-align: right; font-size: 12px; opacity: .85; line-height: 1.8; }
+  .doc-type-badge {
+    background: var(--accent);
+    color: var(--dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 8px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* ── CONTEXT BAR ── */
+  .context-bar {
+    background: var(--dark);
+    color: var(--white);
+    padding: 10px 32px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .context-item { font-size: 12px; }
+  .context-item span { opacity: .6; margin-right: 4px; }
+
+  /* ── MAIN LAYOUT ── */
+  .main-wrap {
+    background: var(--white);
+    border-radius: 0 0 12px 12px;
+    border: 1px solid var(--border);
+    border-top: none;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+  }
+  .phases-col { padding: 24px 28px; border-right: 1px solid var(--border); }
+  .sidebar-col { padding: 20px 18px; }
+
+  /* ── PHASE BLOCK ── */
+  .phase {
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    margin-bottom: 22px;
+    overflow: hidden;
+  }
+  .phase.done { border-color: var(--done-border); }
+  .phase.active { border-color: var(--active-border); }
+  .phase.future { border-color: var(--future-border); opacity: .85; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .phase.done .phase-header { background: var(--done-bg); }
+  .phase.active .phase-header { background: var(--active-bg); }
+  .phase.future .phase-header { background: var(--future-bg); }
+
+  .phase-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .phase.done .phase-badge { background: var(--done-border); color: white; }
+  .phase.active .phase-badge { background: var(--active-border); color: #333; }
+  .phase.future .phase-badge { background: var(--border); color: var(--gray); }
+
+  .phase-title { font-size: 14px; font-weight: 700; flex: 1; }
+  .phase.done .phase-title { color: var(--green); }
+  .phase.active .phase-title { color: #7a5c00; }
+  .phase.future .phase-title { color: var(--gray); }
+  .phase-target { font-size: 11px; color: var(--gray); white-space: nowrap; }
+
+  .phase-body { padding: 12px 16px; background: var(--white); }
+
+  /* ── TASK ITEMS ── */
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0efe8;
+    cursor: pointer;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item input[type="checkbox"] {
+    width: 15px; height: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .task-item.checked .task-text { text-decoration: line-through; color: var(--gray); }
+  .task-text { flex: 1; font-size: 13px; }
+  .task-text strong { color: var(--dark); }
+  .task-note { font-size: 11px; color: var(--gray); display: block; margin-top: 2px; }
+  .task-owner {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .owner-8x8 { background: #e3f2fd; color: #0d47a1; }
+  .owner-crown { background: #f3e5f5; color: #4a148c; }
+  .owner-both { background: #fff8e1; color: #7a5c00; }
+  .owner-pj { background: #e8f5e9; color: #1b5e20; }
+
+  .add-task-btn {
+    margin-top: 10px;
+    padding: 5px 12px;
+    background: var(--light);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--gray);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: background .12s;
+  }
+  .add-task-btn:hover { background: #e8e7e0; }
+
+  .new-task-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  .new-task-input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  .new-task-input:focus { outline: 2px solid var(--primary); }
+  .new-task-save {
+    padding: 6px 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .new-task-cancel { padding: 6px 10px; background: none; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; cursor: pointer; }
+
+  /* ── PILL ── */
+  .pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 5px;
+    vertical-align: middle;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .pill-risk { background: var(--risk-bg); color: var(--red); border: 1px solid var(--risk-border); }
+  .pill-warn { background: #fff3e0; color: #7a3200; border: 1px solid #e67e22; }
+  .pill-ok { background: #e8f5e9; color: #1b5e20; border: 1px solid #27ae60; }
+  .pill-tbd { background: #e3f2fd; color: #0d47a1; border: 1px solid #1976d2; }
+
+  /* ── SIDEBAR ── */
+  .sidebar-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .sidebar-card-header {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    padding: 7px 12px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .sidebar-card-body { padding: 10px 12px; background: var(--white); }
+
+  .contact-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 9px; font-size: 12px; }
+  .contact-row:last-child { margin-bottom: 0; }
+  .contact-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .contact-info .name { font-weight: 700; font-size: 12px; }
+  .contact-info .role { font-size: 11px; color: var(--gray); }
+  .contact-info .tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 8px; display: inline-block; margin-top: 2px; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+  .tag-champion { background: var(--primary); color: white; }
+  .tag-procurement { background: var(--orange); color: white; }
+  .tag-it { background: var(--blue); color: white; }
+  .tag-8x8 { background: var(--accent); color: var(--dark); }
+
+  .tech-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; font-size: 12px; gap: 6px; }
+  .tech-row:last-child { margin-bottom: 0; }
+  .tech-name { font-weight: 600; }
+  .tech-status {
+    font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; white-space: nowrap;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .status-replace { background: var(--risk-bg); color: var(--red); }
+  .status-add { background: #e8f5e9; color: #1b5e20; }
+  .status-keep { background: #e3f2fd; color: #0d47a1; }
+  .status-tbd { background: #fff8e1; color: #7a5c00; }
+  .status-validate { background: #f3e5f5; color: #6a1b9a; }
+
+  .sidebar-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 7px; font-size: 12px; gap: 8px; }
+  .sidebar-row:last-child { margin-bottom: 0; }
+  .sidebar-row .label { color: var(--gray); font-size: 11px; flex-shrink: 0; }
+  .sidebar-row .val { font-weight: 600; text-align: right; }
+
+  .risk-card {
+    background: var(--risk-bg);
+    border: 1px solid var(--risk-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .risk-card .risk-title { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: var(--red); margin-bottom: 6px; }
+  .risk-item { display: flex; gap: 7px; margin-bottom: 6px; }
+  .risk-item:last-child { margin-bottom: 0; }
+  .rdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+  .rdot.red { background: var(--red); }
+  .rdot.orange { background: var(--orange); }
+
+  /* ── PRINT ── */
+  @media print {
+    @page { size: letter landscape; margin: 0.4in 0.5in; }
+    * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    body { padding: 0 !important; max-width: 100% !important; font-size: 11px !important; }
+
+    /* Float layout — far more reliable than grid for page breaks */
+    .main-wrap { display: block !important; overflow: hidden !important; }
+    .sidebar-col {
+      float: right !important;
+      width: 220px !important;
+      padding: 14px !important;
+      border-left: 1px solid #d0cfc8 !important;
+      border-right: none !important;
+    }
+    .phases-col { padding: 16px 20px !important; margin-right: 250px !important; }
+
+    /* overflow:hidden on .phase blocks the browser's fragmentation engine —
+       must be visible so break-inside:avoid actually works */
+    .phase {
+      overflow: visible !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin-bottom: 14px !important;
+    }
+    .phase-header { break-after: avoid; page-break-after: avoid; }
+    .phase-body { overflow: visible !important; }
+    .sidebar-card { break-inside: avoid; page-break-inside: avoid; }
+    .risk-card { break-inside: avoid; page-break-inside: avoid; }
+    .add-task-btn { display: none !important; }
+    [id$="-new"] { display: none !important; }
+    .footer { clear: both; margin-top: 8px !important; }
+  }
+
+  .footer { text-align: center; margin-top: 20px; font-size: 11px; color: var(--gray); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="doc-type-badge">Mutual Action Plan</div>
+    <h1>Crown Awards</h1>
+    <div class="sub">America's Largest Awards Manufacturer · CC Modernization + Vendor Consolidation</div>
+  </div>
+  <div class="header-right">
+    <div><strong>AE:</strong> PJ Schlegel</div>
+    <div><strong>SE:</strong> Tom Rupp</div>
+    <div><strong>CC Spec:</strong> Landon Hendricks</div>
+    <div><strong>Intro:</strong> Eboni Barnes</div>
+    <div><strong>Created:</strong> Apr 21, 2026</div>
+  </div>
+</div>
+
+<!-- CONTEXT BAR -->
+<div class="context-bar">
+  <div class="context-item"><span>Incumbent:</span>Zima + LiveChat (both exp. Dec 2026)</div>
+  <div class="context-item"><span>CC Size:</span>~80–85 concurrent licenses</div>
+  <div class="context-item"><span>Locations:</span>New York · Philippines · Belize</div>
+  <div class="context-item"><span>Champion:</span>Tatiana (CC Mgr)</div>
+  <div class="context-item"><span>Procurement:</span>Jonathan Fenety · Doug Crowe</div>
+  <div class="context-item"><span>Target Close:</span>~Sept–Oct 2026</div>
+</div>
+
+<!-- MAIN WRAP -->
+<div class="main-wrap">
+<div class="phases-col">
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PHASE 1: DONE — Discovery                   -->
+<!-- ════════════════════════════════════════════ -->
+<div class="phase done">
+  <div class="phase-header">
+    <div class="phase-badge">✓ Done</div>
+    <div class="phase-title">Phase 1 — Discovery Call</div>
+    <div class="phase-target">Apr 21, 2026</div>
+  </div>
+  <div class="phase-body">
+    <label class="task-item checked">
+      <input type="checkbox" checked>
+      <div class="task-text"><strong>Discovery call completed</strong> — Tatiana, Jonathan, Doug in attendance
+        <span class="task-note">Crown context captured: multi-location pain, PCI redaction burden, 3rd-party trust issue, QMSA interest, live chat consolidation opportunity.</span>
+      </div>
+      <span class="task-owner owner-both">Both</span>
+    </label>
+    <label class="task-item checked">
+      <input type="checkbox" checked>
+      <div class="task-text"><strong>Pain points documented</strong> — NY↔Philippines calling blocked, PCI manual pipeline, Zima 3rd-party failure, manual QA
+      </div>
+      <span class="task-owner owner-8x8">8x8</span>
+    </label>
+    <label class="task-item checked">
+      <input type="checkbox" checked>
+      <div class="task-text"><strong>Scope confirmed</strong> — ~80–85 concurrent CC licenses, 6 external queues, multiple internal queues
+      </div>
+      <span class="task-owner owner-both">Both</span>
+    </label>
+    <label class="task-item checked">
+      <input type="checkbox" checked>
+      <div class="task-text"><strong>Value Map + SE Demo Checklist created</strong>
+        <span class="task-note">Internal documents capturing discovery intel and demo preparation requirements.</span>
+      </div>
+      <span class="task-owner owner-8x8">8x8</span>
+    </label>
+    <label class="task-item checked">
+      <input type="checkbox" checked>
+      <div class="task-text"><strong>References requested by Doug</strong> — follow-up item logged
+        <span class="task-note">Doug lost audio near end of call and requested references via email. Action item: PJ/Landon to send references.</span>
+      </div>
+      <span class="task-owner owner-crown">Crown</span>
+    </label>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PHASE 2: ACTIVE — Pre-Demo Prep             -->
+<!-- ════════════════════════════════════════════ -->
+<div class="phase active">
+  <div class="phase-header">
+    <div class="phase-badge">▶ Active</div>
+    <div class="phase-title">Phase 2 — Pre-Demo Preparation</div>
+    <div class="phase-target">Target: ~2 weeks</div>
+  </div>
+  <div class="phase-body">
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Landon / PJ: Send customer references to Doug</strong> <span class="pill pill-risk">Urgent</span>
+        <span class="task-note">Doug requested references during discovery. Should be sent before demo day. Ideal: e-commerce, manufacturing, or multi-location references. Do not let this slip — procurement contacts remember.</span>
+      </div>
+      <span class="task-owner owner-pj">PJ/Landon</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tom: Validate Grandstream GRP-2613 compatibility</strong> <span class="pill pill-risk">Risk</span>
+        <span class="task-note">Jonathan explicitly does not want to buy new phones. Confirm GRP-2613 is on 8x8's certified device list. If not: identify nearest equivalent at similar price. Must resolve before demo — do not go in with this unknown.</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Landon / Tom: Confirm SMS MMS/image capability</strong>
+        <span class="task-note">Tatiana's use case: agents send artwork/engraving proof images via SMS. Confirm whether 8x8 CC supports MMS image attachments or requires hosted-link workaround. Answer must be accurate — don't demo a capability you can't deliver.</span>
+      </div>
+      <span class="task-owner owner-8x8">Landon/Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tom: Set up demo tenant with Crown queue names</strong>
+        <span class="task-note">Sales, Support, Retention (outbound), Custom, Engraving, Art + internal queues. Multi-location config: NY ↔ Philippines direct calling. See SE Demo Checklist for full prep requirements.</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tom: Configure QMSA with Crown-relevant scoring categories</strong>
+        <span class="task-note">Categories: Order Status, Engraving Approval, Retention/Cancellation, Complaint Handling, Upsell Opportunity. Prepare 2–3 sample scored recordings. Keep QMSA section brief per Tatiana's directive.</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tom: Prepare live PCI redaction demo</strong>
+        <span class="task-note">Show DTMF tone auto-redaction in call recording. Contrast clearly: "Zima requires manual API pipeline. 8x8 does this automatically — no pipeline, no manual steps."</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tom: Set up two-way SMS demo flow</strong>
+        <span class="task-note">Outbound SMS from agent → customer reply → inbound routes to CC queue. Show in same agent desktop as voice.</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tom: Configure live chat demo with mock Crown web widget</strong>
+        <span class="task-note">Show web chat on a mock CrownAwards.com page. Demonstrate unified agent desktop handling voice + chat + SMS simultaneously. LiveChat also ends Dec 2026 — consolidation narrative is strong.</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Landon / PJ: Scope SFCC (Salesforce Commerce Cloud) integration</strong> <span class="pill pill-tbd">TBD</span>
+        <span class="task-note">Determine what level of SFCC integration Crown actually needs before demo. Do not demo until scoped. Don't overpromise. Validate feasibility with Tom.</span>
+      </div>
+      <span class="task-owner owner-both">Both</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>PJ / Landon: Extend demo invite to Kenny (reporting specialist)</strong>
+        <span class="task-note">Kenny was not on the discovery call. He owns the reporting stack and must validate what he sees in demo. Tatiana or Jonathan should invite him — coordinate through the champion.</span>
+      </div>
+      <span class="task-owner owner-both">Landon/PJ</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Crown: Confirm demo attendees and date</strong>
+        <span class="task-note">Tatiana, Jonathan, Doug — plus Kenny ideally. Target: within 2–3 weeks of discovery. Dec 2026 deadline creates urgency — the longer they wait, the tighter the implementation window gets.</span>
+      </div>
+      <span class="task-owner owner-crown">Crown</span>
+    </label>
+    <button class="add-task-btn" onclick="addTask(this, 'phase2')">+ Add task</button>
+    <div id="phase2-new" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PHASE 3: FUTURE — Demo + Follow-Up         -->
+<!-- ════════════════════════════════════════════ -->
+<div class="phase future">
+  <div class="phase-header">
+    <div class="phase-badge">Future</div>
+    <div class="phase-title">Phase 3 — Product Demo</div>
+    <div class="phase-target">Target: ~May 2026</div>
+  </div>
+  <div class="phase-body">
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Demo delivered — focus: multi-location routing, CC core, PCI, QMSA (brief), SMS, live chat</strong>
+        <span class="task-note">Per Tatiana: keep AI minimal. Per Jonathan: label all 3rd-party items explicitly. See SE Demo Checklist for full run-of-show.</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Kenny validates reporting depth in-demo</strong>
+        <span class="task-note">Critical: Kenny needs to see queue-level reporting, agent performance, historical views. Allocate 10 min for his Q&A.</span>
+      </div>
+      <span class="task-owner owner-crown">Kenny</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Jonathan confirms 3rd-party labeling was satisfactory</strong>
+        <span class="task-note">Check in explicitly: "Jonathan — did we meet your expectation of labeling what's native vs. third-party throughout the demo?" This closes the loop on his #1 trust requirement.</span>
+      </div>
+      <span class="task-owner owner-both">Both</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Identify competitive vendors Crown is evaluating</strong>
+        <span class="task-note">Competitor unknown at this stage. Ask during or after demo: "Are you evaluating other vendors?" If yes, get names. Helps PJ scope pricing positioning.</span>
+      </div>
+      <span class="task-owner owner-8x8">Landon</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Post-demo follow-up email within 24 hrs — recap, next steps, pricing ETA</strong>
+        <span class="task-note">Include: demo recap, addressed pain points, Grandstream result, SFCC scope update, proposal timeline, reference for Doug (if not already sent).</span>
+      </div>
+      <span class="task-owner owner-pj">PJ</span>
+    </label>
+    <button class="add-task-btn" onclick="addTask(this, 'phase3')">+ Add task</button>
+    <div id="phase3-new" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PHASE 4: FUTURE — Proposal + Eval          -->
+<!-- ════════════════════════════════════════════ -->
+<div class="phase future">
+  <div class="phase-header">
+    <div class="phase-badge">Future</div>
+    <div class="phase-title">Phase 4 — Proposal, Evaluation &amp; Technical Validation</div>
+    <div class="phase-target">Target: ~June–July 2026</div>
+  </div>
+  <div class="phase-body">
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>PJ: Deliver pricing proposal — ~80–85 concurrent CC licenses</strong>
+        <span class="task-note">Include: CC concurrent licenses, QMSA, WFM (position as included/no extra cost), SMS+chat channels. Separate line items for 3rd-party: PCI Pal (if scoped), SFCC integration (if scoped). Make native vs. 3rd-party visible in pricing — mirrors Jonathan's directive.</span>
+      </div>
+      <span class="task-owner owner-pj">PJ</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Crown: Internal evaluation — Tatiana, Jonathan, Doug, Kenny review</strong>
+        <span class="task-note">Ensure all four stakeholders have input. Tatiana = CC user champion. Jonathan + Doug = procurement gate. Kenny = reporting validation. No surprises at contract stage.</span>
+      </div>
+      <span class="task-owner owner-crown">Crown</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tom / Landon: Provide technical architecture doc for Crown's IT team</strong>
+        <span class="task-note">Multi-location cloud CC architecture, Grandstream device compatibility confirmation, SFCC integration design (if scoped), data residency (Philippines compliance if applicable).</span>
+      </div>
+      <span class="task-owner owner-8x8">Tom/Landon</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Landon: Address any objections — concurrent licensing model, call volume, channel scope</strong>
+        <span class="task-note">Be prepared to explain concurrent model depth: max simultaneous agents = license count, up to 5 physical agents per concurrent license.</span>
+      </div>
+      <span class="task-owner owner-8x8">Landon</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>PJ: Explore whether to consolidate Zima + LiveChat into single 8x8 contract</strong>
+        <span class="task-note">Both contracts end Dec 2026. Single-vendor proposal is a strong procurement win for Jonathan. Structure accordingly if feasible.</span>
+      </div>
+      <span class="task-owner owner-pj">PJ</span>
+    </label>
+    <button class="add-task-btn" onclick="addTask(this, 'phase4')">+ Add task</button>
+    <div id="phase4-new" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PHASE 5: FUTURE — Close + Implementation   -->
+<!-- ════════════════════════════════════════════ -->
+<div class="phase future">
+  <div class="phase-header">
+    <div class="phase-badge">Future</div>
+    <div class="phase-title">Phase 5 — Close &amp; Implementation</div>
+    <div class="phase-target">Target: Sept–Oct 2026 (live by Dec 2026)</div>
+  </div>
+  <div class="phase-body">
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Legal / procurement review and contract execution</strong>
+        <span class="task-note">Crown procurement (Jonathan + Doug) drives timeline. Allow 4–6 weeks for legal review. Must execute by ~Oct to allow implementation runway before Dec go-live.</span>
+      </div>
+      <span class="task-owner owner-both">Both</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Implementation kickoff — 8x8 PS + Crown IT</strong>
+        <span class="task-note">NY and Philippines must both go live on same timeline. Belize included if applicable. Grandstream device provisioning, queue configuration, QMSA category setup, SMS + chat channel activation.</span>
+      </div>
+      <span class="task-owner owner-8x8">8x8 PS</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>WFM configuration and forecasting setup</strong>
+        <span class="task-note">Built around Crown's busy season Apr–Jun. Even if go-live is Dec 2026, WFM forecasting data begins collecting immediately post-go-live — prepares them for 2027 peak.</span>
+      </div>
+      <span class="task-owner owner-8x8">8x8 PS</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Tatiana signs off on CC configuration — queues, routing, disposition codes</strong>
+        <span class="task-note">Champion validation before go-live. Tatiana is the day-to-day expert — her sign-off reduces go-live risk significantly.</span>
+      </div>
+      <span class="task-owner owner-crown">Tatiana</span>
+    </label>
+    <label class="task-item">
+      <input type="checkbox">
+      <div class="task-text"><strong>Go-live — parallel run if needed, then full cutover from Zima + LiveChat</strong>
+        <span class="task-note">Target: Dec 2026 contract expiration aligned to cutover. Parallel run recommended for at least 2 weeks to reduce risk. Plan: Zima off, LiveChat off, 8x8 on.</span>
+      </div>
+      <span class="task-owner owner-both">Both</span>
+    </label>
+    <button class="add-task-btn" onclick="addTask(this, 'phase5')">+ Add task</button>
+    <div id="phase5-new" style="display:none;"></div>
+  </div>
+</div>
+
+</div><!-- /phases-col -->
+
+<!-- ══════ SIDEBAR ══════ -->
+<div class="sidebar-col">
+
+  <!-- DEAL SNAPSHOT -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Deal Snapshot</div>
+    <div class="sidebar-card-body">
+      <div class="sidebar-row"><span class="label">Incumbent</span><span class="val">Zima + LiveChat</span></div>
+      <div class="sidebar-row"><span class="label">Both Expire</span><span class="val">Dec 2026</span></div>
+      <div class="sidebar-row"><span class="label">CC Size</span><span class="val">~80–85 concurrent</span></div>
+      <div class="sidebar-row"><span class="label">Queues</span><span class="val">6 external + internal</span></div>
+      <div class="sidebar-row"><span class="label">Locations</span><span class="val">NY · Philippines · Belize</span></div>
+      <div class="sidebar-row"><span class="label">Phones</span><span class="val">Grandstream GRP-2613</span></div>
+      <div class="sidebar-row"><span class="label">Competitor</span><span class="val">Unknown — ask</span></div>
+      <div class="sidebar-row"><span class="label">Target Close</span><span class="val">Sept–Oct 2026</span></div>
+    </div>
+  </div>
+
+  <!-- CROWN CONTACTS -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Crown Awards Contacts</div>
+    <div class="sidebar-card-body">
+      <div class="contact-row">
+        <div class="contact-avatar">TA</div>
+        <div class="contact-info">
+          <div class="name">Tatiana</div>
+          <div class="role">CC Manager</div>
+          <span class="tag tag-champion">Champion</span>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:var(--orange);">JF</div>
+        <div class="contact-info">
+          <div class="name">Jonathan Fenety</div>
+          <div class="role">Procurement</div>
+          <span class="tag tag-procurement">Procurement Gate</span>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:var(--orange);">DC</div>
+        <div class="contact-info">
+          <div class="name">Doug Crowe</div>
+          <div class="role">Procurement (lost audio)</div>
+          <span class="tag tag-procurement">Procurement Gate</span>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:var(--gray);">KE</div>
+        <div class="contact-info">
+          <div class="name">Kenny</div>
+          <div class="role">Reporting Specialist</div>
+          <div style="font-size:11px; color:var(--red); margin-top:2px;">⚠ Not on discovery — invite to demo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8X8 TEAM -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">8x8 Team</div>
+    <div class="sidebar-card-body">
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:var(--accent); color:var(--dark);">PJ</div>
+        <div class="contact-info"><div class="name">PJ Schlegel</div><div class="role">AE</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:var(--accent); color:var(--dark);">TR</div>
+        <div class="contact-info"><div class="name">Tom Rupp</div><div class="role">SE</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:var(--accent); color:var(--dark);">LH</div>
+        <div class="contact-info"><div class="name">Landon Hendricks</div><div class="role">CC Specialist</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:var(--accent); color:var(--dark);">EB</div>
+        <div class="contact-info"><div class="name">Eboni Barnes</div><div class="role">Intro / Original Contact</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Technology Stack</div>
+    <div class="sidebar-card-body">
+      <div class="tech-row"><span class="tech-name">Zima (CC)</span><span class="tech-status status-replace">Replace</span></div>
+      <div class="tech-row"><span class="tech-name">LiveChat (web chat)</span><span class="tech-status status-replace">Replace</span></div>
+      <div class="tech-row"><span class="tech-name">8x8 CC (concurrent)</span><span class="tech-status status-add">Add</span></div>
+      <div class="tech-row"><span class="tech-name">8x8 QMSA</span><span class="tech-status status-add">Add — Native</span></div>
+      <div class="tech-row"><span class="tech-name">8x8 WFM</span><span class="tech-status status-add">Add — Included</span></div>
+      <div class="tech-row"><span class="tech-name">8x8 SMS (2-way)</span><span class="tech-status status-add">Add — Native</span></div>
+      <div class="tech-row"><span class="tech-name">8x8 Web Chat</span><span class="tech-status status-add">Add — Native</span></div>
+      <div class="tech-row"><span class="tech-name">Grandstream GRP-2613</span><span class="tech-status status-validate">Validate</span></div>
+      <div class="tech-row"><span class="tech-name">SFCC (Salesforce CC)</span><span class="tech-status status-tbd">Scope TBD</span></div>
+      <div class="tech-row"><span class="tech-name">PCI Pal (if needed)</span><span class="tech-status status-tbd">3rd Party TBD</span></div>
+    </div>
+  </div>
+
+  <!-- RISKS -->
+  <div class="risk-card">
+    <div class="risk-title">🔴 Open Risks</div>
+    <div class="risk-item"><div class="rdot red"></div><div><strong>Grandstream GRP-2613</strong> — compatibility unvalidated. Jonathan will not buy new phones.</div></div>
+    <div class="risk-item"><div class="rdot red"></div><div><strong>MMS / image SMS</strong> — Tatiana needs image delivery for engraving proofs. Confirm capability.</div></div>
+    <div class="risk-item"><div class="rdot red"></div><div><strong>3rd-party trust</strong> — Jonathan's bad Zima experience. Label everything native vs. 3rd-party in every interaction.</div></div>
+    <div class="risk-item"><div class="rdot orange"></div><div><strong>SFCC integration scope</strong> — not yet defined. Don't promise until validated.</div></div>
+    <div class="risk-item"><div class="rdot orange"></div><div><strong>Competitor unknown</strong> — no intel on who else is being evaluated.</div></div>
+    <div class="risk-item"><div class="rdot orange"></div><div><strong>Kenny not engaged</strong> — reporting gap if he's not in the demo and raises concerns later.</div></div>
+    <div class="risk-item"><div class="rdot orange"></div><div><strong>Timeline pressure</strong> — Dec 2026 deadline leaves limited runway if decision slips past June.</div></div>
+  </div>
+
+</div><!-- /sidebar-col -->
+</div><!-- /main-wrap -->
+
+<div class="footer">Crown Awards · Mutual Action Plan · 8x8 Confidential · Updated Apr 21, 2026</div>
+
+<script>
+const STORAGE_KEY = 'crown-awards-map-v1';
+
+function saveState() {
+  const checks = document.querySelectorAll('input[type="checkbox"]');
+  const state = Array.from(checks).map(c => c.checked);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+  const state = JSON.parse(saved);
+  const checks = document.querySelectorAll('input[type="checkbox"]');
+  checks.forEach((c, i) => {
+    if (state[i] !== undefined && state[i]) {
+      c.checked = true;
+      const item = c.closest('.task-item');
+      if (item) item.classList.add('checked');
+    }
+  });
+}
+
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const item = cb.closest('.task-item');
+    if (item) {
+      if (cb.checked) item.classList.add('checked');
+      else item.classList.remove('checked');
+    }
+    saveState();
+  });
+});
+
+function addTask(btn, phaseId) {
+  const container = document.getElementById(phaseId + '-new');
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div class="new-task-row">
+      <input class="new-task-input" type="text" placeholder="Enter task description..." id="${phaseId}-input" autofocus>
+      <button class="new-task-save" onclick="saveNewTask('${phaseId}')">Add</button>
+      <button class="new-task-cancel" onclick="cancelTask('${phaseId}')">Cancel</button>
+    </div>`;
+  setTimeout(() => document.getElementById(phaseId + '-input').focus(), 50);
+}
+
+function saveNewTask(phaseId) {
+  const input = document.getElementById(phaseId + '-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const container = document.getElementById(phaseId + '-new');
+  const btn = container.previousElementSibling;
+  const newItem = document.createElement('label');
+  newItem.className = 'task-item';
+  newItem.innerHTML = `<input type="checkbox"><div class="task-text"><strong>${text}</strong></div>`;
+  newItem.querySelector('input').addEventListener('change', function() {
+    if (this.checked) newItem.classList.add('checked');
+    else newItem.classList.remove('checked');
+    saveState();
+  });
+  btn.before(newItem);
+  container.style.display = 'none';
+  container.innerHTML = '';
+  saveState();
+}
+
+function cancelTask(phaseId) {
+  const container = document.getElementById(phaseId + '-new');
+  container.style.display = 'none';
+  container.innerHTML = '';
+}
+
+loadState();
+</script>
+
+</body>
+</html>

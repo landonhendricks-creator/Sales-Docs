@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown Awards — SE Demo Checklist</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #EAE9E1;
+    --primary: #008486;
+    --accent: #C9DC4F;
+    --dark: #111111;
+    --white: #ffffff;
+    --red: #c0392b;
+    --orange: #e67e22;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --gray: #7f8c8d;
+    --light: #f4f3ec;
+    --border: #d0cfc8;
+    --warn-bg: #fff8e1;
+    --warn-border: #f9a825;
+    --risk-bg: #fdecea;
+    --risk-border: #c0392b;
+    --native-bg: #e8f5e9;
+    --native-border: #27ae60;
+    --thirdparty-bg: #fff3e0;
+    --thirdparty-border: #e67e22;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    padding: 32px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 12px 12px 0 0;
+    padding: 28px 32px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+  .header-left .sub { font-size: 13px; opacity: .85; margin-top: 4px; }
+  .header-right { text-align: right; font-size: 12px; opacity: .85; line-height: 1.6; }
+  .doc-type-badge {
+    background: var(--accent);
+    color: var(--dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 8px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* ── CONTEXT BAR ── */
+  .context-bar {
+    background: var(--dark);
+    color: var(--white);
+    padding: 10px 32px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .context-item { font-size: 12px; }
+  .context-item span { opacity: .6; margin-right: 4px; }
+
+  /* ── DIRECTIVE BANNER ── */
+  .directive-banner {
+    background: var(--warn-bg);
+    border-left: 5px solid var(--warn-border);
+    border-radius: 0 0 0 0;
+    padding: 14px 20px;
+    margin-bottom: 0;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .directive-banner h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: #7a5c00; margin-bottom: 8px; }
+  .directive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .directive-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+  .directive-item .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .directive-item strong { color: var(--dark); }
+
+  /* ── MAIN GRID ── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
+    background: var(--white);
+    border-radius: 0 0 12px 12px;
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+  .main-content { padding: 24px 28px; border-right: 1px solid var(--border); }
+  .sidebar { padding: 20px 18px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 28px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 8px 8px 0 0;
+    padding: 9px 14px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .section-header .num {
+    background: var(--accent);
+    color: var(--dark);
+    font-weight: 700;
+    font-size: 12px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .section-header h2 { font-size: 14px; font-weight: 700; }
+  .section-header .timing { margin-left: auto; font-size: 11px; opacity: .8; white-space: nowrap; }
+
+  .section-body {
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+  }
+
+  /* ── CHECKLIST ITEMS ── */
+  .check-group { border-bottom: 1px solid var(--border); padding: 0; }
+  .check-group:last-child { border-bottom: none; }
+  .check-group-label {
+    background: var(--light);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--gray);
+    padding: 5px 14px;
+    border-bottom: 1px solid var(--border);
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 14px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: #f9f8f4; }
+  .check-item input[type="checkbox"] {
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .check-item.checked .item-text { text-decoration: line-through; color: var(--gray); }
+  .item-text { flex: 1; font-size: 13px; }
+  .item-text strong { color: var(--dark); }
+  .item-note {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 3px;
+    display: block;
+  }
+
+  /* ── PILLS ── */
+  .pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-left: 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .pill-native { background: var(--native-bg); color: #1b5e20; border: 1px solid var(--native-border); }
+  .pill-3p { background: var(--thirdparty-bg); color: #7a3200; border: 1px solid var(--thirdparty-border); }
+  .pill-skip { background: #f3e5f5; color: #4a148c; border: 1px solid #ab47bc; }
+  .pill-risk { background: var(--risk-bg); color: var(--red); border: 1px solid var(--risk-border); }
+  .pill-time { background: #e3f2fd; color: #0d47a1; border: 1px solid #1976d2; }
+  .pill-critical { background: var(--risk-bg); color: var(--red); border: 1px solid var(--risk-border); font-size: 10px; }
+
+  /* ── TALKING POINT BLOCKS ── */
+  .tp-block {
+    background: #f0f9f9;
+    border-left: 3px solid var(--primary);
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px;
+    margin: 6px 14px 0;
+    font-size: 12px;
+    color: #1a4a4a;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .tp-block .tp-label { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: var(--primary); margin-bottom: 4px; }
+  .tp-block ul { padding-left: 16px; }
+  .tp-block li { margin-bottom: 3px; }
+
+  /* ── DEMO FLOW TABLE ── */
+  .flow-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .flow-table th {
+    background: var(--primary);
+    color: var(--white);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .flow-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .flow-table tr:last-child td { border-bottom: none; }
+  .flow-table tr:nth-child(even) td { background: var(--light); }
+  .time-col { width: 60px; font-weight: 700; color: var(--primary); white-space: nowrap; }
+  .skip-row td { background: #f9f0ff !important; color: #7b1fa2; }
+  .skip-row .time-col { color: #7b1fa2; }
+
+  /* ── SIDEBAR CARDS ── */
+  .sidebar-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .sidebar-card-header {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    padding: 7px 12px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .sidebar-card-body { padding: 10px 12px; background: var(--white); }
+  .sidebar-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; font-size: 12px; gap: 8px; }
+  .sidebar-row:last-child { margin-bottom: 0; }
+  .sidebar-row .label { color: var(--gray); font-size: 11px; flex-shrink: 0; }
+  .sidebar-row .val { font-weight: 600; text-align: right; }
+
+  .contact-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+  .contact-row:last-child { margin-bottom: 0; }
+  .contact-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .contact-avatar.orange { background: var(--orange); }
+  .contact-avatar.red { background: var(--red); }
+  .contact-avatar.blue { background: var(--blue); }
+  .contact-avatar.gray { background: var(--gray); }
+  .contact-info .name { font-weight: 700; font-size: 12px; }
+  .contact-info .role { font-size: 11px; color: var(--gray); }
+
+  .gap-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+  .gap-item:last-child { margin-bottom: 0; }
+  .gap-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .gap-dot.red { background: var(--red); print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+  .gap-dot.orange { background: var(--orange); print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+
+  .warn-card {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .warn-card .warn-title { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: #7a5c00; margin-bottom: 6px; }
+  .warn-card li { margin-bottom: 4px; padding-left: 4px; }
+
+  .risk-card {
+    background: var(--risk-bg);
+    border: 1px solid var(--risk-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .risk-card .risk-title { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: var(--red); margin-bottom: 6px; }
+
+  /* ── LEGEND ── */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 0 4px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-section { margin-bottom: 20px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray); margin-bottom: 4px; }
+  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; }
+  .progress-fill { height: 100%; border-radius: 3px; background: var(--primary); transition: width .3s; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+
+  /* ── PRINT ── */
+  @media print {
+    @page { size: letter landscape; margin: 0.4in 0.5in; }
+    * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    body { padding: 0 !important; max-width: 100% !important; font-size: 11px !important; }
+    /* Float layout — far more reliable than grid for page breaks */
+    .main-grid { display: block !important; overflow: hidden !important; }
+    .sidebar { float: right !important; width: 220px !important; padding: 14px !important; border-left: 1px solid #d0cfc8 !important; }
+    .main-content { padding: 16px 20px !important; margin-right: 240px !important; }
+    .section { break-inside: avoid; page-break-inside: avoid; }
+    .section-header { break-after: avoid; page-break-after: avoid; }
+    .check-group { break-inside: avoid; }
+    .progress-section { display: none !important; }
+    .flow-table { break-inside: avoid; }
+    .footer { margin-top: 8px !important; }
+  }
+
+  /* ── FOOTER ── */
+  .footer { text-align: center; margin-top: 20px; font-size: 11px; color: var(--gray); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="doc-type-badge">SE Demo Checklist</div>
+    <h1>Crown Awards</h1>
+    <div class="sub">America's Largest Awards Manufacturer · ~80–85 Concurrent CC Licenses</div>
+  </div>
+  <div class="header-right">
+    <div><strong>AE:</strong> PJ Schlegel</div>
+    <div><strong>SE:</strong> Tom Rupp</div>
+    <div><strong>CC Spec:</strong> Landon Hendricks</div>
+    <div><strong>Discovery:</strong> Apr 21, 2026</div>
+    <div><strong>Incumbent:</strong> Zima (exp. Dec 2026)</div>
+  </div>
+</div>
+
+<!-- CONTEXT BAR -->
+<div class="context-bar">
+  <div class="context-item"><span>Champion:</span>Tatiana (CC Mgr)</div>
+  <div class="context-item"><span>Procurement:</span>Jonathan Fenety + Doug Crowe</div>
+  <div class="context-item"><span>Locations:</span>New York + Philippines + Belize</div>
+  <div class="context-item"><span>Queues:</span>Sales, Support, Retention, Custom, Engraving, Art + internals</div>
+  <div class="context-item"><span>Contract End:</span>Dec 2026 (Zima + LiveChat)</div>
+</div>
+
+<!-- DIRECTIVE BANNER -->
+<div class="directive-banner">
+  <h3>⚡ Customer-Stated Demo Directives — Follow These Exactly</h3>
+  <div class="directive-grid">
+    <div class="directive-item">
+      <span class="icon">🎯</span>
+      <div><strong>Tatiana (Champion):</strong> "I'd like if we focus mostly on the contact center. I don't want us focusing too much on AI. I really just wanna see the basics."</div>
+    </div>
+    <div class="directive-item">
+      <span class="icon">🏷️</span>
+      <div><strong>Jonathan (Procurement):</strong> "Anything that you show us in a demo, just make sure you're clear on what's yours and what would need to be, like, a third party brought in." <em>(Had a bad experience with Zima 3rd-party AI failure)</em></div>
+    </div>
+    <div class="directive-item">
+      <span class="icon">💬</span>
+      <div><strong>Jonathan (late in call):</strong> "Another contract we have expiring at the end of the year is our chat service… that's something else we can look into as a whole solution." → Live chat consolidation opportunity.</div>
+    </div>
+    <div class="directive-item">
+      <span class="icon">📊</span>
+      <div><strong>Invite Kenny</strong> (reporting specialist — not on discovery call) to the demo. He owns the reporting stack and needs to validate queue reporting depth.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main-grid">
+<div class="main-content">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><span class="pill pill-native">8x8 Native</span> Built-in, no 3rd party</div>
+    <div class="legend-item"><span class="pill pill-3p">3rd Party</span> Must label clearly in demo</div>
+    <div class="legend-item"><span class="pill pill-skip">Skip / Minimize</span> Per customer direction</div>
+    <div class="legend-item"><span class="pill pill-risk">Risk</span> Known gap or concern</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SECTION 1: PRE-DEMO ENVIRONMENT SETUP         -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="num">1</div>
+      <h2>Pre-Demo Environment Setup</h2>
+      <div class="timing">Complete before demo day</div>
+    </div>
+    <div class="section-body">
+
+      <div class="check-group">
+        <div class="check-group-label">Licensing &amp; Multi-Location</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Configure demo tenant with multi-location routing</strong>
+            <span class="item-note">NY users + Philippines users must be able to call each other directly — no queue required. This is Crown's #1 pain with Zima (different license types block internal calling). Show them unified cloud = one license type, internal calls free.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Set up ~6 external queues matching Crown's actual queue names</strong>
+            <span class="item-note">Sales, Support, Retention (outbound), Custom, Engraving, Art — use real names for maximum relevance. Add 1–2 internal queues to show internal routing.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Confirm Grandstream GRP-2613 compatibility</strong> <span class="pill pill-risk">Risk</span>
+            <span class="item-note">Jonathan specifically does NOT want to buy new phones. Validate GRP-2613 against 8x8 certified device list BEFORE the demo. If not certified: confirm 3CX-style SIP or advise on equivalent certified Poly/Yealink SKU at similar price point. Do NOT leave this as an unknown going into demo.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Prepare concurrent licensing explanation slide / one-pager</strong>
+            <span class="item-note">~80–85 concurrent licenses. Be ready to explain: concurrent = max simultaneous agents, up to 5 physical agents per concurrent license. Show how this maps to their usage patterns (peak season Apr–Jun).</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">CC Reporting &amp; Supervisor Tools</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Configure real-time supervisor dashboard with live queue stats</strong>
+            <span class="item-note">Show agent status, queue depth, handle time, SLA — per queue. Tatiana needs to see "the basics" clearly. This is table stakes but make it look great.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Prepare historical reporting views for all 6 queues</strong>
+            <span class="item-note">Kenny (reporting specialist) should ideally be in the room/call for this section. Flag to Landon/PJ to extend demo invite to Kenny.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Set up disposition codes in demo tenant</strong>
+            <span class="item-note">Show agents wrapping calls with disposition codes. Simple but visible workflow improvement from what they likely have today.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">QMSA — 100% AI Quality Management</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Configure QMSA with Crown-relevant categories</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Build categories: "Order Status," "Engraving Approval," "Retention / Cancellation," "Complaint Handling," "Upsell Opportunity." Show QA scorecard with auto-scored criteria matching their actual agent behaviors.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Prepare 2–3 sample scored call recordings for demo playback</strong>
+            <span class="item-note">Ideally recordings with: (1) high score / great call, (2) low score / coaching opportunity, (3) keyword flag (e.g., "cancel," "unhappy"). Makes QMSA tangible vs. conceptual. Keep this section brief — Tatiana said don't over-index on AI.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Have "100% QA" narrative ready — vs. Zima's manual sampling</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Crown does manual QA today. QMSA gives 100% automated scoring. Position as: "You currently score a fraction of calls. With QMSA, every call is scored — automatically — with no extra headcount." This is the AI they actually want.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">PCI Redaction</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Confirm and set up PCI redaction demo flow</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Current Zima pain: manual API pipeline — pull recording, redact, delete, reinstall. 8x8 native PCI redaction removes DTMF tones automatically in recording. Contrast this clearly. Jonathan explicitly called this out as a pain point.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Prepare PCI Pal mention IF deeper card-capture is needed</strong> <span class="pill pill-3p">3rd Party</span>
+            <span class="item-note">PCI Pal = third-party secure payment gateway (agent-assisted or self-service card capture). Only surface if they ask about going beyond DTMF redaction. Label clearly as 3rd party per Jonathan's directive.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">Two-Way SMS</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Prepare two-way SMS demo — inbound reply routing to queue</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Tatiana's use case: agents send artwork/engraving proofs to customers via SMS. Customer replies → routes back to correct agent/queue. Set up a live demo of this flow — send outbound SMS, receive reply, show it landing in CC queue.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Confirm image/MMS capability (for proof images)</strong>
+            <span class="item-note">Tatiana's use case involves sending proof images (artwork, engravings). Confirm whether 8x8 SMS supports MMS image attachments in the CC context, or if this is links to hosted images. Clarify before demo — don't promise what can't be shown.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">Live Chat Consolidation</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Prepare live chat channel demo — web widget + agent handling</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Jonathan revealed at end of call: LiveChat contract also ends Dec 2026. Strong opportunity to consolidate. Show: web chat widget on a mock "CrownAwards.com" page, agent receives in same interface as calls/SMS, supervisor sees all channels in unified dashboard.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Show omnichannel agent desktop (voice + chat + SMS, unified)</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Key differentiator vs. having Zima for voice and LiveChat separate. One pane of glass for all channels. This directly solves their siloed channel problem.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">WFM — Forecasting</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Prepare WFM overview — schedule forecasting and shift management</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Crown has a busy season Apr–Jun. WFM (acquired by 8x8, included free with CC licenses) enables volume forecasting and schedule optimization. Keep brief — don't go deep unless Tatiana/Jonathan ask. Mention it's included — contrast with Zima's 3rd-party WFM that was removed from their contract due to failure.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Do NOT position as "enterprise WFM" — keep it right-sized for SMB</strong>
+            <span class="item-note">Verint is the enterprise/expensive 3rd-party alternative. 8x8 WFM is purpose-built for right-sized contact centers. Position accordingly.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">Outbound / Retention Queue</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Confirm outbound dialing capability for Retention queue</strong> <span class="pill pill-native">8x8 Native</span>
+            <span class="item-note">Crown has a Retention queue (outbound focus). Be ready to show or speak to outbound dialing — preview dial, click-to-dial from contact record. Scope TBD on SFCC CRM integration for this.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">Integrations (Scope First)</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Scope SFCC (Salesforce Commerce Cloud) integration prior to demo</strong>
+            <span class="item-note">SFCC was mentioned — scope with Landon/PJ before demo on what integration level is needed (CTI screen pop? Order lookup? CRM data in agent desktop?). Do NOT demo SFCC integration unless scoped — don't overpromise.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Confirm Doug's reference request was sent</strong>
+            <span class="item-note">Doug asked for references via email after losing audio on discovery call. PJ/Landon to confirm references email was sent before demo day — do not let this slip. Procurement contacts track these details.</span>
+          </div>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SECTION 2: DEMO DAY — OPENING                 -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="num">2</div>
+      <h2>Demo Day — Opening (Pre-Demo Conversation)</h2>
+      <div class="timing">~10 min</div>
+    </div>
+    <div class="section-body">
+      <div class="check-group">
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Confirm attendees in room / on call</strong>
+            <span class="item-note">Expected: Tatiana, Jonathan, Doug. <strong>Ask if Kenny (reporting) can join</strong> — essential for validating the reporting section. Landon to flag this pre-demo.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Open with brief recap of discovery pain points</strong>
+            <span class="item-note">Verbalize: "Based on our last conversation, you shared [#1 multi-location calling, #2 PCI redaction burden, #3 manual QA, #4 vendor consolidation opportunity]. Today's demo is focused on showing you exactly how 8x8 solves these — we'll keep it CC-focused and practical."</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Set the native vs. 3rd-party expectation upfront</strong>
+            <span class="item-note">Say explicitly: "Jonathan — before we start, I want to honor your request. Throughout today's demo, I'll call out exactly what is native to 8x8 and what would require a third-party integration. You'll see a clear distinction every time." This directly addresses his bad Zima experience and builds trust immediately.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Confirm agenda with Tatiana's focus preference</strong>
+            <span class="item-note">"Tatiana, you mentioned you'd like to focus on the contact center fundamentals, not deep-dive into AI automation. That's exactly what we've planned. We'll show QMSA briefly as a quality tool — not a bot — and focus most of our time on day-to-day CC operations."</span>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SECTION 3: DEMO FLOW                          -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="num">3</div>
+      <h2>Recommended Demo Flow</h2>
+      <div class="timing">~60–75 min total</div>
+    </div>
+    <div class="section-body">
+      <table class="flow-table">
+        <thead>
+          <tr>
+            <th class="time-col">Time</th>
+            <th>Topic</th>
+            <th>Key Points</th>
+            <th>Label</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="time-col">10 min</td>
+            <td><strong>Multi-Location Unified Routing</strong></td>
+            <td>NY ↔ Philippines direct internal calls — no queue required. Show agent directory, click-to-call colleague in other country. Single license type — everyone on same platform.</td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">10 min</td>
+            <td><strong>Queue Management + Supervisor Dashboard</strong></td>
+            <td>Live queue view for all 6 external queues. Agent status. SLA metrics. Wallboard-style real-time stats. Show routing rules (skills-based, round-robin). Disposition codes on wrap-up.</td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">8 min</td>
+            <td><strong>PCI Redaction — Live Demo</strong></td>
+            <td>Show call recording with DTMF tones auto-redacted. Play back: you hear silence where card number was — no card data stored. Contrast: "Zima requires manual API pipeline to achieve this same result. 8x8 does it automatically." </td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">10 min</td>
+            <td><strong>Historical Reporting Deep Dive</strong></td>
+            <td>Per-queue reports: handle time, abandon rate, SLA, agent performance. Export to Excel/CSV. Custom report builder. <strong>Invite Kenny to ask questions here.</strong> Show scheduling/forecasting hook for WFM.</td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">8 min</td>
+            <td><strong>QMSA — 100% Automated QA</strong></td>
+            <td>Show auto-scored call. Highlight: 100% of calls scored (vs. manual sampling today). Show 2–3 sample scored recordings with Crown-relevant categories. Keep brief — this is a feature, not the focus.</td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">8 min</td>
+            <td><strong>Two-Way SMS + Proof Workflow</strong></td>
+            <td>Agent sends SMS with artwork proof link. Customer replies. Reply routes to agent queue. Show agent receiving reply in same desktop as calls. Confirm MMS/image support or explain workaround (hosted link).</td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">8 min</td>
+            <td><strong>Live Chat — Web Widget + Agent Desktop</strong></td>
+            <td>Show web chat widget on mock Crown page. Agent receives alongside voice/SMS in one desktop. Supervisor sees all channels. Position: "Your LiveChat and Zima contracts both end in December — one 8x8 contract replaces both."</td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">5 min</td>
+            <td><strong>WFM — Forecasting Brief</strong></td>
+            <td>Show volume forecasting for busy season (Apr–Jun). Schedule optimization. "Included with your CC licenses — no separate vendor contract." Contrast with Zima's 3rd-party WFM that failed.</td>
+            <td><span class="pill pill-native">8x8 Native</span></td>
+          </tr>
+          <tr class="skip-row">
+            <td class="time-col">SKIP</td>
+            <td><strong>AI Studio / IVR Builder / Voice Bots</strong></td>
+            <td>Tatiana explicitly said no AI automation focus. Skip unless someone asks. If asked, say: "This is available — happy to show it in a separate session if relevant." Don't demo it today.</td>
+            <td><span class="pill pill-skip">Skip</span></td>
+          </tr>
+          <tr class="skip-row">
+            <td class="time-col">SKIP</td>
+            <td><strong>UCaaS / Teams Replacement</strong></td>
+            <td>No indication they want to change their existing phone/collaboration stack. Focus is 100% on CC. Don't introduce UCaaS — it dilutes the CC story and wastes demo time.</td>
+            <td><span class="pill pill-skip">Skip</span></td>
+          </tr>
+          <tr>
+            <td class="time-col">8 min</td>
+            <td><strong>Q&amp;A + Close</strong></td>
+            <td>Open floor. Make sure Kenny got his reporting questions answered. Close with next steps: pricing, references (Doug), proposal timeline vs. Dec 2026 contract end date.</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SECTION 4: DURING-DEMO CHECKLIST              -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="num">4</div>
+      <h2>During Demo — Execution Checklist</h2>
+      <div class="timing">Run live during demo</div>
+    </div>
+    <div class="section-body">
+      <div class="check-group">
+        <div class="check-group-label">Jonathan's 3rd-Party Labeling — Do This Every Time</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Every feature shown: explicitly say "This is 8x8 native" or "This would require [Partner Name], a 3rd-party integration"</strong>
+            <span class="item-note">Non-negotiable. Jonathan had a bad experience with Zima adding 3rd-party WFM/AI that then failed. He is watching for this. Build trust by being proactively transparent — even when it's uncomfortable.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>If PCI Pal comes up: label as 3rd party, explain it's a partner we integrate with</strong> <span class="pill pill-3p">3rd Party</span>
+            <span class="item-note">PCI Pal = optional upgrade to full secure card-capture. If raised, say: "PCI Pal is a third-party partner — we integrate directly. Your standard 8x8 licensing includes native DTMF redaction, which may be all you need."</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Call Cabinet / Smarsh compliance recording — label as 3rd party if it comes up</strong> <span class="pill pill-3p">3rd Party</span>
+            <span class="item-note">8x8 has native call recording. Call Cabinet/Smarsh is a compliance archival partner. Only relevant if they have compliance recording requirements beyond standard — ask don't assume.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">Tatiana's CC Focus — Stay on Track</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Watch the clock — if a section runs over, cut from AI/WFM, not from CC core</strong>
+            <span class="item-note">Priority order if time is tight: Multi-location routing → PCI redaction → Supervisor dashboard → Reporting → Chat/SMS. WFM and QMSA are secondary if time runs out.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Use Crown's actual queue names throughout the demo</strong>
+            <span class="item-note">"Sales," "Support," "Retention," "Engraving," "Art" — not generic "Queue 1," "Queue 2." Makes demo feel like their environment, not a generic product tour.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-label">Questions to Ask During Demo</div>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>"Tatiana — is this how your agents currently wrap calls? What does that look like in Zima today?"</strong>
+            <span class="item-note">Gets her engaged and surfaces more pain around current workflow. Especially good during disposition codes / supervisor dashboard section.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>"Kenny — does this level of reporting give you what you need, or are there specific metrics you're looking for that we haven't shown yet?"</strong>
+            <span class="item-note">Only if Kenny is in the room. Critical question — don't leave reporting without his validation.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>"Jonathan — when you think about replacing both Zima and LiveChat under one contract, what would that mean for your procurement process?"</strong>
+            <span class="item-note">Ask this after showing live chat section. Gets him thinking about consolidation economics and single-vendor simplicity. Procurement loves reducing vendor count.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>"Doug — do you have questions at this stage, or were there specific things you were hoping to see today?"</strong>
+            <span class="item-note">Doug lost audio during discovery call. He may have missed parts of the initial conversation. Check in specifically with him — don't let him stay quiet and then object later.</span>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SECTION 5: POST-DEMO ACTION ITEMS             -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="num">5</div>
+      <h2>Post-Demo Action Items</h2>
+      <div class="timing">Within 48 hours of demo</div>
+    </div>
+    <div class="section-body">
+      <div class="check-group">
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>PJ: Develop pricing proposal — ~80–85 concurrent CC licenses</strong>
+            <span class="item-note">Include: CC concurrent licenses, QMSA, WFM (position as included), SMS/chat channels. Separate line items for any 3rd-party add-ons (PCI Pal if scoped). Make 8x8-native vs. 3rd-party pricing visible in proposal — mirrors Jonathan's directive.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Landon / PJ: Send references to Doug</strong>
+            <span class="item-note">Doug requested references via email after losing audio on discovery call. This must be sent before or immediately after the demo. Ideal: references from similar companies (e-commerce, manufacturing, multi-location).</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Tom: Document Grandstream GRP-2613 compatibility result</strong>
+            <span class="item-note">If compatible: confirm in writing to Jonathan. If not compatible: provide 2–3 alternative certified devices at similar price point. Jonathan does not want to buy new phones — if must replace, minimize cost/disruption.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Tom: Scope SFCC integration requirements</strong>
+            <span class="item-note">Work with Landon/PJ to define what SFCC integration means for Crown: screen pop? Order lookup? CRM data in agent desktop? Confirm feasibility and any 3rd-party dependency before including in proposal.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Team: Establish proposal timeline anchored to Dec 2026 contract end</strong>
+            <span class="item-note">Work backwards from December 2026 expiration. Target proposal delivery within 2–3 weeks of demo, legal/procurement review 4–6 weeks, implementation 60–90 days. Flag: if they delay past ~June, implementation runway gets tight.</span>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <div class="item-text">
+            <strong>Landon: Update MAP and Value Map post-demo with any new intelligence</strong>
+            <span class="item-note">Capture new objections, requirements confirmed, SFCC scope, Grandstream result, and any competitive intel (are they talking to other vendors?).</span>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ SIDEBAR ══════ -->
+<div class="sidebar">
+
+  <!-- PROGRESS -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Demo Prep Progress</div>
+    <div class="sidebar-card-body">
+      <div id="progress-label" class="progress-label"><span>Items Complete</span><span id="pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      <div style="font-size:11px; color:var(--gray); margin-top:6px;" id="prog-count">0 of 0 items checked</div>
+    </div>
+  </div>
+
+  <!-- ATTENDEES -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Demo Attendees</div>
+    <div class="sidebar-card-body">
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:#008486;">TA</div>
+        <div class="contact-info"><div class="name">Tatiana</div><div class="role">CC Manager — Champion<br>Focus: CC basics, not AI</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar orange">JF</div>
+        <div class="contact-info"><div class="name">Jonathan Fenety</div><div class="role">Procurement<br>3rd-party skeptic — label everything</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar blue">DC</div>
+        <div class="contact-info"><div class="name">Doug Crowe</div><div class="role">Procurement<br>Lost audio on discovery — check in</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar gray">KE</div>
+        <div class="contact-info"><div class="name">Kenny</div><div class="role">Reporting Specialist<br>⚠ NOT on discovery call — invite!</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8X8 TEAM -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">8x8 Team</div>
+    <div class="sidebar-card-body">
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:#C9DC4F; color:#111;">PJ</div>
+        <div class="contact-info"><div class="name">PJ Schlegel</div><div class="role">AE</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:#C9DC4F; color:#111;">TR</div>
+        <div class="contact-info"><div class="name">Tom Rupp</div><div class="role">SE — Demo Lead</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:#C9DC4F; color:#111;">LH</div>
+        <div class="contact-info"><div class="name">Landon Hendricks</div><div class="role">CC Specialist</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-avatar" style="background:#C9DC4F; color:#111;">EB</div>
+        <div class="contact-info"><div class="name">Eboni Barnes</div><div class="role">Original Contact / Intro</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP PAINS -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Top Pains to Solve</div>
+    <div class="sidebar-card-body">
+      <div class="gap-item"><div class="gap-dot red"></div><div><strong>#1:</strong> NY ↔ Philippines can't call each other — different Zima license types, must route through queue</div></div>
+      <div class="gap-item"><div class="gap-dot red"></div><div><strong>#2:</strong> PCI redaction = manual API pipeline in Zima (pull, redact, delete, reinstall)</div></div>
+      <div class="gap-item"><div class="gap-dot red"></div><div><strong>#3:</strong> 3rd-party AI + WFM failed, removed from Zima contract — major trust breach</div></div>
+      <div class="gap-item"><div class="gap-dot orange"></div><div><strong>#4:</strong> Manual QA sampling only — want 100% automated scoring (QMSA)</div></div>
+      <div class="gap-item"><div class="gap-dot orange"></div><div><strong>#5:</strong> Separate LiveChat vendor — consolidation opportunity (also ends Dec 2026)</div></div>
+    </div>
+  </div>
+
+  <!-- THINGS TO SKIP -->
+  <div class="warn-card">
+    <div class="warn-title">⚠ Do NOT Demo These</div>
+    <ul style="padding-left:16px;">
+      <li><strong>AI Studio / Voice Bots / IVR builder</strong> — Tatiana said no AI automation</li>
+      <li><strong>UCaaS / Phone system replacement</strong> — not in scope</li>
+      <li><strong>AI Agent Assist (real-time)</strong> — not a stated need</li>
+      <li><strong>Deep SFCC integration flows</strong> — not yet scoped, don't promise</li>
+    </ul>
+  </div>
+
+  <!-- CRITICAL RISKS -->
+  <div class="risk-card">
+    <div class="risk-title">🔴 Critical Pre-Demo Risks</div>
+    <div class="gap-item"><div class="gap-dot red"></div><div><strong>Grandstream GRP-2613 compatibility</strong> — must validate BEFORE demo. Jonathan does not want new phones.</div></div>
+    <div class="gap-item" style="margin-top:8px;"><div class="gap-dot red"></div><div><strong>MMS/image SMS support</strong> — Tatiana's proof workflow requires image delivery via SMS. Confirm capability or workaround before demo.</div></div>
+    <div class="gap-item" style="margin-top:8px;"><div class="gap-dot orange"></div><div><strong>References not yet sent to Doug</strong> — he asked at end of discovery call. Don't wait until after demo.</div></div>
+  </div>
+
+  <!-- DEAL CONTEXT -->
+  <div class="sidebar-card">
+    <div class="sidebar-card-header">Deal Snapshot</div>
+    <div class="sidebar-card-body">
+      <div class="sidebar-row"><span class="label">Incumbent</span><span class="val">Zima + LiveChat</span></div>
+      <div class="sidebar-row"><span class="label">Contract End</span><span class="val">Dec 2026</span></div>
+      <div class="sidebar-row"><span class="label">CC Size</span><span class="val">~80–85 concurrent</span></div>
+      <div class="sidebar-row"><span class="label">Phones</span><span class="val">Grandstream GRP-2613</span></div>
+      <div class="sidebar-row"><span class="label">Locations</span><span class="val">NY + Philippines + Belize</span></div>
+      <div class="sidebar-row"><span class="label">Key AI Need</span><span class="val">QMSA (100% QA)</span></div>
+      <div class="sidebar-row"><span class="label">Competitor Intel</span><span class="val">Unknown — ask</span></div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /main-grid -->
+
+<div class="footer">
+  Crown Awards · SE Demo Checklist · 8x8 Confidential · Generated Apr 21, 2026
+</div>
+
+<script>
+// ── Checkbox state persistence ──────────────────────────────────────────
+const STORAGE_KEY = 'crown-awards-demo-checklist-v1';
+
+function saveState() {
+  const checks = document.querySelectorAll('input[type="checkbox"]');
+  const state = Array.from(checks).map(c => c.checked);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+  const state = JSON.parse(saved);
+  const checks = document.querySelectorAll('input[type="checkbox"]');
+  checks.forEach((c, i) => {
+    if (state[i]) {
+      c.checked = true;
+      c.closest('.check-item').classList.add('checked');
+    }
+  });
+}
+
+function updateProgress() {
+  const checks = document.querySelectorAll('input[type="checkbox"]');
+  const total = checks.length;
+  const done = Array.from(checks).filter(c => c.checked).length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-count').textContent = done + ' of ' + total + ' items checked';
+}
+
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const item = cb.closest('.check-item');
+    if (cb.checked) item.classList.add('checked');
+    else item.classList.remove('checked');
+    saveState();
+    updateProgress();
+  });
+});
+
+loadState();
+updateProgress();
+</script>
+
+</body>
+</html>
