@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Washington Health Institute — 8x8 Value Map</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #EAE9E1;
+    color: #111;
+    padding: 28px 24px;
+    max-width: 1080px;
+    margin: 0 auto;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  /* ── META BAR ── */
+  .meta-bar {
+    background: #fff;
+    border-radius: 12px 12px 0 0;
+    padding: 20px 28px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    border-bottom: 3px solid #EAE9E1;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .logo-badge {
+    background: #008486;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .meta-info { flex: 1; }
+  .meta-info h1 { font-size: 20px; font-weight: 700; color: #111; }
+  .meta-info .sub { font-size: 12px; color: #7f8c8d; margin-top: 2px; }
+  .meta-right { text-align: right; font-size: 11.5px; color: #555; line-height: 1.7; }
+  .meta-bar .dot {
+    width: 10px; height: 10px; border-radius: 50%; background: #C9DC4F; display: inline-block; margin-right: 6px;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .badge-stage {
+    background: #008486; color: #fff; font-size: 10px; font-weight: 700;
+    letter-spacing: .07em; text-transform: uppercase; padding: 3px 9px;
+    border-radius: 20px; display: inline-block; margin-top: 4px;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+
+  /* ── GRIDS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 3; }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    background: #008486; color: #fff;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    padding: 7px 14px; border-radius: 6px 6px 0 0; margin-bottom: 0;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .section-header.accent { background: #C9DC4F; color: #111; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+  .section-header.dark   { background: #111; color: #fff; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+  .section-header.risk   { background: #c0392b; color: #fff; print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+
+  /* ── CARDS ── */
+  .col-card {
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+    padding: 14px 16px;
+    border: 1px solid #ddd;
+    border-top: none;
+    height: 100%;
+  }
+  .col-card.top-radius { border-radius: 8px; border-top: 1px solid #ddd; }
+  .cap-card {
+    background: #EAE9E1;
+    border-radius: 0 0 8px 8px;
+    padding: 14px 16px;
+    border: 1px solid #d0cfc8;
+    border-top: none;
+  }
+
+  /* ── ITEM LISTS ── */
+  ul.item-list { list-style: none; padding: 0; margin: 0; }
+  ul.item-list li {
+    background: #EAE9E1;
+    border-radius: 6px;
+    padding: 7px 10px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  ul.item-list li:last-child { margin-bottom: 0; }
+  ul.item-list li .icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+  ul.item-list li strong { color: #008486; }
+
+  /* ── OPEN ITEM ── */
+  .open-item {
+    background: #EAE9E1;
+    border-radius: 6px;
+    padding: 7px 10px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .open-item:last-child { margin-bottom: 0; }
+
+  /* ── RISK PILLS ── */
+  .risk-pill {
+    display: inline-block;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 20px; margin-left: 6px; vertical-align: middle;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .risk-pill.confirmed { background: #d4f0d1; color: #1a6e1a; }
+  .risk-pill.tbd       { background: #fff3cd; color: #7a5800; }
+  .risk-pill.gap       { background: #fde8e8; color: #c0392b; }
+  .risk-pill.partner   { background: #ede9ff; color: #4a148c; }
+
+  /* ── NOTES ── */
+  .notes-field {
+    background: #EAE9E1;
+    border: none; border-radius: 6px;
+    padding: 8px 10px; font-size: 12px; font-family: inherit;
+    width: 100%; resize: vertical; min-height: 56px; color: #333;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  .notes-field:focus { outline: 2px solid #008486; }
+
+  /* ── EDITABLE SPANS ── */
+  [contenteditable] {
+    border-bottom: 1px dashed #aaa; min-width: 40px; display: inline-block;
+    outline: none; padding: 0 2px;
+  }
+  [contenteditable]:focus { border-bottom: 1.5px solid #008486; background: #f0f9f9; }
+
+  /* ── SAVE INDICATOR ── */
+  #save-indicator {
+    position: fixed; bottom: 16px; right: 20px;
+    background: #008486; color: #fff;
+    font-size: 11px; padding: 5px 12px; border-radius: 20px;
+    opacity: 0; transition: opacity .3s; pointer-events: none;
+    print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important;
+  }
+  #save-indicator.show { opacity: 1; }
+
+  /* ── PRINT ── */
+  @media print {
+    @page { size: letter landscape; margin: 0.4in 0.5in; }
+    * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    body { background: #EAE9E1 !important; padding: 0 !important; max-width: 100% !important; font-size: 11px !important; }
+    #save-indicator { display: none !important; }
+    .col-card { background: #fff !important; break-inside: avoid; page-break-inside: avoid; }
+    .cap-card { background: #EAE9E1 !important; break-inside: avoid; page-break-inside: avoid; }
+    .section-header { break-after: avoid; page-break-after: avoid; }
+    .section-header.accent { background: #C9DC4F !important; color: #111111 !important; }
+    .section-header.dark   { background: #111111 !important; color: #fff !important; }
+    .section-header.risk   { background: #c0392b !important; color: #fff !important; }
+    .logo-badge, .badge-stage { background: #008486 !important; }
+    .meta-bar { background: #fff !important; }
+    .meta-bar .dot { background: #C9DC4F !important; }
+    ul.item-list li, .open-item, .notes-field { background: #EAE9E1 !important; }
+    .risk-pill.confirmed { background: #d4f0d1 !important; color: #1a6e1a !important; }
+    .risk-pill.tbd       { background: #fff3cd !important; color: #7a5800 !important; }
+    .risk-pill.gap       { background: #fde8e8 !important; color: #c0392b !important; }
+    .risk-pill.partner   { background: #ede9ff !important; color: #4a148c !important; }
+    .grid-2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    .grid-3 { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 10px !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="save-indicator">Saved ✓</div>
+
+<!-- META BAR -->
+<div class="meta-bar">
+  <div class="logo-badge">8x8</div>
+  <div class="meta-info">
+    <h1>Washington Health Institute</h1>
+    <div class="sub"><span class="dot"></span>Healthcare · Washington DC Metro · 3 Clinic Locations · Existing 8x8 Customer (UCaaS → CC Upsell)</div>
+  </div>
+  <div class="meta-right">
+    <div><strong>AE:</strong> Lala Miranda</div>
+    <div><strong>SE:</strong> Bianca</div>
+    <div><strong>CX Spec:</strong> Landon Hendricks</div>
+    <div><strong>Discovery:</strong> Apr 22, 2026</div>
+    <div class="badge-stage">Stage: Post-Discovery → Demo</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 1: CUSTOMER CONTEXT -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="grid-3" style="margin-top:16px;">
+  <div>
+    <div class="section-header">Customer Overview</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">🏥</span><div><strong>Organization:</strong> Washington Health Institute (WHI) — multi-site primary care / community health clinic</div></li>
+        <li><span class="icon">📍</span><div><strong>3 locations:</strong> Silver Spring (Mandarin patients), Varnum Street (Amharic patients), + 1 additional site</div></li>
+        <li><span class="icon">👤</span><div><strong>Michael Shankle</strong> — COO (decision maker)</div></li>
+        <li><span class="icon">👤</span><div><strong>Max</strong> — Associate Director of Operations (influencer)</div></li>
+        <li><span class="icon">🌐</span><div>Online booking available; patient portal via eClinicalWorks + NextHealth add-on</div></li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="section-header accent">Deal Type &amp; Existing Licenses</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">✅</span><div><strong>Existing 8x8 customer</strong> — UCaaS only today</div></li>
+        <li><span class="icon">📋</span><div>Staff on <strong>X1</strong> licenses; Michael on <strong>X4</strong></div></li>
+        <li><span class="icon">🚀</span><div>Upsell path: add <strong>X6 CC voice licenses</strong> + AI Studio + SpinSci/ECW integration</div></li>
+        <li><span class="icon">💰</span><div>Budget conscious — "costs up, medical revenue down" (Michael)</div></li>
+        <li><span class="icon">🛠️</span><div><strong>No internal developers</strong> — wants 8x8 to handle all setup and configuration</div></li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="section-header dark">Call Volume &amp; Operations</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">📞</span><div><strong>~150 calls/day</strong> across all sites</div></li>
+        <li><span class="icon">👥</span><div><strong>~6 staff</strong> handling patient-facing calls</div></li>
+        <li><span class="icon">🗂️</span><div><strong>4–5 departments</strong> that calls route to</div></li>
+        <li><span class="icon">💊</span><div>Dedicated <strong>medication refill line</strong> — voicemail cleared every 2 hours by assigned staff</div></li>
+        <li><span class="icon">🌍</span><div>Languages: English, <strong>Spanish</strong> (largest), Mandarin (Silver Spring), Amharic (Varnum St.)</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 2: CHALLENGES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="grid-2">
+  <div>
+    <div class="section-header risk">Key Pain Points</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">📵</span><div><strong>Calls going unanswered / high abandonment rate</strong> — no queue visibility, no overflow routing. Staff stretched across 3 sites.</div></li>
+        <li><span class="icon">📊</span><div><strong>UC analytics are insufficient</strong> — Michael said directly: "They stink." No KPIs on patient-facing call performance, no queue depth insight.</div></li>
+        <li><span class="icon">💊</span><div><strong>Manual prescription refill workflow</strong> — voicemail box checked every 2 hours. No real-time visibility. Staff must proactively check, creating gaps.</div></li>
+        <li><span class="icon">🔗</span><div><strong>No EMR screen pop</strong> — receptionists answer calls blind. Patient context (name, DOB, appointments, location) must be looked up manually in ECW.</div></li>
+        <li><span class="icon">🌍</span><div><strong>Multilingual patient population</strong> with no intelligent language routing. Patients may reach wrong staff or be unable to communicate.</div></li>
+        <li><span class="icon">💸</span><div><strong>Cost pressure</strong> — operating costs increasing while medical reimbursement declining. ROI and cost containment are required.</div></li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="section-header">Business Objectives</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">🎯</span><div><strong>Reduce call abandonment</strong> — ensure no patient call goes unanswered, even during peak hours</div></li>
+        <li><span class="icon">⚡</span><div><strong>Increase staff efficiency</strong> — Michael: "Increase efficiency, not reduce efficiency." Let AI handle routine calls so staff focus on high-value interactions.</div></li>
+        <li><span class="icon">🤖</span><div><strong>AI-driven call automation</strong> — specifically: patient verification, appointment scheduling/rescheduling, FAQ, refill routing</div></li>
+        <li><span class="icon">🔍</span><div><strong>EMR integration</strong> — pull patient context into agent desktop. Michael: "Anything that can pull the patient up... route to correct location... identify appointment type."</div></li>
+        <li><span class="icon">📈</span><div><strong>Real-time analytics &amp; KPIs</strong> — understand call patterns to inform where to automate next</div></li>
+        <li><span class="icon">🏗️</span><div><strong>Phase appropriately</strong> — start with highest ROI use cases; expand over time. Don't try to do everything at once.</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 3: PROPOSED SOLUTION ARCHITECTURE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div style="margin-bottom:16px;">
+  <div class="section-header accent">Proposed Solution Architecture</div>
+  <div class="col-card top-radius" style="border-radius:0 0 8px 8px; border-top:none;">
+    <div class="grid-3" style="margin-bottom:0;">
+      <div>
+        <div style="font-weight:700; color:#008486; font-size:12px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">Foundation — Phase 1</div>
+        <ul class="item-list">
+          <li><span class="icon">📞</span><div><strong>X6 CC Voice licenses</strong> — small starter set (3–5 licenses for patient-facing receptionists). Unlocks queues, analytics, EMR integration capability.</div></li>
+          <li><span class="icon">🔗</span><div><strong>eClinicalWorks integration</strong> — patient screen pop in 8x8 agent desktop. Name, DOB, appointments, location visible on inbound call. TBD: 8x8 native vs. SpinSci.</div></li>
+          <li><span class="icon">📊</span><div><strong>CC analytics dashboard</strong> — queue KPIs, handle time, abandonment rate, agent performance. Foundation for AI automation decisions.</div></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#008486; font-size:12px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">AI Layer — Phase 2</div>
+        <ul class="item-list">
+          <li><span class="icon">🤖</span><div><strong>8x8 AI Studio voice bot</strong> — front-ends calls, handles FAQ, routing, appointment scheduling/rescheduling. No-code builder; WHI can modify on their own.</div></li>
+          <li><span class="icon">🌍</span><div><strong>Multilingual AI</strong> — auto-detects language (no "press 1 for Spanish"). Supports English, Spanish, Mandarin, Amharic. Escalates to human if unclear.</div></li>
+          <li><span class="icon">💊</span><div><strong>Prescription refill queue routing</strong> — AI identifies refill intent and routes to refill queue vs. checking voicemail every 2 hours.</div></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#008486; font-size:12px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">Efficiency Add-Ons</div>
+        <ul class="item-list">
+          <li><span class="icon">📱</span><div><strong>Engage license</strong> — mobile CC for nurses handling refill queue. Real-time call visibility on phone vs. checking voicemail every 2 hours.</div></li>
+          <li><span class="icon">🧭</span><div><strong>Compass 360</strong> (optional) — $500/mo, 2 hrs/mo managed bot optimization service. Recommended for ongoing AI performance tuning.</div></li>
+          <li><span class="icon">💬</span><div><strong>Two-way SMS</strong> (future) — if NextHealth/ECW SMS needs backup. 8x8 CC supports mass text + inbound replies routed to queue.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 4: AI STUDIO USE CASES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div style="margin-bottom:16px;">
+  <div class="section-header">AI Studio — Identified Use Cases for WHI</div>
+  <div class="col-card top-radius" style="border-radius:0 0 8px 8px; border-top:none;">
+    <div class="grid-3" style="margin-bottom:0;">
+      <div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#008486; margin-bottom:8px;">Phase 1 — No Integration Required</div>
+        <ul class="item-list">
+          <li><span class="icon">📻</span><div><strong>Auto-attendant / call routing</strong> — front-end every inbound call, route to correct department/queue. Immediate abandonment reduction.</div></li>
+          <li><span class="icon">❓</span><div><strong>FAQ handling</strong> — clinic hours, directions, parking, accepted insurance. Pulls from knowledge base. Zero integration needed.</div></li>
+          <li><span class="icon">🌍</span><div><strong>Language auto-detection</strong> — patient speaks, bot identifies language and responds accordingly. No menu required.</div></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#008486; margin-bottom:8px;">Phase 2 — With ECW Integration</div>
+        <ul class="item-list">
+          <li><span class="icon">✅</span><div><strong>Patient verification</strong> — AI verifies caller identity (name, DOB) before transferring to human or taking action. HIPAA-compliant flow.</div></li>
+          <li><span class="icon">📅</span><div><strong>Appointment scheduling / rescheduling</strong> — reads availability across all 3 clinic locations via ECW integration. Confirms or reschedules in 1–2 min conversation.</div></li>
+          <li><span class="icon">📍</span><div><strong>Location-aware routing</strong> — identifies which of the 3 WHI clinics the patient is associated with and routes accordingly.</div></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#008486; margin-bottom:8px;">Phase 2 — Clinical Workflow</div>
+        <ul class="item-list">
+          <li><span class="icon">💊</span><div><strong>Prescription refill routing</strong> — AI identifies refill intent, verifies patient, routes to refill queue (Engage mobile for nurse). Eliminates voicemail-every-2-hours workflow.</div></li>
+          <li><span class="icon">🔁</span><div><strong>Escalation to human</strong> — always available. If language unclear, complex issue, or patient requests, AI hands off to live agent with context summary.</div></li>
+          <li><span class="icon">💰</span><div><strong>Estimated cost:</strong> ~$1,000–$1,500/month in AI credits based on ~150 calls/day. (~8 credits/min, ~$0.03/min equivalent)</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 5: EMR INTEGRATION — SPINSCI vs NATIVE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="grid-2">
+  <div>
+    <div class="section-header dark">ECW Integration — Critical Decision Point</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">🔍</span><div><strong>EMR:</strong> eClinicalWorks (ECW) — existing system, not changing</div></li>
+        <li><span class="icon">🛠️</span><div><strong>Option A — 8x8 Native Integration</strong> (preferred): Landon believes 8x8 may have built ECW integration directly. Lower cost. Must confirm with pro services before demo. <span class="risk-pill tbd">Verify</span></div></li>
+        <li><span class="icon">🤝</span><div><strong>Option B — SpinSci</strong> (s-p-i-n-s-c-i): Most-used EMR integration middleware for CC vendors. Has ECW integration confirmed. "Buy once, cry once" — setup can be costly. <span class="risk-pill partner">3rd Party</span></div></li>
+        <li><span class="icon">✨</span><div>Either way, integration <strong>pops into the 8x8 agent desktop</strong> — NOT into ECW. One pane of glass for agent: patient name, DOB, appointments, location, all 3 clinics.</div></li>
+        <li><span class="icon">⚠️</span><div>Michael &amp; Max asked specifically: "Would this be an external tool or pop into ECW?" Answer: <strong>pops into 8x8.</strong> They were satisfied with this.</div></li>
+        <li><span class="icon">📋</span><div>SpinSci also benefits human agents (not just the AI bot) — screen pop for every inbound call, not just AI-handled ones.</div></li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="section-header">Required Capabilities &amp; Status</div>
+    <div class="cap-card">
+      <div class="open-item"><strong>X6 CC Voice Licenses</strong> (3–5 starter) <span class="risk-pill confirmed">8x8 Native</span></div>
+      <div class="open-item"><strong>8x8 AI Studio voice bot</strong> <span class="risk-pill confirmed">8x8 Native</span></div>
+      <div class="open-item"><strong>Multilingual AI</strong> (EN/ES/ZH/Amharic auto-detect) <span class="risk-pill confirmed">8x8 Native</span></div>
+      <div class="open-item"><strong>CC Analytics &amp; Supervisor Dashboard</strong> <span class="risk-pill confirmed">8x8 Native</span></div>
+      <div class="open-item"><strong>Engage License</strong> (nurse refill queue, mobile) <span class="risk-pill confirmed">8x8 Native</span></div>
+      <div class="open-item"><strong>Two-way SMS</strong> (future backup to NextHealth) <span class="risk-pill confirmed">8x8 Native</span></div>
+      <div class="open-item"><strong>ECW Integration — 8x8 Native</strong> <span class="risk-pill tbd">Verify w/ Pro Services</span></div>
+      <div class="open-item"><strong>SpinSci EMR Integration</strong> (if native not available) <span class="risk-pill partner">3rd Party — Cost TBD</span></div>
+      <div class="open-item"><strong>Compass 360 Bot Management</strong> ($500/mo, optional) <span class="risk-pill confirmed">8x8 Service</span></div>
+      <div class="open-item"><strong>No internal developers</strong> — 8x8 handles all build &amp; setup <span class="risk-pill confirmed">Confirmed</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 6: PRICING CONTEXT & NEXT STEPS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="grid-2" style="margin-top:16px;">
+  <div>
+    <div class="section-header accent">Pricing Context (Ballpark from Discovery)</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">💰</span><div><strong>AI Studio credits:</strong> ~8 credits/min → ~$0.03/min. Est. <strong>$1,000–$1,500/month</strong> based on ~150 calls/day. Volume-based — scales with usage.</div></li>
+        <li><span class="icon">📋</span><div><strong>X6 CC Voice licenses:</strong> Small starter set (3–5). Already on X1/X4 — license upgrade, not new install. Should be relatively low delta.</div></li>
+        <li><span class="icon">🧭</span><div><strong>Compass 360:</strong> $500/month — 2 hrs managed bot tuning. Optional but recommended. Can cancel anytime.</div></li>
+        <li><span class="icon">🤝</span><div><strong>SpinSci setup:</strong> "A little heavy" (Landon). Preferred to avoid if 8x8 can do ECW natively. Pricing TBD — Landon to pull.</div></li>
+        <li><span class="icon">⚙️</span><div><strong>One-time setup:</strong> 8x8 to handle all configuration. Scoping call needed post-demo to finalize setup cost.</div></li>
+        <li><span class="icon">💡</span><div>Landon committed: "I want to save you money and keep it as skinny as I can." Budget sensitivity acknowledged. No budget number given by WHI.</div></li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="section-header dark">Open Action Items — Pre-Demo</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">🔴</span><div><strong>Landon:</strong> Confirm with Pro Services — does 8x8 have native ECW integration, or is SpinSci required? Answer before demo.</div></li>
+        <li><span class="icon">🔴</span><div><strong>Lala:</strong> Schedule demo with Bianca (SE) for week of Apr 28. Options: Tue Apr 28 (1–4 PM), Thu Apr 30 (10–11 AM), Mon May 4 (10 AM or 2 PM). Copy Max on invite.</div></li>
+        <li><span class="icon">🟡</span><div><strong>Landon/Lala:</strong> Pull SpinSci pricing for reference (in case native ECW not possible).</div></li>
+        <li><span class="icon">🟡</span><div><strong>Bianca (SE):</strong> Build customized demo environment — WHI-specific bot with healthcare use cases, multilingual demo, ECW screen pop (SpinSci or native).</div></li>
+        <li><span class="icon">🟡</span><div><strong>Landon:</strong> Ask WHI about budget window before or during demo to help right-size proposal.</div></li>
+        <li><span class="icon">⚪</span><div><strong>Post-demo:</strong> 20-min scoping call with Michael/Max to finalize one-time setup cost for CC + integration.</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 7: FUTURE STATE & NOTES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="grid-2" style="margin-top:16px;">
+  <div>
+    <div class="section-header">Future State Vision</div>
+    <div class="col-card">
+      <ul class="item-list">
+        <li><span class="icon">📞</span><div>Every inbound call answered — AI front-ends, routes, or resolves. <strong>Near-zero abandonment.</strong></div></li>
+        <li><span class="icon">👩‍⚕️</span><div>Receptionists see full patient context on screen pop before saying hello. Handle time drops dramatically.</div></li>
+        <li><span class="icon">💊</span><div>Nurses receive real-time refill queue alerts on mobile (Engage). No more voicemail box cleared every 2 hours.</div></li>
+        <li><span class="icon">🌍</span><div>Spanish, Mandarin, and Amharic patients served natively — no bilingual staff required for basic interactions.</div></li>
+        <li><span class="icon">📅</span><div>Patients self-schedule and reschedule via AI across all 3 clinic locations without staff involvement.</div></li>
+        <li><span class="icon">📊</span><div>Michael has full visibility into call KPIs — abandonment, handle time, queue depth — to make data-driven staffing and automation decisions.</div></li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="section-header accent">Notes</div>
+    <div class="cap-card">
+      <textarea class="notes-field" id="notes-field" placeholder="Add notes here — auto-saved..."></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'washington-health-institute-value-map-v1';
+
+function collectState() {
+  const editables = document.querySelectorAll('[contenteditable]');
+  const state = { editables: [], notes: '' };
+  editables.forEach(el => state.editables.push(el.innerHTML));
+  const notes = document.getElementById('notes-field');
+  if (notes) state.notes = notes.value;
+  return state;
+}
+
+function applyState(state) {
+  if (!state) return;
+  const editables = document.querySelectorAll('[contenteditable]');
+  if (state.editables) state.editables.forEach((v, i) => { if (editables[i]) editables[i].innerHTML = v; });
+  const notes = document.getElementById('notes-field');
+  if (notes && state.notes) notes.value = state.notes;
+}
+
+let saveTimer;
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
+    const ind = document.getElementById('save-indicator');
+    ind.classList.add('show');
+    setTimeout(() => ind.classList.remove('show'), 1500);
+  }, 600);
+}
+
+const saved = localStorage.getItem(STORAGE_KEY);
+if (saved) { try { applyState(JSON.parse(saved)); } catch(e) {} }
+
+document.querySelectorAll('[contenteditable]').forEach(el => el.addEventListener('input', scheduleSave));
+const notesField = document.getElementById('notes-field');
+if (notesField) notesField.addEventListener('input', scheduleSave);
+</script>
+</body>
+</html>
