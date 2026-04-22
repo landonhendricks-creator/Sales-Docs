@@ -352,7 +352,7 @@
 <div class="critical-banner">
   <div class="banner-title">🚨 Critical — Know Before Demo Day</div>
   <ul>
-    <li><strong>ECW Integration Path TBD:</strong> Landon must confirm with Pro Services — does 8x8 have native eClinicalWorks integration, or is SpinSci required? This shapes the ENTIRE Part 2 demo narrative. Do not demo without this answer.</li>
+    <li><strong>✅ SpinSci Confirmed:</strong> Pro Services confirmed 8x8 has no native ECW connector. SpinSci is the required integration path. Bianca must coordinate with SpinSci SE before demo day to stand up the live screen pop.</li>
     <li><strong>Michael's #1 Priority is EMR screen pop</strong> — he said "that would be huge." Every demo part should ladder back to this.</li>
     <li><strong>No developers on WHI's team</strong> — position everything as no-code, 8x8 manages it, they just use it.</li>
     <li><strong>HIPAA posture:</strong> Be ready to confirm 8x8 BAA availability. Michael raised compliance concerns.</li>
@@ -369,11 +369,11 @@
   </div>
   <div class="section-body">
 
-    <div class="callout callout-warn">
-      <div class="callout-title">⚠️ Blockers — Resolve First</div>
+    <div class="callout callout-done">
+      <div class="callout-title">✅ Integration Path Resolved — SpinSci Confirmed</div>
       <ul>
-        <li>ECW integration path (native vs. SpinSci) must be confirmed before building any demo environment. Tag Landon.</li>
-        <li>If SpinSci is the path — coordinate with SpinSci SE for a live screen pop in the shared demo tenant.</li>
+        <li>8x8 Pro Services confirmed: no native ECW connector exists. SpinSci is required.</li>
+        <li><strong>Bianca must coordinate with SpinSci SE</strong> to configure live screen pop in the shared demo tenant before demo day. This is a hard dependency for Part 2.</li>
       </ul>
     </div>
 
@@ -434,18 +434,18 @@
       <li>
         <input type="checkbox" />
         <div class="item-text">
-          <span class="tag tag-critical">Critical</span>
           <span class="tag tag-landon">Landon</span>
-          <span class="main-label">Confirm with 8x8 Pro Services: <strong>native ECW integration status</strong> vs. SpinSci requirement</span>
-          <span class="note">This determines whether Bianca demos 8x8-native screen pop or coordinates with SpinSci for a live integration demo.</span>
+          <span class="main-label">Pull formal <strong>SpinSci quote</strong> for WHI — one-time setup fee + ongoing monthly cost — for inclusion in proposal</span>
+          <span class="note">Pro Services confirmed SpinSci is required. Quote needed before proposal can be finalized post-demo.</span>
         </div>
       </li>
       <li>
         <input type="checkbox" />
         <div class="item-text">
+          <span class="tag tag-critical">Critical</span>
           <span class="tag tag-bianca">Bianca</span>
-          <span class="main-label">If SpinSci path: connect with SpinSci SE to configure <strong>live patient record screen pop</strong> into 8x8 desktop agent view</span>
-          <span class="note">Screen pop must show: patient name, DOB, upcoming appointments, provider, location. Michael said "that would be huge."</span>
+          <span class="main-label">Connect with SpinSci SE to configure <strong>live patient record screen pop</strong> into 8x8 desktop agent view</span>
+          <span class="note">Screen pop must show: patient name, DOB, upcoming appointments, provider, location. Michael said "that would be huge." SpinSci SE coordination is required — do not skip.</span>
         </div>
       </li>
       <li>
@@ -640,8 +640,8 @@
         <tr>
           <td>Integration Architecture</td>
           <td><span class="time-badge">4 min</span></td>
-          <td>One slide or diagram: how 8x8 connects to ECW (native or SpinSci middleware). Emphasize: WHI owns no servers, no custom dev.</td>
-          <td class="whi-callout">"You don't need developers. We handle the integration — your team just starts using it."</td>
+          <td>One slide or diagram: 8x8 ↔ SpinSci ↔ ECW. Show SpinSci as a purpose-built healthcare middleware layer. Emphasize: WHI owns no servers, no custom dev, 8x8 manages it all.</td>
+          <td class="whi-callout">"SpinSci is the bridge between your ECW and 8x8 — it's already built for healthcare. You don't need developers. We handle everything."</td>
         </tr>
 
         <!-- PART 3 -->
@@ -757,7 +757,7 @@
           <input type="checkbox" />
           <div class="item-text">
             <span class="main-label"><strong>"How long does this take to set up?"</strong></span>
-            <span class="note">Response: "A typical CC deployment runs 4–6 weeks. EMR integration adds time depending on the connector path — that's why we want to nail down the ECW path before we scope. No surprises."</span>
+            <span class="note">Response: "A typical CC deployment runs 4–6 weeks. The SpinSci ECW integration adds a few weeks on top of that for connector configuration and testing — but it's a known process, we've done it many times. We'll scope the exact timeline for WHI on our follow-up call."</span>
           </div>
         </li>
         <li>
@@ -808,7 +808,8 @@
           <li>
             <input type="checkbox" />
             <div class="item-text">
-              <span class="main-label">If SpinSci was demoed — confirm <strong>SpinSci one-time setup cost and scope</strong> with SpinSci team for inclusion in WHI proposal</span>
+              <span class="main-label">Confirm <strong>SpinSci one-time setup cost and scope</strong> with SpinSci team for inclusion in WHI proposal</span>
+              <span class="note">SpinSci is confirmed — this is not conditional. Formal quote needed before proposal can be submitted.</span>
             </div>
           </li>
           <li>
@@ -856,7 +857,7 @@
           <li>
             <input type="checkbox" />
             <div class="item-text">
-              <span class="main-label">Confirm <strong>ECW integration path</strong> with Pro Services if not resolved before demo — this blocks proposal finalization</span>
+              <span class="main-label">Include <strong>SpinSci line item</strong> in WHI proposal — one-time setup + ongoing monthly fee. Pull Landon's formal quote.</span>
             </div>
           </li>
         </ul>

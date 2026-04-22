@@ -287,7 +287,7 @@
         <div style="font-weight:700; color:#008486; font-size:12px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">Foundation — Phase 1</div>
         <ul class="item-list">
           <li><span class="icon">📞</span><div><strong>X6 CC Voice licenses</strong> — small starter set (3–5 licenses for patient-facing receptionists). Unlocks queues, analytics, EMR integration capability.</div></li>
-          <li><span class="icon">🔗</span><div><strong>eClinicalWorks integration</strong> — patient screen pop in 8x8 agent desktop. Name, DOB, appointments, location visible on inbound call. TBD: 8x8 native vs. SpinSci.</div></li>
+          <li><span class="icon">🔗</span><div><strong>eClinicalWorks integration via SpinSci</strong> — patient screen pop in 8x8 agent desktop. Name, DOB, appointments, location visible on inbound call. SpinSci confirmed as integration middleware.</div></li>
           <li><span class="icon">📊</span><div><strong>CC analytics dashboard</strong> — queue KPIs, handle time, abandonment rate, agent performance. Foundation for AI automation decisions.</div></li>
         </ul>
       </div>
@@ -351,15 +351,15 @@
 <!-- ══════════════════════════════════════════════════════ -->
 <div class="grid-2">
   <div>
-    <div class="section-header dark">ECW Integration — Critical Decision Point</div>
+    <div class="section-header dark">ECW Integration — SpinSci Confirmed</div>
     <div class="col-card">
       <ul class="item-list">
         <li><span class="icon">🔍</span><div><strong>EMR:</strong> eClinicalWorks (ECW) — existing system, not changing</div></li>
-        <li><span class="icon">🛠️</span><div><strong>Option A — 8x8 Native Integration</strong> (preferred): Landon believes 8x8 may have built ECW integration directly. Lower cost. Must confirm with pro services before demo. <span class="risk-pill tbd">Verify</span></div></li>
-        <li><span class="icon">🤝</span><div><strong>Option B — SpinSci</strong> (s-p-i-n-s-c-i): Most-used EMR integration middleware for CC vendors. Has ECW integration confirmed. "Buy once, cry once" — setup can be costly. <span class="risk-pill partner">3rd Party</span></div></li>
-        <li><span class="icon">✨</span><div>Either way, integration <strong>pops into the 8x8 agent desktop</strong> — NOT into ECW. One pane of glass for agent: patient name, DOB, appointments, location, all 3 clinics.</div></li>
+        <li><span class="icon">✅</span><div><strong>SpinSci confirmed</strong> (s-p-i-n-s-c-i) as the ECW integration path. Pro Services confirmed 8x8 does not have a native ECW connector. SpinSci is the required middleware. <span class="risk-pill partner">3rd Party — Confirmed</span></div></li>
+        <li><span class="icon">💰</span><div><strong>SpinSci setup cost:</strong> Typically a one-time implementation fee — Landon to pull formal quote from SpinSci for WHI proposal. Budget note: "buy once, cry once." Ongoing monthly cost is modest.</div></li>
+        <li><span class="icon">✨</span><div>Integration <strong>pops into the 8x8 agent desktop</strong> — NOT into ECW. One pane of glass for agent: patient name, DOB, appointments, location, all 3 clinics.</div></li>
         <li><span class="icon">⚠️</span><div>Michael &amp; Max asked specifically: "Would this be an external tool or pop into ECW?" Answer: <strong>pops into 8x8.</strong> They were satisfied with this.</div></li>
-        <li><span class="icon">📋</span><div>SpinSci also benefits human agents (not just the AI bot) — screen pop for every inbound call, not just AI-handled ones.</div></li>
+        <li><span class="icon">📋</span><div>SpinSci benefits human agents and the AI bot — screen pop fires on every inbound call, not just AI-handled ones. Full coverage.</div></li>
       </ul>
     </div>
   </div>
@@ -372,8 +372,8 @@
       <div class="open-item"><strong>CC Analytics &amp; Supervisor Dashboard</strong> <span class="risk-pill confirmed">8x8 Native</span></div>
       <div class="open-item"><strong>Engage License</strong> (nurse refill queue, mobile) <span class="risk-pill confirmed">8x8 Native</span></div>
       <div class="open-item"><strong>Two-way SMS</strong> (future backup to NextHealth) <span class="risk-pill confirmed">8x8 Native</span></div>
-      <div class="open-item"><strong>ECW Integration — 8x8 Native</strong> <span class="risk-pill tbd">Verify w/ Pro Services</span></div>
-      <div class="open-item"><strong>SpinSci EMR Integration</strong> (if native not available) <span class="risk-pill partner">3rd Party — Cost TBD</span></div>
+      <div class="open-item"><strong>ECW Integration — 8x8 Native</strong> <span class="risk-pill gap">Not Available</span></div>
+      <div class="open-item"><strong>SpinSci EMR Integration</strong> (confirmed path) <span class="risk-pill partner">3rd Party — Quote Pending</span></div>
       <div class="open-item"><strong>Compass 360 Bot Management</strong> ($500/mo, optional) <span class="risk-pill confirmed">8x8 Service</span></div>
       <div class="open-item"><strong>No internal developers</strong> — 8x8 handles all build &amp; setup <span class="risk-pill confirmed">Confirmed</span></div>
     </div>
@@ -391,7 +391,7 @@
         <li><span class="icon">💰</span><div><strong>AI Studio credits:</strong> ~8 credits/min → ~$0.03/min. Est. <strong>$1,000–$1,500/month</strong> based on ~150 calls/day. Volume-based — scales with usage.</div></li>
         <li><span class="icon">📋</span><div><strong>X6 CC Voice licenses:</strong> Small starter set (3–5). Already on X1/X4 — license upgrade, not new install. Should be relatively low delta.</div></li>
         <li><span class="icon">🧭</span><div><strong>Compass 360:</strong> $500/month — 2 hrs managed bot tuning. Optional but recommended. Can cancel anytime.</div></li>
-        <li><span class="icon">🤝</span><div><strong>SpinSci setup:</strong> "A little heavy" (Landon). Preferred to avoid if 8x8 can do ECW natively. Pricing TBD — Landon to pull.</div></li>
+        <li><span class="icon">🤝</span><div><strong>SpinSci setup:</strong> Confirmed as required — 8x8 has no native ECW connector. One-time implementation fee TBD — Landon to pull formal SpinSci quote for proposal.</div></li>
         <li><span class="icon">⚙️</span><div><strong>One-time setup:</strong> 8x8 to handle all configuration. Scoping call needed post-demo to finalize setup cost.</div></li>
         <li><span class="icon">💡</span><div>Landon committed: "I want to save you money and keep it as skinny as I can." Budget sensitivity acknowledged. No budget number given by WHI.</div></li>
       </ul>
@@ -401,10 +401,10 @@
     <div class="section-header dark">Open Action Items — Pre-Demo</div>
     <div class="col-card">
       <ul class="item-list">
-        <li><span class="icon">🔴</span><div><strong>Landon:</strong> Confirm with Pro Services — does 8x8 have native ECW integration, or is SpinSci required? Answer before demo.</div></li>
+        <li><span class="icon">✅</span><div><strong>Resolved:</strong> ECW integration path confirmed — SpinSci required. 8x8 has no native ECW connector.</div></li>
         <li><span class="icon">🔴</span><div><strong>Lala:</strong> Schedule demo with Bianca (SE) for week of Apr 28. Options: Tue Apr 28 (1–4 PM), Thu Apr 30 (10–11 AM), Mon May 4 (10 AM or 2 PM). Copy Max on invite.</div></li>
-        <li><span class="icon">🟡</span><div><strong>Landon/Lala:</strong> Pull SpinSci pricing for reference (in case native ECW not possible).</div></li>
-        <li><span class="icon">🟡</span><div><strong>Bianca (SE):</strong> Build customized demo environment — WHI-specific bot with healthcare use cases, multilingual demo, ECW screen pop (SpinSci or native).</div></li>
+        <li><span class="icon">🔴</span><div><strong>Landon:</strong> Pull formal SpinSci quote for WHI — one-time setup fee + any ongoing cost. Include in proposal.</div></li>
+        <li><span class="icon">🟡</span><div><strong>Bianca (SE):</strong> Coordinate with SpinSci SE — build demo environment with live SpinSci ECW screen pop into 8x8 agent desktop. WHI-specific bot + multilingual demo also required.</div></li>
         <li><span class="icon">🟡</span><div><strong>Landon:</strong> Ask WHI about budget window before or during demo to help right-size proposal.</div></li>
         <li><span class="icon">⚪</span><div><strong>Post-demo:</strong> 20-min scoping call with Michael/Max to finalize one-time setup cost for CC + integration.</div></li>
       </ul>
